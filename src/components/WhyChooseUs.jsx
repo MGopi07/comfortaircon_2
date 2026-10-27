@@ -33,8 +33,11 @@ export default function WhyChooseUs() {
           {/* Left Column (on Desktop): Overlapping Dual Image Showcase (Matching 1st Reference Image) */}
           <div className="col-lg-6 order-lg-1 order-2">
             <div className="why-images-wrapper position-relative">
+              {/* Soft sky-blue glow behind the collage */}
+              <div className="why-images-glow" aria-hidden="true"></div>
+
               {/* Main Primary Image: Certified Technician Servicing Ceiling AC */}
-              <div className="why-main-img-box rounded-4 overflow-hidden shadow-lg">
+              <div className="why-main-img-box">
                 <img
                   src="/images/why1.png"
                   alt="Certified Comfort Aircon HVAC Technician Servicing Ceiling AC"
@@ -44,13 +47,24 @@ export default function WhyChooseUs() {
               </div>
 
               {/* Overlapping Secondary Image: Technical Maintenance Setup */}
-              <div className="why-overlap-img-box position-absolute rounded-4 overflow-hidden shadow-2xl">
+              <div className="why-overlap-img-box">
                 <img
                   src="/images/why2.png"
                   alt="Precision AC Technical Installation and Maintenance Setup"
                   className="img-fluid w-100 h-100 object-fit-cover why-overlap-img"
                   loading="lazy"
                 />
+              </div>
+
+              {/* Floating Experience Badge */}
+              <div className="why-exp-badge">
+                <span className="why-exp-icon">
+                  <i className="fa-solid fa-award"></i>
+                </span>
+                <span className="why-exp-text">
+                  <strong>25+ Years</strong>
+                  <span>Trusted cooling experts</span>
+                </span>
               </div>
             </div>
           </div>
@@ -60,10 +74,10 @@ export default function WhyChooseUs() {
             <span className="section-tag mb-2">
               <i className="fa-solid fa-medal me-1"></i> WHY CARRIER
             </span>
-            <h2 className="text-white section-title display-5 fw-bold mb-4">
+            <h2 className="text-white section-title why-title">
               Why Choose <span className="gradient-word">Comfort Aircon</span>?
             </h2>
-            <p className="text-light opacity-75 mb-4 fs-6">
+            <p className="why-lead">
               As Puducherry&apos;s premier authorized Carrier &amp; Toshiba AC dealership
               for over 25 years, we combine official manufacturer backing,
               factory-trained HVAC engineers, transparent pricing, and rapid local
@@ -76,8 +90,8 @@ export default function WhyChooseUs() {
                     <div className="why-icon">
                       <i className={reason.icon}></i>
                     </div>
-                    <h5 className="text-white fw-bold">{reason.title}</h5>
-                    <p className="text-light opacity-75 small mb-0">{reason.desc}</p>
+                    <h3 className="why-card-title">{reason.title}</h3>
+                    <p className="why-card-desc">{reason.desc}</p>
                   </div>
                 </div>
               ))}

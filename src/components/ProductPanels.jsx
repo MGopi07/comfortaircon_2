@@ -186,9 +186,9 @@ export default function ProductPanels({ openSpec, openAppointment }) {
     return () => clearInterval(timer);
   }, [hasInteracted, isHovered, prefersReducedMotion, products.length]);
 
-  // Handle desktop hover on collapsed panel
+  // Handle desktop hover (below 992px panels stack as an accordion) on collapsed panel
   const handlePanelHover = useCallback((idx) => {
-    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+    if (typeof window !== 'undefined' && window.innerWidth >= 992) {
       setActiveIndex(idx);
     }
   }, []);

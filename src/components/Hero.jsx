@@ -27,7 +27,7 @@ export default function Hero() {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 3800);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, currentSlide]);
 
   return (
     <section
@@ -41,9 +41,9 @@ export default function Hero() {
       </div>
 
       <div className="container-xxl position-relative z-2">
-        <div className="row align-items-stretch gy-4 gy-lg-0 hero-main-row">
+        <div className="row align-items-center gy-4 gy-lg-0 hero-main-row">
           {/* Left Column: Content & Interactive Controls */}
-          <div className="col-lg-6 hero-content d-flex flex-column justify-content-center py-4 py-lg-5">
+          <div className="col-lg-6 col-xl-5 hero-content d-flex flex-column justify-content-center">
             {/* Status Badge */}
             <div className="hero-status-badge">
               <span className="pulse-dot"></span>
@@ -57,7 +57,7 @@ export default function Hero() {
             </h1>
 
             {/* Subtitle / Company Introduction */}
-            <p className="hero-subtitle fs-5 text-secondary mb-4 lh-base">
+            <p className="hero-subtitle text-secondary">
               Reliable air conditioning and refrigeration solutions for homes,
               offices and businesses. Expert service, quality products, and your
               comfort is our priority. Authorized Carrier partner serving
@@ -123,7 +123,7 @@ export default function Hero() {
           </div>
 
           {/* Right Column: Hero Visual & Interactive Banner Carousel */}
-          <div className="col-lg-6 hero-img-container position-relative d-flex align-items-stretch">
+          <div className="col-lg-6 col-xl-7 hero-img-container">
             {/* Soft Ambient Radial Glow Orb */}
             <div className="hero-img-glow"></div>
 
@@ -144,8 +144,24 @@ export default function Hero() {
                       alt={slide.alt}
                       className="hero-main-img img-fluid"
                       loading={idx === 0 ? 'eager' : 'lazy'}
+                      fetchPriority={idx === 0 ? 'high' : 'auto'}
+                      draggable="false"
                     />
                   </div>
+                ))}
+              </div>
+
+              {/* Slide Indicators */}
+              <div className="hero-carousel-indicators">
+                {slides.map((slide, idx) => (
+                  <button
+                    key={slide.src}
+                    type="button"
+                    className={idx === currentSlide ? 'active' : ''}
+                    aria-label={`Show banner ${idx + 1}`}
+                    aria-current={idx === currentSlide ? 'true' : undefined}
+                    onClick={() => setCurrentSlide(idx)}
+                  ></button>
                 ))}
               </div>
             </div>

@@ -7,6 +7,7 @@ import AppointmentModal from '@/components/AppointmentModal';
 import ProductSpecModal from '@/components/ProductSpecModal';
 import Toast from '@/components/Toast';
 import FloatingButtons from '@/components/FloatingButtons';
+import SmoothScroll from '@/components/SmoothScroll';
 
 export const metadata = {
   title: 'Comfort Aircon | Authorized Carrier & Toshiba HVAC Solutions & Engineering Profile',
@@ -24,7 +25,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -39,6 +40,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <ModalProvider>
+          <SmoothScroll />
           <Navbar />
           <main>{children}</main>
           <Footer />
