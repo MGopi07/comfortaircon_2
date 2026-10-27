@@ -28,19 +28,19 @@ pipeline {
                         echo 'Deploying to Production...'
                         sh "rsync -av --delete . ${PROD_DIR}/ --exclude node_modules --exclude .git"
                         sh "cd ${PROD_DIR} && npm install --production"
-                        sh "pm2 restart comfortair-prod || pm2 start npm --name 'comfortair-prod' -- start -- -p 3001"
+                        sh "pm2 restart comfortair-prod || pm2 start npm --name 'comfortair-prod' -- start -- -p 3063"
                     } 
                     else if (env.BRANCH_NAME == 'staging') {
                         echo 'Deploying to Staging...'
                         sh "rsync -av --delete . ${STAGING_DIR}/ --exclude node_modules --exclude .git"
-                        sh "cd ${STAGING_DIR} && npm install --production"
+                        sh "cd ${STAGING_DIR} && npm install --production"`
                         sh "pm2 restart comfortair-staging || pm2 start npm --name 'comfortair-staging' -- start -- -p 3002"
                     } 
                     else if (env.BRANCH_NAME == 'dev') {
                         echo 'Deploying to Dev...'
                         sh "rsync -av --delete . ${DEV_DIR}/ --exclude node_modules --exclude .git"
                         sh "cd ${DEV_DIR} && npm install"
-                        sh "pm2 restart comfortair-dev || pm2 start npm --name 'comfortair-dev' -- start -- -p 3003"
+                        sh "pm2 restart comfortair-dev || pm2 start npm --name 'comfortair-dev' -- start -- -p 3061"
                     }
                 }
             }
