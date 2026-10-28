@@ -5,14 +5,13 @@ import React from 'react';
 import Link from 'next/link';
 import { useModal } from '@/context/ModalContext';
 
-// Contact details match the floating call/WhatsApp buttons and navbar
-const PHONE_DISPLAY = '0413 224 2111';
-const PHONE_HREF = 'tel:+914132242111';
-const WHATSAPP_DISPLAY = '+91 98430 20486';
+const PHONE_DISPLAY = '+91 98430 20458';
+const PHONE_HREF = 'tel:+919843020458';
+const WHATSAPP_DISPLAY = '+91 98430 20458';
 const WHATSAPP_HREF =
-  'https://wa.me/919843020486?text=Hi%20Comfort%20Aircon%2C%20I%20would%20like%20to%20enquire%20about%20Carrier%20AC%20sales%20and%20service.';
-const EMAIL = 'info@comfortaircon.com';
-const ADDRESS = '295, Thiruvalluvar Salai, Puducherry 605005';
+  'https://wa.me/919843020458?text=Hi%2C%20I%20want%20to%20enquire%20about%20your%20AC%20products%20%2F%20services.';
+const EMAIL = 'admin@comfortair.co.in';
+const ADDRESS = '295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry, 605013';
 
 const quickLinks = [
   { label: 'Home', href: '/' },
@@ -25,13 +24,13 @@ const quickLinks = [
 
 const services = [
   'AC Installation',
-  'AC Repair & Service',
-  'Maintenance',
-  'Refrigeration Solutions',
+  'Repair',
+  'Service & Maintenance',
   'Gas Filling',
   'Cleaning & Troubleshooting',
   'Replacement',
   'Annual Maintenance',
+  'Commercial AC Services',
 ];
 
 const serviceAreas = ['Pondicherry', 'Villupuram', 'Cuddalore', 'Nearby Locations'];
@@ -218,10 +217,21 @@ export default function Footer() {
             © 2026 Comfort Aircon Air Conditioning &amp; Cooling
             Specialist. All rights reserved.
           </p>
-          <p className="mb-0 footer-bottom-areas">
-            <i className="fa-solid fa-location-dot"></i>
-            Serving Pondicherry · Villupuram · Cuddalore
-          </p>
+          <div className="d-flex align-items-center gap-3">
+            <p className="mb-0 footer-bottom-areas">
+              <i className="fa-solid fa-location-dot"></i>
+              Serving Pondicherry · Villupuram · Cuddalore
+            </p>
+            <span className="text-muted d-none d-md-inline">|</span>
+            <Link
+              href="/admin-login"
+              className="text-muted text-decoration-none small hover-white d-inline-flex align-items-center gap-1"
+              title="Staff & Management Portal"
+            >
+              <i className="fa-solid fa-shield-halved text-primary-blue"></i>
+              <span>Staff Login</span>
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
