@@ -153,15 +153,7 @@ export default function ContactPage() {
                 AC sales, installation, repair, and maintenance. Our experienced team is ready to help you choose the right air conditioning solution, request a quotation or schedule a service appointment for your home or business.
               </p>
 
-              <div className="d-flex flex-wrap align-items-center gap-3 pt-2">
-                <a
-                  href={INITIAL_CONTACT.phoneHref}
-                  className="btn btn-custom-primary shadow-sm px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
-                >
-                  <i className="fa-solid fa-phone"></i> Tap to Call {INITIAL_CONTACT.phone}
-                </a>
 
-              </div>
             </div>
           </div>
         </div>

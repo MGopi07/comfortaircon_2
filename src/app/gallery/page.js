@@ -49,22 +49,7 @@ export default function GalleryPage() {
                 Explore our portfolio of completed Carrier &amp; Toshiba air conditioning projects across Pondicherry, Villupuram, and Cuddalore. Featuring residential villas, corporate offices, healthcare facilities, and specialized HVAC servicing.
               </p>
 
-              <div className="d-flex flex-wrap align-items-center gap-3 pt-2">
-                <button
-                  type="button"
-                  className="btn btn-custom-primary shadow-sm px-4 py-2 fw-bold"
-                  onClick={() => openAppointment()}
-                >
-                  <i className="fa-solid fa-calendar-check me-2"></i> Book Free Consultation
-                </button>
 
-                <a
-                  href={INITIAL_CONTACT.phoneHref}
-                  className="btn btn-outline-light rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
-                >
-                  <i className="fa-solid fa-phone"></i> Call {INITIAL_CONTACT.phone}
-                </a>
-              </div>
             </div>
           </div>
         </div>

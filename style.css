@@ -714,6 +714,19 @@ a {
   background: transparent;
 }
 
+.btn-outline-primary {
+  --bs-btn-color: var(--primary-blue, #0078BF);
+  --bs-btn-border-color: var(--primary-blue, #0078BF);
+  --bs-btn-hover-color: #FFFFFF;
+  --bs-btn-hover-bg: var(--primary-blue, #0078BF);
+  --bs-btn-hover-border-color: var(--primary-blue, #0078BF);
+  --bs-btn-focus-shadow-rgb: 0, 120, 191;
+  --bs-btn-active-color: #FFFFFF;
+  --bs-btn-active-bg: var(--primary-dark-blue, #005A94);
+  --bs-btn-active-border-color: var(--primary-dark-blue, #005A94);
+  transition: all 0.25s ease;
+}
+
 .nav-phone-btn-outline:hover {
   background: var(--primary-blue);
   color: #FFFFFF !important;
@@ -1163,13 +1176,13 @@ a {
   }
 
   .hero-main-row {
-    min-height: 500px;
+    min-height: 420px;
     align-items: center !important;
   }
 
   .hero-content {
-    padding-top: 32px !important;
-    padding-bottom: 32px !important;
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;

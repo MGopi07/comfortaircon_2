@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useModal } from '@/context/ModalContext';
+import { INITIAL_CONTACT } from '@/data/mockData';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -90,12 +91,11 @@ export default function Navbar() {
 
           <div className="d-flex align-items-center gap-2 pt-3 pt-xl-0">
             <a
-              href="https://wa.me/919843020486?text=Hi%2C%20I%20want%20to%20enquire%20about%20your%20AC%20products%20%2F%20services."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-sm btn-outline-success rounded-pill px-3 py-2 fw-bold d-none d-lg-inline-flex align-items-center gap-1"
+              href={INITIAL_CONTACT.phoneHref}
+              className="btn btn-sm btn-outline-primary rounded-pill px-3 py-2 fw-bold d-none d-lg-inline-flex align-items-center gap-1"
+              title={`Call Comfort Aircon (${INITIAL_CONTACT.phone})`}
             >
-              <i className="fa-brands fa-whatsapp fs-6"></i> WhatsApp
+              <i className="fa-solid fa-phone fs-6"></i> Call Us
             </a>
 
             <button

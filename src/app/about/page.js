@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useModal } from '@/context/ModalContext';
 import { INITIAL_CONTACT } from '@/data/mockData';
+import WhyChooseUsCards from '@/components/WhyChooseUsCards';
 
 // Reusable animated count-up component with cubic ease-out
 function AnimatedCounter({ end, duration = 1600, decimals = 0, prefix = '', suffix = '' }) {
@@ -205,27 +206,13 @@ export default function AboutPage() {
           <div className="row align-items-center">
             <div className="col-lg-8">
               <h1 className="subpage-title">
-                Your Trusted Air Conditioning Partner in <span className="text-primary-blue">Puducherry</span>
+                Your Trusted Air Conditioning Partner <span className="text-primary-blue">Partner</span>
               </h1>
               <p className="subpage-lead">
-                Comfort Aircon delivers reliable air conditioning solutions for homes, offices, and commercial spaces. With expertise in AC sales, installation, repair, and maintenance, we are committed to providing quality cooling solutions and dependable customer service.
+                Comfort Aircon delivers reliable air conditioning solutions for homes, offices, and commercial spaces. With expertise in AC sales, installation, repair, and maintenance.
               </p>
 
-              <div className="d-flex flex-wrap align-items-center gap-3 pt-2">
-                <Link
-                  href="/services"
-                  className="btn btn-custom-primary shadow-sm px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
-                >
-                  <span>Explore Our Services</span>
-                  <i className="fa-solid fa-arrow-right"></i>
-                </Link>
-                <a
-                  href={INITIAL_CONTACT.phoneHref}
-                  className="btn btn-outline-light rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
-                >
-                  <i className="fa-solid fa-phone"></i> Call {INITIAL_CONTACT.phone}
-                </a>
-              </div>
+
             </div>
           </div>
         </div>
@@ -533,33 +520,7 @@ export default function AboutPage() {
               Since 1999, Comfort Aircon has been committed to delivering reliable air conditioning products and services for homes, offices, and commercial establishments.</p>
           </div>
 
-          <div className="row g-4">
-            {trustPoints.map((item, idx) => (
-              <div className={`col-lg-4 col-md-6 reveal-from-bottom delay-${(idx % 6) + 1}`} key={item.title}>
-                <div className="trust-pillar-card">
-                  <div className="trust-pillar-top">
-                    <div className="trust-pillar-icon">
-                      <i className={item.icon}></i>
-                    </div>
-                    <div className="trust-pillar-meta">
-                      <span className="trust-pillar-num">{`0${idx + 1}`}</span>
-                      <span className="trust-pillar-tag">{item.tag}</span>
-                    </div>
-                  </div>
-                  <h3 className="trust-pillar-title">{item.title}</h3>
-                  <p className="trust-pillar-desc">{item.desc}</p>
-                  <div className="trust-pillar-footer">
-                    <span className="trust-pillar-check">
-                      <i className="fa-solid fa-circle-check"></i> {item.check}
-                    </span>
-                    <span className="trust-pillar-arrow" aria-hidden="true">
-                      <i className="fa-solid fa-arrow-right"></i>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <WhyChooseUsCards items={trustPoints} />
         </div>
       </section>
 
