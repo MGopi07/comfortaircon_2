@@ -147,10 +147,10 @@ export default function ContactPage() {
           <div className="row align-items-center">
             <div className="col-lg-8">
               <h1 className="subpage-title">
-                Get in Touch with <span className="text-primary-blue">Comfort Aircon</span>
+                Contact <span className="text-primary-blue">Comfort Aircon</span> for Expert Cooling Solutions
               </h1>
               <p className="subpage-lead">
-                Visit our showroom in Thattanchavady, Pondicherry or send us an enquiry below. Our Carrier &amp; Toshiba HVAC specialists provide fast estimates, equipment advice, and emergency service bookings.
+                AC sales, installation, repair, and maintenance. Our experienced team is ready to help you choose the right air conditioning solution, request a quotation or schedule a service appointment for your home or business.
               </p>
 
               <div className="d-flex flex-wrap align-items-center gap-3 pt-2">
@@ -186,10 +186,10 @@ export default function ContactPage() {
                   <span>Send a Message</span>
                 </div>
                 <h2 className="ref-card-title">
-                  Request HVAC Service or Ask a Question
+                  Request AC Service
                 </h2>
                 <p className="ref-card-lead">
-                  Fill out the form and our team will follow up about your heating, cooling, repair, or maintenance request.
+                  Fill out the enquiry form below, and our team will contact you to assist with AC sales, installation, repair, servicing, or maintenance.
                 </p>
 
                 {submittedSuccess && (
@@ -463,7 +463,7 @@ export default function ContactPage() {
 
               <div className="ref-hours-card">
                 <div className="ref-hours-header">Business hours</div>
-                
+
                 <div className="ref-hours-row">
                   <span className="ref-hours-day">Monday – Saturday</span>
                   <span className="ref-hours-time">9:00 AM – 8:00 PM</span>
