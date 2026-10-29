@@ -441,9 +441,9 @@ export default function AboutPage() {
                       </div>
                       <span className="value-card-num">01</span>
                     </div>
-                    <h4 className="value-card-title">Engineering Precision</h4>
+                    <h4 className="value-card-title">Engineering Excellence</h4>
                     <p className="value-card-desc">
-                      We never cut corners on copper piping thickness, electrical breakers, vacuum standards, or structural wall anchors.
+                      We focus on proper installation practices, suitable materials, electrical safety, and reliable system performance.
                     </p>
                   </div>
                 </div>
@@ -458,7 +458,7 @@ export default function AboutPage() {
                     </div>
                     <h4 className="value-card-title">Customer Trust</h4>
                     <p className="value-card-desc">
-                      Clear itemized proposals, transparent warranty registrations, and zero unexpected hidden charges.
+                      We believe in honest communication, clear quotations, transparent pricing, and dependable service.
                     </p>
                   </div>
                 </div>
@@ -473,7 +473,7 @@ export default function AboutPage() {
                     </div>
                     <h4 className="value-card-title">Energy Efficiency</h4>
                     <p className="value-card-desc">
-                      Championing high-ISEER Carrier inverters and Toshiba Japanese VRFs to reduce customer electricity bills.
+                      We help customers explore energy-efficient air conditioning options that support comfortable indoor environments and responsible energy consumption.
                     </p>
                   </div>
                 </div>
@@ -486,9 +486,9 @@ export default function AboutPage() {
                       </div>
                       <span className="value-card-num">04</span>
                     </div>
-                    <h4 className="value-card-title">Rapid Local Response</h4>
+                    <h4 className="value-card-title">Reliable Local Service</h4>
                     <p className="value-card-desc">
-                      Same-day emergency breakdown response across Pondicherry, Villupuram, and Cuddalore districts.
+                      Our team is committed to providing responsive AC repair, maintenance, and installation services across our service areas.
                     </p>
                   </div>
                 </div>
