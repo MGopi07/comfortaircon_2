@@ -321,7 +321,7 @@ export default function AboutPage() {
           <div className="row justify-content-center">
             <div className="col-lg-10 reveal-from-bottom">
               <h2 className="promo-banner-title">
-                Discount up to 50% for maintenance service. Only this month !
+                Professional AC Maintenance &amp; Reliable Cooling Solutions
               </h2>
               <p className="promo-banner-desc">
                 Keep your home and workspace whisper-quiet and cool. Choose from Service & Maintenance, Cleaning & Troubleshooting, Gas Filling and Annual Maintenance for your home or commercial space in Pondicherry, Villupuram and Cuddalore. Send an enquiry, WhatsApp us or call to book your service today.
