@@ -4,11 +4,16 @@ import React, { useState } from 'react';
 import { useModal } from '@/context/ModalContext';
 
 const publishedProducts = [
-  'Carrier Split Room AC',
-  'Carrier 4-Way Cassette AC',
-  'Carrier Concealed Ductable AC',
-  'Carrier Commercial VRF System',
-  'Toshiba SMMS-u Japanese VRF',
+  'Carrier Ester Neo 5-Star Inverter Split AC',
+  'Carrier Superia 4-Way Inverter Cassette AC',
+  'Carrier Concealed High-Static Ductable AC',
+  'Carrier X-Power Commercial VRF System',
+  'Carrier Durafresh 3-Star Inverter Split AC',
+  'Toshiba Daiseikai 5-Star Japanese Inverter Split AC',
+  'Toshiba SMMS-u Next-Gen Japanese VRF System',
+  'Toshiba 4-Way Smart Inverter Cassette AC',
+  'Toshiba Concealed Slim Inverter Ductable AC',
+  'Toshiba Shorai Edge High-Efficiency Split AC',
 ];
 
 const serviceOptions = [
@@ -49,6 +54,31 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
       formData.location === 'Other' && formData.otherLocation
         ? `Other (${formData.otherLocation})`
         : formData.location;
+
+    // Save lead to localStorage for Admin Enquiry Management (FSD Section 6.1)
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('comfort_aircon_enquiries');
+        const list = stored ? JSON.parse(stored) : [];
+        const newEnquiry = {
+          id: `ENQ-${Date.now().toString().slice(-4)}`,
+          name: formData.name.trim(),
+          mobile: formData.phone.trim(),
+          email: formData.email.trim() || 'N/A',
+          service: formData.service || 'General Enquiry',
+          productInterested: formData.productInterested || 'N/A',
+          location: resolvedLocation,
+          message: formData.message.trim() || 'No additional message provided.',
+          status: 'New',
+          createdAt: new Date().toISOString(),
+        };
+        list.unshift(newEnquiry);
+        localStorage.setItem('comfort_aircon_enquiries', JSON.stringify(list));
+        window.dispatchEvent(new Event('storage'));
+      } catch (err) {
+        console.error('Error saving enquiry to localStorage:', err);
+      }
+    }
 
     showToast(
       `Thank you, ${formData.name}! Your enquiry for ${formData.service || 'AC Service'}${
@@ -214,7 +244,7 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                       ))}
                     </select>
                     <div className="form-text small text-muted">
-                      Select the primary service needed
+                      Select the service needed
                     </div>
                   </div>
 
