@@ -8704,10 +8704,10 @@ body.maintenance-page {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  min-height: clamp(380px, 33vw, 500px);
+  min-height: clamp(300px, 24vw, 390px);
   display: flex;
   align-items: center;
-  padding: 56px 0;
+  padding: 38px 0;
   border-bottom: 3px solid var(--hero-blue);
 }
 
@@ -8771,6 +8771,10 @@ body.maintenance-page {
   width: 100%;
 }
 
+.subpage-hero.subpage-hero-about .subpage-lead {
+  margin-bottom: 16px;
+}
+
 /* Subtle Motion Keyframes */
 @keyframes aboutHeroFadeIn {
   from {
@@ -8809,7 +8813,7 @@ body.maintenance-page {
 @media (max-width: 992px) {
   .subpage-hero.subpage-hero-about {
     min-height: auto;
-    padding: 48px 0;
+    padding: 36px 0;
   }
 
   .subpage-hero.subpage-hero-about::before {
@@ -8836,7 +8840,7 @@ body.maintenance-page {
 /* 576px and below: image layer opacity .4, buttons stack full width, no horizontal scroll at 360px */
 @media (max-width: 576px) {
   .subpage-hero.subpage-hero-about {
-    padding: 40px 0;
+    padding: 28px 0;
     overflow-x: hidden;
   }
 
