@@ -58,10 +58,7 @@ export default function Hero() {
 
             {/* Subtitle / Company Introduction */}
             <p className="hero-subtitle text-secondary">
-              Reliable air conditioning and refrigeration solutions for homes,
-              offices and businesses. Expert service, quality products, and your
-              comfort is our priority. Authorized Carrier partner serving
-              Pondicherry, Villupuram, and Cuddalore.
+              Get professional AC installation, repair, and maintenance from our experienced team. We work with major AC brands to deliver reliable performance, efficient cooling, and customer satisfaction.
             </p>
 
             {/* Action Buttons */}
