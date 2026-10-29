@@ -197,7 +197,7 @@ export default function AboutPage() {
           <div className="row align-items-center">
             <div className="col-lg-8">
               <h1 className="subpage-title">
-                Pioneering HVAC Excellence in <span className="text-primary-blue">Puducherry</span>
+                Your Trusted Air Conditioning Partner in <span className="text-primary-blue">Puducherry</span>
               </h1>
               <p className="subpage-lead">
                 Comfort Aircon is Puducherry’s premier authorized Carrier AC Dealer &amp; Air Conditioning Services provider, offering Carrier cooling systems alongside Toshiba high-efficiency Japanese air conditioning solutions.
@@ -324,8 +324,7 @@ export default function AboutPage() {
                 Professional AC Maintenance &amp; Reliable Cooling Solutions
               </h2>
               <p className="promo-banner-desc">
-                Keep your home and workspace whisper-quiet and cool. Choose from Service & Maintenance, Cleaning & Troubleshooting, Gas Filling and Annual Maintenance for your home or commercial space in Pondicherry, Villupuram and Cuddalore. Send an enquiry, WhatsApp us or call to book your service today.
-              </p>
+                Keep your air conditioner running efficiently with professional servicing from Comfort Aircon. Our services include system inspection, filter and coil cleaning, performance checks, and maintenance recommendations.</p>
               <a
                 href={INITIAL_CONTACT.whatsappHref}
                 target="_blank"

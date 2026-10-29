@@ -50,13 +50,13 @@ export default function Hero() {
               <span>Authorized Carrier &amp; Toshiba AC Dealership</span>
             </div>
 
-            <h1 className="hero-title fw-extrabold text-navy lh-sm mb-3">
+            <h1 className="hero-title fw-extrabold text-navy lh-sm mb-2">
               Complete Air <br />
               <span className="animated-gradient-text">Conditioning Solutions</span>
             </h1>
 
             {/* Subtitle / Company Introduction */}
-            <p className="hero-subtitle text-secondary">
+            <p className="hero-subtitle text-secondary mb-2">
               Get professional AC installation, repair, and maintenance from our experienced team. We work with major AC brands to deliver reliable performance, efficient cooling, and customer satisfaction.
             </p>
 
@@ -64,7 +64,7 @@ export default function Hero() {
             <div className="hero-cta-group d-flex flex-wrap align-items-center gap-3">
               <button
                 type="button"
-                className="btn btn-hero-book rounded-pill px-4 py-3 fw-bold d-inline-flex align-items-center gap-2 shadow-sm"
+                className="btn btn-hero-book rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-sm"
                 onClick={() => openAppointment()}
               >
                 <i className="fa-regular fa-calendar-check fs-6"></i>
@@ -72,7 +72,7 @@ export default function Hero() {
               </button>
               <a
                 href="#services"
-                className="btn btn-hero-explore rounded-pill px-4 py-3 fw-bold d-inline-flex align-items-center gap-2"
+                className="btn btn-hero-explore rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
               >
                 <span>Explore Our Services</span>
               </a>
@@ -82,7 +82,7 @@ export default function Hero() {
             <hr className="hero-trust-divider" />
 
             {/* Trust Points */}
-            <div className="hero-trust-row d-flex flex-wrap align-items-center gap-3 gap-md-4 pt-1">
+            <div className="hero-trust-row d-flex flex-wrap align-items-center gap-3 gap-md-4">
               {/* Feature 1: 100% Genuine Carrier Units */}
               <div className="hero-trust-item d-flex align-items-center gap-2">
                 <span className="hero-trust-check-icon">
