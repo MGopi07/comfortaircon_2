@@ -277,39 +277,38 @@ export default function AboutPage() {
                     <span className="who-check-circle">
                       <i className="fa-solid fa-check"></i>
                     </span>
-                    <span>Exceed your expectations</span>
+                    <span>Exceeding Customer Expectations</span>
                   </li>
                   <li>
                     <span className="who-check-circle">
                       <i className="fa-solid fa-check"></i>
                     </span>
-                    <span>Deliver 100% satisfaction</span>
+                    <span>Commitment to Quality Service</span>
                   </li>
                   <li>
                     <span className="who-check-circle">
                       <i className="fa-solid fa-check"></i>
                     </span>
-                    <span>Professional Expert</span>
+                    <span>Experienced Technical Professionals</span>
                   </li>
                   <li>
                     <span className="who-check-circle">
                       <i className="fa-solid fa-check"></i>
                     </span>
-                    <span>Premium support 24/7</span>
+                    <span>Reliable After-Sales Support</span>
                   </li>
                 </ul>
 
                 {/* Horizontal Divider Line */}
                 <div className="who-divider"></div>
 
-                {/* Action Button styled in existing theme color */}
-                <button
-                  type="button"
+                {/* Action Button */}
+                <Link
+                  href="/contact"
                   className="who-btn-discover"
-                  onClick={() => openAppointment()}
                 >
-                  Discover more
-                </button>
+                  Contact Now
+                </Link>
               </div>
             </div>
           </div>
@@ -413,8 +412,7 @@ export default function AboutPage() {
                     <i className="fa-solid fa-compass"></i> Mission Statement
                   </h3>
                   <p className="mission-card-desc">
-                    To provide homeowners, businesses, and institutions across Pondicherry, Villupuram, and Cuddalore with dependable, energy-efficient, and factory-warranted air conditioning solutions delivered with uncompromising engineering integrity and prompt after-sales service.
-                  </p>
+                    To provide dependable, energy-efficient air conditioning solutions to residential and commercial customers across Pondicherry, Villupuram, and Cuddalore. We strive to deliver professional installation, quality workmanship, transparent pricing, and responsive customer support.</p>
                 </div>
 
                 <div>
