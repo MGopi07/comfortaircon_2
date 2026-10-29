@@ -380,25 +380,9 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Right Column: 4 Contact Cards (~40%) */}
+            {/* Right Column: Contact Cards (~40%) */}
             <div className="col-lg-5">
-              {/* Card 1: Emergency Support Dark Card */}
-              <div className="ref-card-emergency">
-                <div className="ref-emergency-eyebrow">
-                  <i className="fa-solid fa-triangle-exclamation me-1"></i> Emergency Support
-                </div>
-                <h3 className="ref-emergency-title">Need urgent HVAC help?</h3>
-                <p className="ref-emergency-desc">
-                  If your heating or cooling system stops working, contact Comfort Aircon for fast support and clear next steps.
-                </p>
-                <a href={INITIAL_CONTACT.phoneHref} className="ref-emergency-btn">
-                  <i className="fa-solid fa-phone"></i>
-                  <span>Call {INITIAL_CONTACT.phone}</span>
-                  <i className="fa-solid fa-arrow-right ms-1"></i>
-                </a>
-              </div>
-
-              {/* Card 2: Call us */}
+              {/* Card 1: Call us */}
               <div className="ref-contact-card">
                 <div className="ref-contact-icon">
                   <i className="fa-solid fa-phone"></i>
@@ -433,10 +417,10 @@ export default function ContactPage() {
                 <div className="ref-contact-icon">
                   <i className="fa-solid fa-location-dot"></i>
                 </div>
-                <div className="ref-contact-title">Visit location</div>
+                <div className="ref-contact-title">Visit our location</div>
                 <div className="ref-contact-highlight">Pudupalaiyam, Pondicherry</div>
                 <p className="ref-contact-desc">
-                  {INITIAL_CONTACT.address}. For HVAC service, our technicians come to your home or business.
+                  {INITIAL_CONTACT.address}
                 </p>
               </div>
             </div>
