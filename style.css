@@ -879,11 +879,11 @@ a {
 
 .hero-title {
   font-family: var(--font-heading);
-  font-size: clamp(2.35rem, 4.5vw, 3.4rem);
+  font-size: clamp(1.75rem, 1.05rem + 1.6vw, 2.35rem);
   font-weight: 800;
-  line-height: 1.16;
+  line-height: 1.18;
   letter-spacing: -0.02em;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 /* Animated Shimmer Text */
@@ -957,8 +957,8 @@ a {
 
 /* Hero Action Buttons & Trust Points (1st Reference Layout - No Red Button) */
 .hero-cta-group {
-  margin-top: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 12px;
 }
 
 .btn-hero-book {
@@ -967,7 +967,7 @@ a {
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.95rem;
-  padding: 13px 28px;
+  padding: 10px 24px;
   border-radius: 50px;
   border: none;
   box-shadow: 0 8px 22px rgba(0, 120, 191, 0.32);
@@ -993,7 +993,7 @@ a {
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.95rem;
-  padding: 12px 28px;
+  padding: 10px 24px;
   border-radius: 50px;
   border: 1.5px solid rgba(22, 46, 92, 0.24);
   transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1015,7 +1015,7 @@ a {
 .hero-trust-divider {
   border: none;
   border-top: 1px solid rgba(22, 46, 92, 0.12);
-  margin: 1.5rem 0 1.25rem;
+  margin: 12px 0 10px;
   width: 100%;
 }
 
@@ -1141,10 +1141,10 @@ a {
 
 .hero-subtitle {
   font-family: var(--font-body);
-  font-size: 1.12rem;
-  line-height: 1.62;
+  font-size: 1.02rem;
+  line-height: 1.55;
   color: var(--text-muted);
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   max-width: 580px;
   padding-left: 0;
   margin-left: 0;
@@ -1163,13 +1163,13 @@ a {
   }
 
   .hero-main-row {
-    min-height: 560px;
+    min-height: 500px;
     align-items: center !important;
   }
 
   .hero-content {
-    padding-top: 50px !important;
-    padding-bottom: 50px !important;
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: center !important;
@@ -2994,6 +2994,11 @@ a {
   margin-bottom: 0 !important;
   font-size: 0.88rem;
   color: #94A3B8;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
 }
 
 .footer-bottom a {
@@ -3002,6 +3007,18 @@ a {
 
 .footer-bottom a:hover {
   color: #FFFFFF !important;
+}
+
+.footer-syscorp-link {
+  color: #38BDF8 !important;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.footer-syscorp-link:hover {
+  color: #FFFFFF !important;
+  text-decoration: underline !important;
 }
 
 /* Search Modal Overlay */

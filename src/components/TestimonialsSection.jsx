@@ -23,81 +23,45 @@ export default function TestimonialsSection() {
     {
       id: 1,
       quote:
-        'Comfort Aircon helped us select the perfect Toshiba 5-Star Inverter AC for our master bedroom. Our monthly electric bills dropped by 35% and cooling is whisper-silent!',
-      name: 'R. Sundararam',
-      role: 'Homeowner, Lawspet, Pondicherry',
-      tag: 'Toshiba 5-Star Inverter AC',
+        'Comfort Aircon provided excellent service when we purchased our new AC. The installation was smooth, the team was professional, and everything was completed on time.',
+      name: 'R. Kumar',
+      role: 'Homeowner, Pondicherry',
+      tag: 'Reliable AC Installation',
       avatar: '/images/avatar_1.jpg',
     },
     {
       id: 2,
       quote:
-        'Purchased 3 Carrier Cassette ACs for our medical clinic in White Town. Instant GST quotation, unbeatable dealer pricing, and completed precision installation in 24 hours!',
-      name: 'Dr. Ananya V.',
-      role: 'Clinic Director, White Town, Pondicherry',
-      tag: 'Carrier 4-Way Cassette AC',
+        'Very happy with their AC servicing and maintenance. The technicians were knowledgeable, explained the issue clearly, and ensured our air conditioner worked efficiently.',
+      name: 'S. Priya',
+      role: 'Residential Customer, Pondicherry',
+      tag: 'Professional AC Servicing',
       avatar: '/images/avatar_2.jpg',
     },
     {
       id: 3,
       quote:
-        'Best authorized dealership in Puducherry! Installed a Toshiba Multi-VRF System for our beach villa. Genuine products with official factory warranty cards.',
-      name: 'K. Vigneshwar',
-      role: 'Villa Owner, ECR Road, Pondicherry',
-      tag: 'Toshiba SMMS-u VRF System',
+        'We contacted Comfort Aircon for our office AC installation and received excellent support throughout the process. Their team delivered quality work with great attention to detail.',
+      name: 'V. Suresh',
+      role: 'Business Owner, Pondicherry',
+      tag: 'Quality Cooling Solutions',
       avatar: '/images/avatar_3.jpg',
     },
     {
       id: 4,
       quote:
-        'Outstanding turnkey commercial HVAC design and execution. The energy efficiency and priority after-sales service give our resort guests complete climate comfort year-round.',
-      name: 'S. Meenakshi',
-      role: 'Resort Director, Auroville',
-      tag: 'Turnkey Commercial HVAC',
-      avatar: '/images/avatar_4.jpg',
-    },
-    {
-      id: 5,
-      quote:
-        'Concealed ductable AC installation in our 80-year-old French quarter home was executed flawlessly without damaging architectural woodwork. Superb engineering team!',
-      name: 'M. Balasubramanian',
-      role: 'Heritage Homeowner, Heritage Town',
-      tag: 'Concealed Ductable AC',
-      avatar: '/images/avatar_1.jpg',
-    },
-    {
-      id: 6,
-      quote:
-        'Replaced two aging, power-hungry ACs with Carrier 5-Star Inverters. The technician vacuum leak-tested copper lines and cleaned up the site spotless. Very courteous staff.',
-      name: 'Priya & Rajesh Nathan',
-      role: 'Apartment Residents, Rainbow Nagar',
-      tag: 'Carrier Inverter AC & Replacement',
-      avatar: '/images/avatar_2.jpg',
-    },
-    {
-      id: 7,
-      quote:
-        'Signed an Annual Maintenance Contract (AMC) for 18 units across our plant offices. Prompt quarterly servicing, emergency breakdown response in under 2 hours, and genuine Carrier parts.',
-      name: 'V. Saravanan',
-      role: 'General Manager, Mettupalayam Industrial Estate',
-      tag: 'Comprehensive AMC Contract',
-      avatar: '/images/avatar_3.jpg',
-    },
-    {
-      id: 8,
-      quote:
-        'Transparent BOQ quotation with zero surprise charges on copper piping or outdoor bracket stands. The 10-year compressor warranty registered right in front of us. Highly recommended!',
-      name: 'Capt. R. Deshmukh',
-      role: 'Villa Owner, Cuddalore Road',
-      tag: 'Carrier Inverter AC System',
+        'Great experience with Comfort Aircon! Their staff were friendly, responsive, and helpful in choosing the right AC for our needs. Highly recommended for AC sales and service.',
+      name: 'M. Lakshmi',
+      role: 'Customer, Pondicherry',
+      tag: 'Excellent Customer Support',
       avatar: '/images/avatar_4.jpg',
     },
   ];
 
-  // Clone first 3 items at the end so cards roll continuously without showing blank page
+  // Clone first 2 items at the end so cards roll continuously without showing blank page
   const extendedTestimonials = [
     ...testimonials.map((t, i) => ({ ...t, _key: `orig-${t.id}-${i}` })),
-    ...testimonials.slice(0, 3).map((t, i) => ({ ...t, _key: `post-${t.id}-${i}` })),
+    ...testimonials.slice(0, 2).map((t, i) => ({ ...t, _key: `post-${t.id}-${i}` })),
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -205,12 +169,10 @@ export default function TestimonialsSection() {
             <i className="fa-solid fa-comments me-1"></i> TESTIMONIALS
           </span>
           <h2 className="testimonial-heading text-center">
-            What they say <span className="gradient-word">about us</span>.
+            What Our <span className="gradient-word">Customers Say</span>
           </h2>
           <p className="testimonial-lead text-center mx-auto mb-3">
-            Over 2,400+ satisfied homeowners, luxury villas, and commercial
-            enterprises in Puducherry rely on Comfort Aircon for authorized Carrier
-            &amp; Toshiba cooling excellence.
+            We take pride in delivering reliable air conditioning solutions, professional installation, and excellent customer service to homes and businesses across Pondicherry.
           </p>
           <div className="d-inline-flex align-items-center gap-2 bg-white px-3 py-1.5 rounded-pill shadow-xs border">
             <span className="fw-bold text-dark-navy fs-6">4.7</span>

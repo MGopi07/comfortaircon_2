@@ -137,45 +137,45 @@ export default function AboutPage() {
   const trustPoints = [
     {
       icon: 'fa-solid fa-certificate',
-      title: 'Authorized Carrier & Toshiba Dealer',
-      desc: '100% genuine equipment sourced directly from official manufacturing plants with OEM factory warranty and GST tax invoices.',
-      tag: 'OFFICIAL DEALER',
-      check: '100% Genuine OEM Units',
+      title: 'Quality AC Products',
+      desc: 'Explore suitable air conditioning solutions from leading brands to meet your cooling requirements.',
+      tag: 'LEADING BRANDS',
+      check: 'Genuine Products and Warranty Support',
     },
     {
       icon: 'fa-solid fa-award',
-      title: '25+ Years of Industry Leadership',
-      desc: 'Over two decades of proven cooling excellence and technical mastery across 15,000+ completed installations in coastal Tamil Nadu.',
+      title: 'Over 25+ Years of Experience',
+      desc: 'Benefit from our experience in AC sales, installation, repair, and maintenance.',
       tag: 'SINCE 1999',
-      check: '15,000+ Completed Projects',
+      check: 'Decades of Industry Experience',
     },
     {
       icon: 'fa-solid fa-user-gear',
-      title: 'Factory-Certified HVAC Engineers',
-      desc: 'Rigorous factory training ensuring precision heat load calculation, zero-moisture vacuum leak testing, and vibration-isolated setups.',
-      tag: 'CERTIFIED TEAM',
-      check: 'Zero-Moisture Vacuum Testing',
+      title: 'Experienced Technicians',
+      desc: 'Our technicians focus on professional installation, careful troubleshooting, and reliable servicing.',
+      tag: 'EXPERT TEAM',
+      check: 'Quality Workmanship',
     },
     {
       icon: 'fa-solid fa-receipt',
-      title: 'Transparent BOQ Itemized Pricing',
-      desc: 'Clear, itemized proposals with zero hidden costs, clear copper piping rates, and free comprehensive initial site surveys.',
-      tag: 'ZERO HIDDEN FEES',
-      check: 'Free Initial Site Survey',
+      title: 'Transparent Pricing',
+      desc: 'Receive clear quotations and service estimates to help you make informed decisions.',
+      tag: 'HONEST PRICING',
+      check: 'Clear and Honest Pricing',
     },
     {
-      icon: 'fa-solid fa-stopwatch',
-      title: 'Rapid 15-Minute Response Time',
-      desc: 'Dedicated local service desks in Pondicherry, Villupuram, and Cuddalore ensuring fast turnaround for service callouts.',
-      tag: '15-MIN SLA',
-      check: 'Same-Day Breakdown Service',
+      icon: 'fa-solid fa-headset',
+      title: 'Responsive Customer Support',
+      desc: 'We aim to respond promptly to service requests and provide convenient support when you need assistance.',
+      tag: 'QUICK SUPPORT',
+      check: 'Reliable Service Assistance',
     },
     {
       icon: 'fa-solid fa-shield-halved',
-      title: '100% Genuine OEM Spares & Warranty',
-      desc: 'Factory-original PCB boards, compressors, and eco-refrigerants backed by manufacturer warranty certificates.',
-      tag: 'OEM WARRANTY',
-      check: 'Direct Factory Backing',
+      title: 'Dependable After-Sales Service',
+      desc: 'From routine maintenance to repair support, we help you maintain your air conditioning system for lasting comfort.',
+      tag: 'AFTER-SALES',
+      check: 'Customer-Focused Support',
     },
   ];
 
@@ -197,10 +197,10 @@ export default function AboutPage() {
           <div className="row align-items-center">
             <div className="col-lg-8">
               <h1 className="subpage-title">
-                Pioneering HVAC Excellence in <span className="text-primary-blue">Puducherry</span>
+                Your Trusted Air Conditioning Partner in <span className="text-primary-blue">Puducherry</span>
               </h1>
               <p className="subpage-lead">
-                Comfort Aircon is Puducherry’s premier authorized Carrier AC Dealer &amp; Air Conditioning Services provider, offering Carrier cooling systems alongside Toshiba high-efficiency Japanese air conditioning solutions.
+                Comfort Aircon delivers reliable air conditioning solutions for homes, offices, and commercial spaces. With expertise in AC sales, installation, repair, and maintenance, we are committed to providing quality cooling solutions and dependable customer service.
               </p>
 
               <div className="d-flex flex-wrap align-items-center gap-3 pt-2">
@@ -264,10 +264,11 @@ export default function AboutPage() {
               <div className="who-content-col reveal-from-right">
                 <span className="who-label">WHO WE ARE</span>
                 <h2 className="who-title">
-                  Our job is to provide you with innovation.
+                  Bringing Innovation and Comfort to Every Space
+
                 </h2>
                 <p className="who-description">
-                  Founded in 1999, Comfort Aircon is Puducherry’s premier air conditioning sales, engineering, and maintenance enterprise. As an authorized Carrier AC Dealer and Toshiba Air Conditioning Partner, we bring world-class cooling technology with meticulous local execution to homes, healthcare facilities, and commercial projects.
+                  Established in 1999, Comfort Aircon specializes in air conditioning sales, installation, servicing, and maintenance. Our experienced team helps customers choose suitable cooling solutions based on their needs, space, and budget.
                 </p>
 
                 {/* Bullet Checklist with filled circular checkmarks */}
@@ -276,39 +277,38 @@ export default function AboutPage() {
                     <span className="who-check-circle">
                       <i className="fa-solid fa-check"></i>
                     </span>
-                    <span>Exceed your expectations</span>
+                    <span>Exceeding Customer Expectations</span>
                   </li>
                   <li>
                     <span className="who-check-circle">
                       <i className="fa-solid fa-check"></i>
                     </span>
-                    <span>Deliver 100% satisfaction</span>
+                    <span>Commitment to Quality Service</span>
                   </li>
                   <li>
                     <span className="who-check-circle">
                       <i className="fa-solid fa-check"></i>
                     </span>
-                    <span>Professional Expert</span>
+                    <span>Experienced Technical Professionals</span>
                   </li>
                   <li>
                     <span className="who-check-circle">
                       <i className="fa-solid fa-check"></i>
                     </span>
-                    <span>Premium support 24/7</span>
+                    <span>Reliable After-Sales Support</span>
                   </li>
                 </ul>
 
                 {/* Horizontal Divider Line */}
                 <div className="who-divider"></div>
 
-                {/* Action Button styled in existing theme color */}
-                <button
-                  type="button"
+                {/* Action Button */}
+                <Link
+                  href="/contact"
                   className="who-btn-discover"
-                  onClick={() => openAppointment()}
                 >
-                  Discover more
-                </button>
+                  Contact Now
+                </Link>
               </div>
             </div>
           </div>
@@ -321,17 +321,16 @@ export default function AboutPage() {
           <div className="row justify-content-center">
             <div className="col-lg-10 reveal-from-bottom">
               <h2 className="promo-banner-title">
-                Discount up to 50% for maintenance service. Only this month !
+                Professional AC Maintenance &amp; Reliable Cooling Solutions
               </h2>
               <p className="promo-banner-desc">
-                Keep your home and workspace whisper-quiet and cool. Enjoy comprehensive multi-point inspection, coil chemical wash, refrigerant top-up, and genuine OEM parts backed by certified HVAC technicians.
-              </p>
+                Keep your air conditioner running efficiently with professional servicing from Comfort Aircon. Our services include system inspection, filter and coil cleaning, performance checks, and maintenance recommendations.</p>
               <button
                 type="button"
                 className="promo-banner-btn"
                 onClick={() => openAppointment()}
               >
-                Claim Promo !
+                <i className="fa-regular fa-calendar-check fs-5 me-2"></i> Book Your Service
               </button>
             </div>
           </div>
@@ -413,8 +412,7 @@ export default function AboutPage() {
                     <i className="fa-solid fa-compass"></i> Mission Statement
                   </h3>
                   <p className="mission-card-desc">
-                    To provide homeowners, businesses, and institutions across Pondicherry, Villupuram, and Cuddalore with dependable, energy-efficient, and factory-warranted air conditioning solutions delivered with uncompromising engineering integrity and prompt after-sales service.
-                  </p>
+                    To provide dependable, energy-efficient air conditioning solutions to residential and commercial customers across Pondicherry, Villupuram, and Cuddalore. We strive to deliver professional installation, quality workmanship, transparent pricing, and responsive customer support.</p>
                 </div>
 
                 <div>
@@ -443,9 +441,9 @@ export default function AboutPage() {
                       </div>
                       <span className="value-card-num">01</span>
                     </div>
-                    <h4 className="value-card-title">Engineering Precision</h4>
+                    <h4 className="value-card-title">Engineering Excellence</h4>
                     <p className="value-card-desc">
-                      We never cut corners on copper piping thickness, electrical breakers, vacuum standards, or structural wall anchors.
+                      We focus on proper installation practices, suitable materials, electrical safety, and reliable system performance.
                     </p>
                   </div>
                 </div>
@@ -460,7 +458,7 @@ export default function AboutPage() {
                     </div>
                     <h4 className="value-card-title">Customer Trust</h4>
                     <p className="value-card-desc">
-                      Clear itemized proposals, transparent warranty registrations, and zero unexpected hidden charges.
+                      We believe in honest communication, clear quotations, transparent pricing, and dependable service.
                     </p>
                   </div>
                 </div>
@@ -475,7 +473,7 @@ export default function AboutPage() {
                     </div>
                     <h4 className="value-card-title">Energy Efficiency</h4>
                     <p className="value-card-desc">
-                      Championing high-ISEER Carrier inverters and Toshiba Japanese VRFs to reduce customer electricity bills.
+                      We help customers explore energy-efficient air conditioning options that support comfortable indoor environments and responsible energy consumption.
                     </p>
                   </div>
                 </div>
@@ -488,9 +486,9 @@ export default function AboutPage() {
                       </div>
                       <span className="value-card-num">04</span>
                     </div>
-                    <h4 className="value-card-title">Rapid Local Response</h4>
+                    <h4 className="value-card-title">Reliable Local Service</h4>
                     <p className="value-card-desc">
-                      Same-day emergency breakdown response across Pondicherry, Villupuram, and Cuddalore districts.
+                      Our team is committed to providing responsive AC repair, maintenance, and installation services across our service areas.
                     </p>
                   </div>
                 </div>
@@ -532,8 +530,7 @@ export default function AboutPage() {
               Why Customers Choose Us
             </h2>
             <p className="section-desc mx-auto" style={{ maxWidth: '680px' }}>
-              Discover the trust pillars that have made Comfort Aircon the #1 preferred cooling partner for over 15,000 satisfied residential and commercial clients.
-            </p>
+              Since 1999, Comfort Aircon has been committed to delivering reliable air conditioning products and services for homes, offices, and commercial establishments.</p>
           </div>
 
           <div className="row g-4">

@@ -889,11 +889,11 @@ a {
 
 .hero-title {
   font-family: var(--font-heading);
-  font-size: clamp(2.1rem, 1.2rem + 3.2vw, 3.6rem);
+  font-size: clamp(1.75rem, 1.05rem + 1.6vw, 2.35rem);
   font-weight: 800;
-  line-height: 1.12;
+  line-height: 1.18;
   letter-spacing: -0.02em;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
 
 /* Animated Shimmer Text */
@@ -967,8 +967,8 @@ a {
 
 /* Hero Action Buttons & Trust Points (1st Reference Layout - No Red Button) */
 .hero-cta-group {
-  margin-top: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 12px;
 }
 
 .btn-hero-book {
@@ -977,7 +977,7 @@ a {
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.95rem;
-  padding: 13px 28px;
+  padding: 10px 24px;
   border-radius: 50px;
   border: none;
   box-shadow: 0 8px 22px rgba(0, 120, 191, 0.32);
@@ -1003,7 +1003,7 @@ a {
   font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.95rem;
-  padding: 12px 28px;
+  padding: 10px 24px;
   border-radius: 50px;
   border: 1.5px solid rgba(22, 46, 92, 0.24);
   transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1025,7 +1025,7 @@ a {
 .hero-trust-divider {
   border: none;
   border-top: 1px solid rgba(22, 46, 92, 0.12);
-  margin: 1.5rem 0 1.25rem;
+  margin: 12px 0 10px;
   width: 100%;
 }
 
@@ -1152,10 +1152,10 @@ a {
 
 .hero-subtitle {
   font-family: var(--font-body);
-  font-size: 1.12rem;
-  line-height: 1.62;
+  font-size: 1.02rem;
+  line-height: 1.55;
   color: var(--text-muted);
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   max-width: 580px;
   padding-left: 0;
   margin-left: 0;
@@ -1163,7 +1163,7 @@ a {
 
 /* Hero Layout: two-column grid on desktop, stacked on tablet/mobile */
 .hero-main-row {
-  padding-block: clamp(32px, 6vw, 72px);
+  padding-block: clamp(24px, 3.5vw, 44px);
 }
 
 .hero-img-container {
@@ -3367,6 +3367,18 @@ a.footer-contact-value:hover {
 
 .footer-section .footer-bottom p {
   color: #94A3B8;
+}
+
+.footer-syscorp-link {
+  color: #38BDF8;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.footer-syscorp-link:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
 }
 
 .footer-bottom-areas {
@@ -7304,7 +7316,7 @@ body.maintenance-page {
 
 .promo-banner-btn {
   background: var(--primary-blue, #0078BF);
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 1.05rem;
@@ -7317,12 +7329,12 @@ body.maintenance-page {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .promo-banner-btn:hover {
   background: #005A94;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 16px 36px rgba(0, 120, 191, 0.55);
 }
