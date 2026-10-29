@@ -50,10 +50,9 @@ export default function Hero() {
               <span>Authorized Carrier &amp; Toshiba AC Dealership</span>
             </div>
 
-            {/* Main Heading */}
             <h1 className="hero-title fw-extrabold text-navy lh-sm mb-3">
-              Stay Cool <br />
-              <span className="animated-gradient-text">All Year Round</span>
+              Complete Air <br />
+              <span className="animated-gradient-text">Conditioning Solutions</span>
             </h1>
 
             {/* Subtitle / Company Introduction */}

@@ -228,15 +228,6 @@ export default function Footer() {
                 Syscorp Technology Pvt. Ltd.
               </a>
             </p>
-            <span className="text-muted d-none d-md-inline">|</span>
-            <Link
-              href="/admin-login"
-              className="text-muted text-decoration-none small hover-white d-inline-flex align-items-center gap-1"
-              title="Staff & Management Portal"
-            >
-              <i className="fa-solid fa-shield-halved text-primary-blue"></i>
-              <span>Staff Login</span>
-            </Link>
           </div>
         </div>
       </div>
