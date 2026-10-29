@@ -11,14 +11,20 @@ export default function Hero() {
     {
       src: '/images/ban2.png',
       alt: 'Comfort Aircon Carrier Living Room AC Cooling',
+      width: 1637,
+      height: 1262,
     },
     {
       src: '/images/ban1.png',
       alt: 'Comfort Aircon High-Efficiency Inverter AC Cooling',
+      width: 1360,
+      height: 980,
     },
     {
       src: '/images/ban4.png',
       alt: 'Comfort Aircon Floating Serenity Bedroom Cooling',
+      width: 1360,
+      height: 980,
     },
   ];
 
@@ -138,6 +144,8 @@ export default function Hero() {
                     <img
                       src={slide.src}
                       alt={slide.alt}
+                      width={slide.width}
+                      height={slide.height}
                       className="hero-main-img img-fluid"
                       loading={idx === 0 ? 'eager' : 'lazy'}
                       fetchPriority={idx === 0 ? 'high' : 'auto'}
