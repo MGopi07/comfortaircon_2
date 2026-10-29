@@ -7304,7 +7304,7 @@ body.maintenance-page {
 
 .promo-banner-btn {
   background: var(--primary-blue, #0078BF);
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 1.05rem;
@@ -7317,12 +7317,12 @@ body.maintenance-page {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .promo-banner-btn:hover {
   background: #005A94;
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 16px 36px rgba(0, 120, 191, 0.55);
 }

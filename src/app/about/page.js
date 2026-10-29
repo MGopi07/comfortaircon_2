@@ -324,15 +324,16 @@ export default function AboutPage() {
                 Discount up to 50% for maintenance service. Only this month !
               </h2>
               <p className="promo-banner-desc">
-                Keep your home and workspace whisper-quiet and cool. Enjoy comprehensive multi-point inspection, coil chemical wash, refrigerant top-up, and genuine OEM parts backed by certified HVAC technicians.
+                Keep your home and workspace whisper-quiet and cool. Choose from Service & Maintenance, Cleaning & Troubleshooting, Gas Filling and Annual Maintenance for your home or commercial space in Pondicherry, Villupuram and Cuddalore. Send an enquiry, WhatsApp us or call to book your service today.
               </p>
-              <button
-                type="button"
+              <a
+                href={INITIAL_CONTACT.whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="promo-banner-btn"
-                onClick={() => openAppointment()}
               >
-                Claim Promo !
-              </button>
+                <i className="fa-brands fa-whatsapp fs-5 me-2"></i> WhatsApp Now
+              </a>
             </div>
           </div>
         </div>
