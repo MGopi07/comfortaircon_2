@@ -5773,11 +5773,11 @@ body.maintenance-page {
   border-bottom: 3px solid var(--primary-blue);
 }
 
-.subpage-hero::before {
+.subpage-hero:not(.subpage-hero-about)::before {
   display: none !important;
 }
 
-.subpage-hero::after {
+.subpage-hero:not(.subpage-hero-about)::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -8581,12 +8581,10 @@ body.maintenance-page {
 }
 
 /* ==========================================================================
-   SUBPAGE HERO BANNER (.subpage-hero, .subpage-hero-about)
-   Integrates /images/about-us-hero.png seamlessly with standard .subpage-hero
-   Zero neon/cyan glow effects, standard subpage padding (64px 0 54px), uniform margins
+   STANDARD SUBPAGE HERO BANNER (.subpage-hero)
+   Used on contact, services, products, and gallery pages
    ========================================================================== */
-.subpage-hero,
-.subpage-hero.subpage-hero-about {
+.subpage-hero:not(.subpage-hero-about) {
   background-color: #09162E;
   background-image: 
     linear-gradient(
@@ -8605,15 +8603,8 @@ body.maintenance-page {
   padding: 64px 0 54px;
 }
 
-/* Disable ambient glow pseudo-element on subpage hero */
-.subpage-hero::before,
-.subpage-hero.subpage-hero-about::before {
-  display: none !important;
-}
-
 @media (max-width: 991px) {
-  .subpage-hero,
-  .subpage-hero.subpage-hero-about {
+  .subpage-hero:not(.subpage-hero-about) {
     padding: 56px 0 46px;
     background-image: 
       linear-gradient(
@@ -8623,6 +8614,188 @@ body.maintenance-page {
       ),
       url('/images/about-us-hero-original.png');
     background-position: right top;
+  }
+}
+
+/* ==========================================================================
+   ABOUT US SUB-PAGE HERO (.subpage-hero.subpage-hero-about)
+   - Displays full uncropped hero image on right (background-size: auto 100%)
+   - Seamless gradient overlay & gradient mask on left edge
+   - Content container sits over navy background with high contrast
+   ========================================================================== */
+
+:root {
+  --hero-navy: #09162e;
+  --hero-blue: var(--primary-blue, #0078BF);
+}
+
+/* 1. Section Container */
+.subpage-hero.subpage-hero-about {
+  background-color: var(--hero-navy);
+  background-image: none !important;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: clamp(380px, 33vw, 500px);
+  display: flex;
+  align-items: center;
+  padding: 56px 0;
+  border-bottom: 3px solid var(--hero-blue);
+}
+
+/* 2. Image Layer (::before pseudo-element, z-index 0, pointer-events none) */
+.subpage-hero.subpage-hero-about::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 64%;
+  z-index: 0;
+  pointer-events: none;
+  background-color: transparent;
+  background-image: url('/images/about-us-hero-original.png');
+  background-image: -webkit-image-set(
+    url('/images/about-us-hero-original.webp') 1x,
+    url('/images/about-us-hero-original.png') 1x
+  );
+  background-image: image-set(
+    url('/images/about-us-hero-original.webp') type('image/webp'),
+    url('/images/about-us-hero-original.png') type('image/png')
+  );
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: auto 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 18%, #000 38%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 18%, #000 38%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  animation: aboutHeroFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+             aboutHeroDrift 14s ease-in-out 0.9s infinite alternate;
+  will-change: transform, translate, opacity;
+}
+
+/* 3. Overlay Layer (::after pseudo-element, z-index 1, pointer-events none) */
+.subpage-hero.subpage-hero-about::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  inset: 0 !important;
+  height: auto !important;
+  pointer-events: none;
+  z-index: 1;
+  background: 
+    linear-gradient(0deg, rgba(9, 22, 46, 0.35) 0%, transparent 25%),
+    linear-gradient(90deg, #09162e 0%, #09162e 32%, rgba(9, 22, 46, 0.92) 44%, rgba(9, 22, 46, 0.55) 58%, rgba(9, 22, 46, 0) 78%);
+}
+
+/* 4. Content Container & Text Column */
+.subpage-hero.subpage-hero-about .container-xxl {
+  position: relative;
+  z-index: 2;
+  max-width: 1240px;
+  width: 100%;
+}
+
+.subpage-hero.subpage-hero-about .col-lg-8 {
+  max-width: 620px;
+  width: 100%;
+}
+
+/* Subtle Motion Keyframes */
+@keyframes aboutHeroFadeIn {
+  from {
+    opacity: 0;
+    translate: 24px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes aboutHeroDrift {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-8px);
+  }
+}
+
+/* RESPONSIVE SPECIFICATIONS */
+
+/* 1200px and below: image layer width 68%, content max-width 560px */
+@media (max-width: 1200px) {
+  .subpage-hero.subpage-hero-about::before {
+    width: 68%;
+  }
+
+  .subpage-hero.subpage-hero-about .col-lg-8 {
+    max-width: 560px;
+  }
+}
+
+/* 992px and below: image layer width 100%, background-size cover, 78% center, opacity .55, top overlay gradient */
+@media (max-width: 992px) {
+  .subpage-hero.subpage-hero-about {
+    min-height: auto;
+    padding: 48px 0;
+  }
+
+  .subpage-hero.subpage-hero-about::before {
+    width: 100%;
+    background-size: cover;
+    background-position: 78% center;
+    opacity: 0.55;
+    -webkit-mask-image: none;
+    mask-image: none;
+    animation: none;
+    transform: none;
+    translate: none;
+  }
+
+  .subpage-hero.subpage-hero-about::after {
+    background: linear-gradient(180deg, rgba(9, 22, 46, 0.94) 0%, rgba(9, 22, 46, 0.7) 100%);
+  }
+
+  .subpage-hero.subpage-hero-about .col-lg-8 {
+    max-width: 100%;
+  }
+}
+
+/* 576px and below: image layer opacity .4, buttons stack full width, no horizontal scroll at 360px */
+@media (max-width: 576px) {
+  .subpage-hero.subpage-hero-about {
+    padding: 40px 0;
+    overflow-x: hidden;
+  }
+
+  .subpage-hero.subpage-hero-about::before {
+    opacity: 0.4;
+  }
+
+  .subpage-hero.subpage-hero-about .d-flex.flex-wrap {
+    flex-direction: column;
+    align-items: stretch !important;
+    width: 100%;
+  }
+
+  .subpage-hero.subpage-hero-about .d-flex.flex-wrap .btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .subpage-hero.subpage-hero-about::before {
+    animation: none !important;
+    transform: none !important;
+    translate: none !important;
+    transition: none !important;
   }
 }
 

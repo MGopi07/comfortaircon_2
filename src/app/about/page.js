@@ -181,6 +181,14 @@ export default function AboutPage() {
 
   return (
     <>
+      {/* Preload hero WebP image */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/about-us-hero-original.webp"
+        type="image/webp"
+      />
+
       {/* 1. SUBPAGE HERO / BANNER */}
       <section className="subpage-hero subpage-hero-about">
         <div className="container-xxl">
