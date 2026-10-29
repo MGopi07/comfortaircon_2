@@ -724,6 +724,19 @@ a {
   background: transparent;
 }
 
+.btn-outline-primary {
+  --bs-btn-color: var(--primary-blue, #0078BF);
+  --bs-btn-border-color: var(--primary-blue, #0078BF);
+  --bs-btn-hover-color: #FFFFFF;
+  --bs-btn-hover-bg: var(--primary-blue, #0078BF);
+  --bs-btn-hover-border-color: var(--primary-blue, #0078BF);
+  --bs-btn-focus-shadow-rgb: 0, 120, 191;
+  --bs-btn-active-color: #FFFFFF;
+  --bs-btn-active-bg: var(--primary-dark-blue, #005A94);
+  --bs-btn-active-border-color: var(--primary-dark-blue, #005A94);
+  transition: all 0.25s ease;
+}
+
 .nav-phone-btn-outline:hover {
   background: var(--primary-blue);
   color: #FFFFFF !important;
@@ -789,15 +802,42 @@ a {
   transform: scale(1.05);
 }
 
-/* 3. HERO / BANNER SECTION */
+/* ==========================================================================
+   3. HERO / BANNER SECTION ("Complete Air Conditioning Solutions")
+   - Fluid vertical spacing with --hero-pad-y
+   - Content-driven height with zero fixed/100vh stretch
+   - Responsive two-column flex layout scaling smoothly from 360px to 1920px+
+   ========================================================================== */
+
+:root {
+  --hero-pad-y: clamp(14px, 2vw, 32px);
+}
+
+/* 1. Section Container: height comes from content, zero fixed min-height */
 .hero-section {
   position: relative;
   background: linear-gradient(135deg, #F0F6FF 0%, #E8F2FD 50%, #F5F8FF 100%);
-  padding: 0;
+  padding: var(--hero-pad-y) 0;
+  margin: 0;
+  margin-bottom: 0;
+  height: auto;
+  min-height: 0;
   overflow: hidden;
 }
 
-/* Glowing Ambient Orbs */
+@media (min-width: 1200px) {
+  .hero-section {
+    max-height: clamp(440px, 52vh, 560px);
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-section > .container-xxl {
+    width: 100%;
+  }
+}
+
+/* Ambient Glow Orbs (contained, pointer-events none, zero layout impact) */
 .hero-section::before {
   content: '';
   position: absolute;
@@ -822,103 +862,7 @@ a {
   pointer-events: none;
 }
 
-.hero-content {
-  position: relative;
-  z-index: 2;
-}
-
-.hero-status-badge {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  width: fit-content;
-  max-width: 100%;
-  gap: 8px;
-  padding: 5px 14px;
-  border-radius: 50px;
-  background: rgba(0, 120, 191, 0.08);
-  border: 1px solid rgba(0, 120, 191, 0.22);
-  color: var(--primary-blue, #0078BF);
-  font-weight: 600;
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 6px rgba(0, 120, 191, 0.06);
-}
-
-.live-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(43, 120, 228, 0.08);
-  border: 1px solid rgba(43, 120, 228, 0.2);
-  color: var(--primary-blue);
-  padding: 8px 20px;
-  border-radius: 50px;
-  font-weight: 600;
-  font-size: 0.88rem;
-  margin-bottom: 24px;
-}
-
-.pulse-dot {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #22c55e;
-  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-  animation: pulse-green 2s infinite;
-}
-
-@keyframes pulse-green {
-  0% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-  }
-
-  70% {
-    transform: scale(1);
-    box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
-  }
-
-  100% {
-    transform: scale(0.95);
-    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-  }
-}
-
-.hero-title {
-  font-family: var(--font-heading);
-  font-size: clamp(1.75rem, 1.05rem + 1.6vw, 2.35rem);
-  font-weight: 800;
-  line-height: 1.18;
-  letter-spacing: -0.02em;
-  margin-bottom: 12px;
-}
-
-/* Animated Shimmer Text */
-.animated-gradient-text {
-  background: linear-gradient(135deg, #162E5C 0%, #0078BF 25%, #0284C7 50%, #162E5C 75%, #0078BF 100%);
-  background-size: 250% auto;
-  color: transparent !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  animation: gradientShimmer 5s linear infinite;
-  display: inline;
-}
-
-@keyframes gradientShimmer {
-  0% {
-    background-position: 0% center;
-  }
-
-  100% {
-    background-position: 250% center;
-  }
-}
-
-/* Ambient Air Waves & Glowing Aura */
+/* Live Ambient Air Waves */
 .hero-animated-bg {
   position: absolute;
   top: 0;
@@ -952,23 +896,120 @@ a {
 }
 
 @keyframes waveRotate {
-  0% {
-    transform: rotate(0deg) scale(1);
-  }
-
-  50% {
-    transform: rotate(180deg) scale(1.1);
-  }
-
-  100% {
-    transform: rotate(360deg) scale(1);
-  }
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
 }
 
-/* Hero Action Buttons & Trust Points (1st Reference Layout - No Red Button) */
+/* 2. Main Row / Slider Track */
+.hero-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(24px, 4vw, 64px);
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+  height: auto;
+  --bs-gutter-x: 0;
+  --bs-gutter-y: 0;
+}
+
+/* 3. Text Column: flex 1 1 46%, max-width 560px */
+.hero-main-row > .hero-content {
+  flex: 1 1 46%;
+  max-width: 560px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(8px, 1.1vw, 14px);
+  padding: 0;
+}
+
+/* Status Badge */
+.hero-status-badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  width: fit-content;
+  max-width: 100%;
+  gap: 8px;
+  padding: 5px 14px;
+  border-radius: 50px;
+  background: rgba(0, 120, 191, 0.08);
+  border: 1px solid rgba(0, 120, 191, 0.22);
+  color: var(--primary-blue, #0078BF);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  margin: 0 !important;
+  box-shadow: 0 2px 6px rgba(0, 120, 191, 0.06);
+}
+
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+/* Hero Title: clamp(30px, 4.2vw, 56px), line-height 1.12 */
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(30px, 4.2vw, 56px) !important;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: 0 !important;
+}
+
+/* Animated Shimmer Text */
+.animated-gradient-text {
+  background: linear-gradient(135deg, #162E5C 0%, #0078BF 25%, #0284C7 50%, #162E5C 75%, #0078BF 100%);
+  background-size: 250% auto;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  animation: gradientShimmer 5s linear infinite;
+  display: inline;
+}
+
+@keyframes gradientShimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 250% center; }
+}
+
+/* Hero Subtitle: clamp(15px, 1.5vw, 18px) */
+.hero-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.5vw, 18px);
+  line-height: 1.55;
+  color: var(--text-muted);
+  max-width: 560px;
+  margin: 0 !important;
+  padding: 0;
+}
+
+/* Action Buttons */
 .hero-cta-group {
-  margin-top: 0;
-  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 0 !important;
 }
 
 .btn-hero-book {
@@ -978,6 +1019,7 @@ a {
   font-weight: 600;
   font-size: 0.95rem;
   padding: 10px 24px;
+  min-height: 44px;
   border-radius: 50px;
   border: none;
   box-shadow: 0 8px 22px rgba(0, 120, 191, 0.32);
@@ -986,6 +1028,7 @@ a {
   letter-spacing: 0.01em;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -1004,6 +1047,7 @@ a {
   font-weight: 600;
   font-size: 0.95rem;
   padding: 10px 24px;
+  min-height: 44px;
   border-radius: 50px;
   border: 1.5px solid rgba(22, 46, 92, 0.24);
   transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1011,6 +1055,7 @@ a {
   letter-spacing: 0.01em;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -1022,18 +1067,21 @@ a {
   box-shadow: 0 8px 20px rgba(22, 46, 92, 0.2);
 }
 
+/* Trust Divider */
 .hero-trust-divider {
   border: none;
   border-top: 1px solid rgba(22, 46, 92, 0.12);
-  margin: 12px 0 10px;
+  margin: 0 !important;
   width: 100%;
 }
 
+/* Trust Points: wraps with gap 10px 20px */
 .hero-trust-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 16px 28px;
+  gap: 10px 20px;
+  margin: 0 !important;
 }
 
 .hero-trust-item {
@@ -1069,60 +1117,21 @@ a {
   font-variant-numeric: tabular-nums;
 }
 
-.hero-cta-btn {
-  background: linear-gradient(135deg, #0078BF 0%, #005A94 100%) !important;
-  border: none !important;
-  box-shadow: 0 10px 25px rgba(0, 120, 191, 0.35) !important;
-  transition: all 0.3s ease !important;
-}
-
-.hero-cta-btn:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 14px 32px rgba(0, 120, 191, 0.45) !important;
-}
-
-.hero-secondary-btn {
-  border: 2px solid rgba(0, 120, 191, 0.25) !important;
-  color: #162E5C !important;
-  transition: all 0.3s ease !important;
-}
-
-.hero-secondary-btn:hover {
-  background: rgba(0, 120, 191, 0.08) !important;
-  border-color: #0078BF !important;
-  transform: translateY(-3px);
-}
-
-.hero-trust-icon {
-  width: 44px;
-  height: 44px;
+/* 4. Image Column: flex 1 1 50% */
+.hero-main-row > .hero-img-container {
+  flex: 1 1 50%;
+  width: 100%;
+  max-width: 620px;
+  position: relative;
+  z-index: 2;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease;
+  margin-inline: auto;
+  padding: 0;
 }
 
-.hero-trust-icon:hover {
-  transform: scale(1.1);
-}
-
-.hero-mode-pill {
-  border: none;
-  background: transparent;
-  color: #64748b;
-  font-size: 0.8rem;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-}
-
-.hero-mode-pill.active {
-  background-color: #ffffff;
-  color: var(--color-navy);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-  font-weight: 600;
-}
-
-/* Glowing Image Backdrop Ring */
 .hero-img-glow {
   position: absolute;
   top: 50%;
@@ -1143,67 +1152,39 @@ a {
     opacity: 0.65;
     transform: translate(-50%, -50%) scale(0.96);
   }
-
   100% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.04);
   }
 }
 
-.hero-subtitle {
-  font-family: var(--font-body);
-  font-size: 1.02rem;
-  line-height: 1.55;
-  color: var(--text-muted);
-  margin-bottom: 16px;
-  max-width: 580px;
-  padding-left: 0;
-  margin-left: 0;
-}
-
-/* Hero Layout: two-column grid on desktop, stacked on tablet/mobile */
-.hero-main-row {
-  padding-block: clamp(24px, 3.5vw, 44px);
-}
-
-.hero-img-container {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Hero Banner Carousel Slider
-   Slides are stacked in a fixed aspect-ratio frame so the height is reserved
-   before images load and slides never shift the layout. The 13:10 frame matches
-   the 1637x1262 room scene; the 1360x980 slides only lose ~3% per side to cover,
-   so every image fills the frame exactly and the feathered mask lines up with
-   the real photo edges. The mask stacks three layers that all reach full
-   transparency at the edge: a short top fade (keeps the AC unit crisp), a longer
-   bottom fade (melts floors/beds into the hero), side fades, and a soft vignette
-   for rounded corners, so no slide ever shows a hard border. */
+/* Banner Carousel Slider */
 .hero-banner-carousel {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 760px;
+  max-width: 620px;
   margin-inline: auto;
 }
 
 .hero-banner-carousel .carousel-inner {
   position: relative;
   width: 100%;
-  aspect-ratio: 13 / 10;
+  aspect-ratio: 1637 / 1262;
   overflow: visible;
 }
 
 .hero-banner-carousel .carousel-item {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
   float: none;
   margin: 0;
+  padding: 0;
   opacity: 0;
   visibility: hidden;
   transform: none;
@@ -1216,13 +1197,15 @@ a {
   z-index: 1;
 }
 
+/* Main Hero Image: width 100%, max-width 620px, height auto, max-height min(58vh, 520px), object-fit contain */
 .hero-main-img {
   display: block;
   width: 100%;
-  height: 100%;
-  max-width: none;
-  object-fit: cover;
-  object-position: center;
+  max-width: 620px;
+  height: auto;
+  max-height: min(58vh, 520px);
+  object-fit: contain;
+  margin-inline: auto;
   border: none;
   border-radius: 0;
   box-shadow: none;
@@ -1235,26 +1218,33 @@ a {
   mask-composite: intersect;
 }
 
+/* 5. Slider Dots: positioned directly below content with margin-top clamp(12px, 1.6vw, 24px) */
 .hero-carousel-indicators {
   position: relative;
   z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin-top: 4px;
+  gap: 8px;
+  margin-top: clamp(12px, 1.6vw, 24px);
+  margin-bottom: 0;
+  padding: 0;
 }
 
 .hero-carousel-indicators button {
   width: 10px;
   height: 10px;
-  padding: 0;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 17px 0;
+  background-clip: content-box;
   border: none;
   border-radius: 50px;
   background-color: var(--primary-blue, #0078BF);
   opacity: 0.3;
   cursor: pointer;
   transition: width 0.3s ease, opacity 0.3s ease;
+  box-sizing: border-box;
 }
 
 .hero-carousel-indicators button.active {
@@ -1267,89 +1257,180 @@ a {
   outline-offset: 3px;
 }
 
-/* Desktop & laptop: text left, artwork right, vertically centred */
-@media (min-width: 992px) {
-  .hero-main-row {
-    min-height: clamp(540px, calc(100vh - 72px), 720px);
-    align-items: center !important;
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* 1400px and up: container max-width 1320px, image max-width 680px */
+@media (min-width: 1400px) {
+  .hero-section .container-xxl {
+    max-width: 1320px;
   }
 
-  .hero-content {
-    padding-right: clamp(8px, 2vw, 32px);
-  }
-
-  /* Cap the width by the viewport height so the whole scene (AC unit to sofa)
-     stays on screen on short laptop displays */
-  .hero-banner-carousel {
-    width: min(100%, calc((100svh - 220px) * 1.3));
-    min-width: min(100%, 440px);
-    max-width: 820px;
+  .hero-main-row > .hero-img-container,
+  .hero-banner-carousel,
+  .hero-main-img {
+    max-width: 680px;
   }
 }
 
-/* Tablet: stacked, centred copy so the column doesn't look left-heavy */
-@media (min-width: 576px) and (max-width: 991.98px) {
-  .hero-content {
+/* 992px to 1399px: two columns, gap clamp(24px, 3vw, 48px), image max-width 540px */
+@media (min-width: 992px) and (max-width: 1399.98px) {
+  .hero-main-row {
+    gap: clamp(24px, 3vw, 48px);
+  }
+
+  .hero-main-row > .hero-img-container,
+  .hero-banner-carousel,
+  .hero-main-img {
+    max-width: 540px;
+  }
+}
+
+/* 821px to 991px: keep two columns with text at 16px */
+@media (min-width: 821px) and (max-width: 991.98px) {
+  .hero-main-row {
+    gap: clamp(20px, 2.5vw, 32px);
+  }
+
+  .hero-main-row > .hero-content {
+    flex: 1 1 48%;
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+  }
+
+  .hero-main-row > .hero-img-container,
+  .hero-banner-carousel,
+  .hero-main-img {
+    max-width: 460px;
+  }
+}
+
+/* 820px and below: switch to single column layout */
+@media (max-width: 820px) {
+  .hero-main-row {
+    flex-direction: column;
     align-items: center;
-    text-align: center;
+    gap: 32px;
+  }
+
+  .hero-main-row > .hero-content {
+    flex: 1 1 100%;
+    max-width: 620px;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .hero-main-row > .hero-img-container {
+    flex: 1 1 100%;
+    max-width: 500px;
+  }
+}
+
+/* 767px and below: one column, image max-width 440px & max-height 300px, padding 24px 0 32px */
+@media (max-width: 767.98px) {
+  .hero-section {
+    padding: 24px 0 32px;
+  }
+
+  .hero-main-row {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .hero-main-row > .hero-content {
+    max-width: 100%;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .hero-status-badge {
-    align-self: center;
+    align-self: flex-start;
   }
 
-  .hero-subtitle {
-    margin-inline: auto;
+  .hero-main-row > .hero-img-container,
+  .hero-banner-carousel,
+  .hero-main-img {
+    max-width: 440px;
   }
 
-  .hero-cta-group,
-  .hero-trust-row {
-    justify-content: center;
+  .hero-main-img {
+    max-height: 300px;
   }
 
-  .hero-trust-item {
-    text-align: left;
-  }
-}
-
-/* Mobile phones */
-@media (max-width: 575.98px) {
-  .hero-subtitle {
-    font-size: 1rem;
-    line-height: 1.65;
-    margin-bottom: 24px;
-  }
-
-  .hero-cta-group {
-    flex-direction: column;
-    align-items: stretch !important;
-  }
-
-  .hero-cta-group .btn {
-    width: 100%;
-    justify-content: center;
-    min-height: 50px;
+  .hero-banner-carousel .carousel-inner {
+    max-height: 300px;
   }
 
   .hero-trust-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px 16px;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px 16px;
   }
 
   .hero-trust-text {
     font-size: 0.8rem;
   }
+}
 
-  .hero-banner-carousel {
-    width: 108%;
-    margin-inline: -4%;
+/* Below 480px: buttons stack full width */
+@media (max-width: 480px) {
+  .hero-cta-group {
+    flex-direction: column;
+    align-items: stretch !important;
+    width: 100%;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
   }
 }
 
+/* 360px: no horizontal scroll, heading at least 28px, tap targets >= 44px */
+@media (max-width: 360px) {
+  .hero-title {
+    font-size: clamp(28px, 8vw, 32px) !important;
+  }
+
+  .hero-trust-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Landscape phones (max-height: 480px): reduce --hero-pad-y to 20px and image max-height to 70vh */
+@media (orientation: landscape) and (max-height: 480px) {
+  .hero-section {
+    --hero-pad-y: 20px;
+    padding: 20px 0;
+    max-height: none;
+  }
+
+  .hero-main-row {
+    gap: 20px;
+  }
+
+  .hero-main-img {
+    max-height: 70vh;
+  }
+
+  .hero-banner-carousel .carousel-inner {
+    max-height: 70vh;
+  }
+}
+
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .hero-banner-carousel .carousel-item {
     transition: none;
+  }
+
+  .hero-img-glow,
+  .air-wave {
+    animation: none !important;
   }
 }
 
@@ -5750,42 +5831,7 @@ body.maintenance-page {
    SUBPAGE SHARED HERO & BREADCRUMBS
    Integrates /images/about-us-hero.png seamlessly across all subpages
    ========================================================================== */
-.subpage-hero {
-  background-color: #09162E;
-  background-image: 
-    linear-gradient(
-      90deg,
-      #09162E 0%,
-      #09162E 34%,
-      rgba(9, 22, 46, 0.94) 48%,
-      rgba(9, 22, 46, 0.68) 64%,
-      rgba(9, 22, 46, 0.20) 84%,
-      rgba(9, 22, 46, 0.04) 100%
-    ),
-    url('/images/about-us-hero.png');
-  background-position: right top;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: relative;
-  padding: 64px 0 54px;
-  color: #FFFFFF;
-  overflow: hidden;
-  border-bottom: 3px solid var(--primary-blue);
-}
-
-.subpage-hero::before {
-  display: none !important;
-}
-
-.subpage-hero::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-}
+/* Subpage hero base styles are defined in master section below (line 8620+) */
 
 .subpage-badge {
   display: none !important;
@@ -8581,48 +8627,190 @@ body.maintenance-page {
 }
 
 /* ==========================================================================
-   SUBPAGE HERO BANNER (.subpage-hero, .subpage-hero-about)
-   Integrates /images/about-us-hero.png seamlessly with standard .subpage-hero
-   Zero neon/cyan glow effects, standard subpage padding (64px 0 54px), uniform margins
+   SUBPAGE HERO BANNER (.subpage-hero)
+   Applied across About Us, Services, Products, Gallery, and Contact pages
+   - Displays full uncropped hero image on right (background-size: auto 100%)
+   - Seamless gradient overlay & gradient mask on left edge
+   - Content container sits over navy background with high contrast
    ========================================================================== */
-.subpage-hero,
-.subpage-hero.subpage-hero-about {
-  background-color: #09162E;
-  background-image: 
-    linear-gradient(
-      90deg,
-      #09162E 0%,
-      #09162E 34%,
-      rgba(9, 22, 46, 0.94) 48%,
-      rgba(9, 22, 46, 0.68) 64%,
-      rgba(9, 22, 46, 0.20) 84%,
-      rgba(9, 22, 46, 0.04) 100%
-    ),
-    url('/images/about-us-hero.png');
-  background-position: right top;
-  background-size: cover;
+
+:root {
+  --hero-navy: #09162e;
+  --hero-blue: var(--primary-blue, #0078BF);
+}
+
+/* 1. Section Container */
+.subpage-hero {
+  background-color: var(--hero-navy);
+  background-image: none !important;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: clamp(300px, 24vw, 390px);
+  display: flex;
+  align-items: center;
+  padding: 38px 0;
+  border-bottom: 3px solid var(--hero-blue);
+  color: #FFFFFF;
+}
+
+/* 2. Image Layer (::before pseudo-element, z-index 0, pointer-events none) */
+.subpage-hero::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 64%;
+  z-index: 0;
+  pointer-events: none;
+  background-color: transparent;
+  background-image: url('/images/about-us-hero-original.png');
+  background-image: -webkit-image-set(
+    url('/images/about-us-hero-original.webp') 1x,
+    url('/images/about-us-hero-original.png') 1x
+  );
+  background-image: image-set(
+    url('/images/about-us-hero-original.webp') type('image/webp'),
+    url('/images/about-us-hero-original.png') type('image/png')
+  );
   background-repeat: no-repeat;
-  padding: 64px 0 54px;
+  background-position: right center;
+  background-size: auto 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 18%, #000 38%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.55) 18%, #000 38%);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  animation: aboutHeroFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards,
+             aboutHeroDrift 14s ease-in-out 0.9s infinite alternate;
+  will-change: transform, translate, opacity;
 }
 
-/* Disable ambient glow pseudo-element on subpage hero */
-.subpage-hero::before,
-.subpage-hero.subpage-hero-about::before {
-  display: none !important;
+/* 3. Overlay Layer (::after pseudo-element, z-index 1, pointer-events none) */
+.subpage-hero::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  inset: 0 !important;
+  height: auto !important;
+  pointer-events: none;
+  z-index: 1;
+  background: 
+    linear-gradient(0deg, rgba(9, 22, 46, 0.35) 0%, transparent 25%),
+    linear-gradient(90deg, #09162e 0%, #09162e 32%, rgba(9, 22, 46, 0.92) 44%, rgba(9, 22, 46, 0.55) 58%, rgba(9, 22, 46, 0) 78%);
 }
 
-@media (max-width: 991px) {
-  .subpage-hero,
-  .subpage-hero.subpage-hero-about {
-    padding: 56px 0 46px;
-    background-image: 
-      linear-gradient(
-        180deg,
-        rgba(9, 22, 46, 0.95) 0%,
-        rgba(9, 22, 46, 0.88) 100%
-      ),
-      url('/images/about-us-hero.png');
-    background-position: right top;
+/* 4. Content Container & Text Column */
+.subpage-hero .container-xxl {
+  position: relative;
+  z-index: 2;
+  max-width: 1240px;
+  width: 100%;
+}
+
+.subpage-hero .col-lg-8 {
+  max-width: 620px;
+  width: 100%;
+}
+
+.subpage-hero .subpage-lead {
+  margin-bottom: 16px;
+}
+
+/* Subtle Motion Keyframes */
+@keyframes aboutHeroFadeIn {
+  from {
+    opacity: 0;
+    translate: 24px 0;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes aboutHeroDrift {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-8px);
+  }
+}
+
+/* RESPONSIVE SPECIFICATIONS */
+
+/* 1200px and below: image layer width 68%, content max-width 560px */
+@media (max-width: 1200px) {
+  .subpage-hero::before {
+    width: 68%;
+  }
+
+  .subpage-hero .col-lg-8 {
+    max-width: 560px;
+  }
+}
+
+/* 992px and below: image layer width 100%, background-size cover, 78% center, opacity .55, top overlay gradient */
+@media (max-width: 992px) {
+  .subpage-hero {
+    min-height: auto;
+    padding: 36px 0;
+  }
+
+  .subpage-hero::before {
+    width: 100%;
+    background-size: cover;
+    background-position: 78% center;
+    opacity: 0.55;
+    -webkit-mask-image: none;
+    mask-image: none;
+    animation: none;
+    transform: none;
+    translate: none;
+  }
+
+  .subpage-hero::after {
+    background: linear-gradient(180deg, rgba(9, 22, 46, 0.94) 0%, rgba(9, 22, 46, 0.7) 100%);
+  }
+
+  .subpage-hero .col-lg-8 {
+    max-width: 100%;
+  }
+}
+
+/* 576px and below: image layer opacity .4, buttons stack full width, no horizontal scroll at 360px */
+@media (max-width: 576px) {
+  .subpage-hero {
+    padding: 28px 0;
+    overflow-x: hidden;
+  }
+
+  .subpage-hero::before {
+    opacity: 0.4;
+  }
+
+  .subpage-hero .d-flex.flex-wrap {
+    flex-direction: column;
+    align-items: stretch !important;
+    width: 100%;
+  }
+
+  .subpage-hero .d-flex.flex-wrap .btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .subpage-hero::before {
+    animation: none !important;
+    transform: none !important;
+    translate: none !important;
+    transition: none !important;
   }
 }
 
@@ -9318,4 +9506,142 @@ body.maintenance-page {
 /* Fallback mapping for FontAwesome Pro fa-shield-check to fa-shield-halved */
 .fa-shield-check::before {
   content: "\f3ed" !important;
+}
+
+/* ==========================================================================
+   DESKTOP & LAPTOP SHORT-VIEWPORT HERO SLIDER FIX
+   Applies ONLY to desktop/laptop screens (min-width: 992px) with short height
+   (max-height: 760px and max-height: 620px). Taller desktops and mobile/tablet
+   remain 100% untouched.
+   ========================================================================== */
+
+@media (min-width: 992px) and (max-height: 760px) {
+  /* 1. Section: natural height, never clipped, scrolls normally */
+  .hero-section {
+    --header-h: 0px;
+    display: block;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+    padding-top: 20px;
+    padding-bottom: 24px;
+  }
+
+  /* 2. Slider wrappers and slides: height auto, min-height 0, overflow visible, align-items center */
+  .hero-main-row {
+    display: flex;
+    flex-wrap: nowrap;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    align-items: center;
+    gap: clamp(16px, 2.5vw, 36px);
+  }
+
+  .hero-banner-carousel {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  .hero-banner-carousel .carousel-inner {
+    overflow: visible;
+  }
+
+  .hero-banner-carousel .carousel-item {
+    align-items: center;
+  }
+
+  /* 3. Headline: fits on 1-2 lines, never 3 */
+  .hero-title {
+    font-size: clamp(30px, min(3.6vw, 6.4vh), 48px) !important;
+    line-height: 1.1 !important;
+    max-width: none;
+  }
+
+  /* 4. Paragraph: scales with short height, max-width 520px */
+  .hero-subtitle {
+    font-size: clamp(14px, min(1.3vw, 2.6vh), 17px);
+    line-height: 1.55;
+    max-width: 520px;
+  }
+
+  /* 5. Spacing in text column & trust points */
+  .hero-main-row > .hero-content {
+    gap: clamp(8px, 1.8vh, 16px);
+    flex: 1 1 48%;
+    max-width: 600px;
+  }
+
+  .hero-trust-row {
+    gap: 10px 24px !important;
+  }
+
+  .hero-trust-text {
+    font-size: 13px;
+  }
+
+  .hero-trust-check-icon {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+
+  /* 6. Image column & image: sized by width, noticeably larger */
+  .hero-main-row > .hero-img-container {
+    flex: 1 1 52%;
+    max-width: min(720px, 52vw);
+  }
+
+  .hero-banner-carousel {
+    max-width: min(720px, 52vw);
+  }
+
+  .hero-main-img {
+    width: 100%;
+    max-width: min(720px, 52vw);
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  /* 8. Slider dots: static, margin-top 12px */
+  .hero-carousel-indicators {
+    position: static;
+    margin-top: 12px;
+  }
+}
+
+@media (min-width: 992px) and (max-height: 620px) {
+  /* Tighten spacing by ~10% for very short viewports */
+  .hero-section {
+    padding-top: calc(var(--header-h, 80px) + 12px);
+    padding-bottom: 24px;
+  }
+
+  .hero-title {
+    font-size: clamp(28px, min(3.4vw, 5.8vh), 40px) !important;
+  }
+
+  .hero-subtitle {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .hero-cta-group .btn-hero-book,
+  .hero-cta-group .btn-hero-explore {
+    min-height: 44px;
+    padding: 0 22px;
+  }
+
+  .hero-main-row > .hero-img-container,
+  .hero-banner-carousel,
+  .hero-main-img {
+    max-width: min(680px, 50vw);
+  }
+
+  .hero-main-row > .hero-content {
+    gap: clamp(8px, 1.5vh, 12px);
+  }
 }

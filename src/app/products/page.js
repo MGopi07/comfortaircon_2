@@ -38,35 +38,12 @@ export default function ProductsPage() {
           <div className="row align-items-center">
             <div className="col-lg-8">
               <h1 className="subpage-title">
-                Carrier &amp; Toshiba <span className="text-primary-blue">Cooling Systems</span>
+                Find the Right AC for <span className="text-primary-blue">Your Space</span>
               </h1>
               <p className="subpage-lead">
-                Explore our authorized cooling portfolio. As Puducherry’s premier dealer, we offer Carrier air conditioning systems alongside Toshiba Japanese inverter solutions. Information and technical enquiry only — no online cart or payment.
-              </p>
+                Get professional assistance in choosing the right air conditioner based on your space, cooling requirements, and budget.</p>
 
-              <div className="d-flex flex-wrap align-items-center gap-3 pt-2">
-                <button
-                  type="button"
-                  className="btn btn-custom-primary shadow-sm px-4 py-2 fw-bold"
-                  onClick={() => openAppointment()}
-                >
-                  <i className="fa-solid fa-clipboard-question me-2"></i> Enquire for Quote
-                </button>
-                <a
-                  href={INITIAL_CONTACT.whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline-success bg-white rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-xs"
-                >
-                  <i className="fa-brands fa-whatsapp fs-5"></i> WhatsApp Product Inquiry
-                </a>
-                <a
-                  href={INITIAL_CONTACT.phoneHref}
-                  className="btn btn-outline-light rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
-                >
-                  <i className="fa-solid fa-phone"></i> Call {INITIAL_CONTACT.phone}
-                </a>
-              </div>
+
             </div>
           </div>
         </div>

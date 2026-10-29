@@ -153,22 +153,7 @@ export default function ContactPage() {
                 AC sales, installation, repair, and maintenance. Our experienced team is ready to help you choose the right air conditioning solution, request a quotation or schedule a service appointment for your home or business.
               </p>
 
-              <div className="d-flex flex-wrap align-items-center gap-3 pt-2">
-                <a
-                  href={INITIAL_CONTACT.phoneHref}
-                  className="btn btn-custom-primary shadow-sm px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
-                >
-                  <i className="fa-solid fa-phone"></i> Tap to Call {INITIAL_CONTACT.phone}
-                </a>
-                <a
-                  href={INITIAL_CONTACT.whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline-success bg-white rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-xs"
-                >
-                  <i className="fa-brands fa-whatsapp fs-5"></i> Chat on WhatsApp
-                </a>
-              </div>
+
             </div>
           </div>
         </div>
@@ -382,45 +367,49 @@ export default function ContactPage() {
 
             {/* Right Column: Contact Cards (~40%) */}
             <div className="col-lg-5">
-              {/* Card 1: Call us */}
-              <div className="ref-contact-card">
-                <div className="ref-contact-icon">
-                  <i className="fa-solid fa-phone"></i>
-                </div>
-                <div className="ref-contact-title">Call us</div>
-                <a href={INITIAL_CONTACT.phoneHref} className="ref-contact-highlight">
-                  {INITIAL_CONTACT.phone}
-                </a>
-                <span className="ref-contact-subtext">Landline: {INITIAL_CONTACT.secondaryPhone}</span>
-                <p className="ref-contact-desc">
-                  Talk with our team about scheduling urgent repair, maintenance, or heating and cooling service questions.
-                </p>
-              </div>
-
-              {/* Card 3: Email us */}
-              <div className="ref-contact-card">
-                <div className="ref-contact-icon">
-                  <i className="fa-solid fa-envelope"></i>
-                </div>
-                <div className="ref-contact-title">Email us</div>
-                <a href={`mailto:${INITIAL_CONTACT.email}`} className="ref-contact-highlight">
-                  {INITIAL_CONTACT.email}
-                </a>
-                <span className="ref-contact-subtext">{INITIAL_CONTACT.secondaryEmail}</span>
-                <p className="ref-contact-desc">
-                  Send your service request, system issue, project details, or general questions anytime.
-                </p>
-              </div>
-
-              {/* Card 4: Visit location */}
+              {/* Card 1: Visit Our Location */}
               <div className="ref-contact-card">
                 <div className="ref-contact-icon">
                   <i className="fa-solid fa-location-dot"></i>
                 </div>
-                <div className="ref-contact-title">Visit our location</div>
-                <div className="ref-contact-highlight">Pudupalaiyam, Pondicherry</div>
+                <div className="ref-contact-title">Visit Our Location</div>
+                <div className="ref-contact-highlight">Pudupalaiyam, Puducherry</div>
                 <p className="ref-contact-desc">
-                  {INITIAL_CONTACT.address}
+                  No: 295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry – 605013.
+                </p>
+              </div>
+
+              {/* Card 2: Call Us */}
+              <div className="ref-contact-card">
+                <div className="ref-contact-icon">
+                  <i className="fa-solid fa-phone"></i>
+                </div>
+                <div className="ref-contact-title">Call Us</div>
+                <a href={INITIAL_CONTACT.phoneHref} className="ref-contact-highlight">
+                  Mobile: {INITIAL_CONTACT.phone}
+                </a>
+                <a href={INITIAL_CONTACT.secondaryPhoneHref} className="ref-contact-subtext text-decoration-none">
+                  Landline: {INITIAL_CONTACT.secondaryPhone}
+                </a>
+                <p className="ref-contact-desc">
+                  Talk with our team about scheduling repair, maintenance, or air conditioning service questions.
+                </p>
+              </div>
+
+              {/* Card 3: Email Us */}
+              <div className="ref-contact-card">
+                <div className="ref-contact-icon">
+                  <i className="fa-solid fa-envelope"></i>
+                </div>
+                <div className="ref-contact-title">Email Us</div>
+                <a href={`mailto:${INITIAL_CONTACT.email}`} className="ref-contact-highlight">
+                  {INITIAL_CONTACT.email}
+                </a>
+                <a href={`mailto:${INITIAL_CONTACT.secondaryEmail}`} className="ref-contact-subtext text-decoration-none">
+                  {INITIAL_CONTACT.secondaryEmail}
+                </a>
+                <p className="ref-contact-desc">
+                  Send your service request, project details, or general questions anytime.
                 </p>
               </div>
             </div>
@@ -428,140 +417,37 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* 3. SECTION 2: CONTACT DETAILS AND BUSINESS HOURS + INTERACTIVE MAP (2ND REF IMAGE) */}
+      {/* 3. SECTION 2: INTERACTIVE GOOGLE MAP LOCATION */}
       <section className="contact-hours-section" id="location-hours">
         <div className="container-xxl">
-          <div className="row g-4 align-items-stretch">
-            {/* Left Column: Business Hours Card */}
-            <div className="col-lg-6">
-              <div className="ref-eyebrow-tag">
-                <span className="ref-tag-dot"></span>
-                <span>Location &amp; Hours</span>
+          <div className="ref-map-card" style={{ minHeight: '460px', height: '460px' }}>
+            {/* Floating Location Overlay Badge */}
+            <div className="ref-map-floating-box">
+              <div className="ref-map-title">Comfort Aircon Showroom</div>
+              <div className="ref-map-address">
+                No: 295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry – 605013
               </div>
-              <h2 className="ref-card-title">
-                Contact Details and Business Hours
-              </h2>
-              <p className="ref-card-lead">
-                Reach out to schedule service, ask about an HVAC issue, or get help with heating, cooling, repair, maintenance, and emergency support.
-              </p>
-
-              <div className="ref-hours-card">
-                <div className="ref-hours-header">Business hours</div>
-
-                <div className="ref-hours-row">
-                  <span className="ref-hours-day">Monday – Saturday</span>
-                  <span className="ref-hours-time">9:00 AM – 8:00 PM</span>
-                </div>
-
-                <div className="ref-hours-row">
-                  <span className="ref-hours-day">Sunday</span>
-                  <span className="ref-hours-time">10:00 AM – 2:00 PM</span>
-                </div>
-
-                <div className="ref-hours-row">
-                  <span className="ref-hours-day">Emergency support</span>
-                  <span className="ref-hours-time">
-                    <span className="ref-badge-live">Available 24/7</span>
-                  </span>
-                </div>
-
-                <div className="ref-hours-row">
-                  <span className="ref-hours-day">Active service areas</span>
-                  <span className="ref-hours-time text-end" style={{ maxWidth: "240px", fontSize: "0.85rem" }}>
-                    {INITIAL_CONTACT.serviceAreas.join(", ")}
-                  </span>
-                </div>
-
-                {/* Social Media & WhatsApp quick action */}
-                <div className="d-flex flex-wrap align-items-center justify-content-between pt-3 mt-2">
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="small text-muted fw-bold me-1">Follow Us:</span>
-                    <a
-                      href={INITIAL_CONTACT.facebookUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm btn-outline-primary rounded-circle"
-                      style={{ width: "34px", height: "34px", padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                      aria-label="Facebook"
-                    >
-                      <i className="fa-brands fa-facebook-f"></i>
-                    </a>
-                    <a
-                      href={INITIAL_CONTACT.instagramUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm btn-outline-danger rounded-circle"
-                      style={{ width: "34px", height: "34px", padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                      aria-label="Instagram"
-                    >
-                      <i className="fa-brands fa-instagram"></i>
-                    </a>
-                    <a
-                      href={INITIAL_CONTACT.twitterUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm btn-outline-dark rounded-circle"
-                      style={{ width: "34px", height: "34px", padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                      aria-label="Twitter / X"
-                    >
-                      <i className="fa-brands fa-x-twitter"></i>
-                    </a>
-                    <a
-                      href={INITIAL_CONTACT.youtubeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm btn-outline-danger rounded-circle"
-                      style={{ width: "34px", height: "34px", padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                      aria-label="YouTube"
-                    >
-                      <i className="fa-brands fa-youtube"></i>
-                    </a>
-                  </div>
-
-                  <a
-                    href={INITIAL_CONTACT.whatsappHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center gap-1 shadow-xs"
-                  >
-                    <i className="fa-brands fa-whatsapp fs-6"></i>
-                    <span>WhatsApp</span>
-                  </a>
-                </div>
-              </div>
+              <a
+                href="https://www.google.com/maps/place/COMFORT+AIRCON+%7C+Hvac+Solutions+Provider+%7C+MEP+consultant/@11.9349443,79.8103655,19z"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ref-map-btn"
+              >
+                <i className="fa-solid fa-map-location-dot"></i>
+                <span>Open in Maps</span>
+                <i className="fa-solid fa-arrow-up-right-from-square ms-1" style={{ fontSize: '0.72rem' }}></i>
+              </a>
             </div>
 
-            {/* Right Column: Google Maps Card with Floating Location Badge */}
-            <div className="col-lg-6">
-              <div className="ref-map-card">
-                {/* Floating Location Overlay Badge (Matching Ref 2) */}
-                <div className="ref-map-floating-box">
-                  <div className="ref-map-title">Comfort Aircon Showroom</div>
-                  <div className="ref-map-address">
-                    295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry
-                  </div>
-                  <a
-                    href={INITIAL_CONTACT.googleMapsLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ref-map-btn"
-                  >
-                    <i className="fa-solid fa-map-location-dot"></i>
-                    <span>Open in Maps</span>
-                    <i className="fa-solid fa-arrow-up-right-from-square ms-1" style={{ fontSize: "0.72rem" }}></i>
-                  </a>
-                </div>
-
-                <iframe
-                  src={INITIAL_CONTACT.googleMapsLink}
-                  className="ref-map-iframe"
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Comfort Aircon Puducherry Google Map Location"
-                ></iframe>
-              </div>
-            </div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.587548858422!2d79.8106980735886!3d11.933765888294278!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1106ae5f7185dcdb%3A0x8b19cc10065d019e!2sCOMFORT%20AIRCON%20%7C%20Hvac%20Solutions%20Provider%20%7C%20MEP%20consultant!5e0!3m2!1sen!2sin!4v1793258188167!5m2!1sen!2sin"
+              className="ref-map-iframe"
+              style={{ minHeight: '460px', height: '100%', width: '100%', border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title="Comfort Aircon Puducherry Google Map Location"
+            ></iframe>
           </div>
         </div>
       </section>

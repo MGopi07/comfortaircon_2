@@ -137,35 +137,13 @@ export default function ServicesPage() {
           <div className="row align-items-center">
             <div className="col-lg-8">
               <h1 className="subpage-title">
-                Authorized Carrier &amp; Toshiba <span className="text-primary-blue">AC Services</span>
+                Reliable AC Services for <span className="text-primary-blue">Every Space</span>
               </h1>
               <p className="subpage-lead">
-                Comprehensive air conditioning services across Puducherry, Villupuram, and Cuddalore. From precision split and cassette installations to emergency PCB repairs, chemical hydro-cleaning, and commercial VRF engineering.
+                From AC installation and repair to routine maintenance, Comfort Aircon delivers dependable cooling solutions for homes, offices, and commercial spaces across .
               </p>
 
-              <div className="d-flex flex-wrap align-items-center gap-3 pt-2">
-                <button
-                  type="button"
-                  className="btn btn-custom-primary shadow-sm px-4 py-2 fw-bold"
-                  onClick={() => openAppointment()}
-                >
-                  <i className="fa-solid fa-calendar-check me-2"></i> Enquire Now
-                </button>
-                <a
-                  href={INITIAL_CONTACT.whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline-success bg-white rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-xs"
-                >
-                  <i className="fa-brands fa-whatsapp fs-5"></i> WhatsApp Booking
-                </a>
-                <a
-                  href={INITIAL_CONTACT.phoneHref}
-                  className="btn btn-outline-light rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
-                >
-                  <i className="fa-solid fa-phone"></i> Call {INITIAL_CONTACT.phone}
-                </a>
-              </div>
+
             </div>
           </div>
         </div>
