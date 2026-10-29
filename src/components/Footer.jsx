@@ -214,8 +214,15 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p className="mb-0">
-            © 2026 Comfort Aircon Air Conditioning &amp; Cooling
-            Specialist. All rights reserved.
+            © 2026 Comfort Aircon. All Rights Reserved. Designed &amp; Developed by{' '}
+            <a
+              href="https://syscorp.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-syscorp-link"
+            >
+              Syscorp Technology Pvt. Ltd.
+            </a>
           </p>
           <div className="d-flex align-items-center gap-3">
             <p className="mb-0 footer-bottom-areas">

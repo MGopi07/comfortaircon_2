@@ -3369,6 +3369,18 @@ a.footer-contact-value:hover {
   color: #94A3B8;
 }
 
+.footer-syscorp-link {
+  color: #38BDF8;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.footer-syscorp-link:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
 .footer-bottom-areas {
   display: inline-flex;
   align-items: center;
