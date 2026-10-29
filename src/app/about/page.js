@@ -137,45 +137,45 @@ export default function AboutPage() {
   const trustPoints = [
     {
       icon: 'fa-solid fa-certificate',
-      title: 'Authorized Carrier & Toshiba Dealer',
-      desc: '100% genuine equipment sourced directly from official manufacturing plants with OEM factory warranty and GST tax invoices.',
-      tag: 'OFFICIAL DEALER',
-      check: '100% Genuine OEM Units',
+      title: 'Quality AC Products',
+      desc: 'Explore suitable air conditioning solutions from leading brands to meet your cooling requirements.',
+      tag: 'LEADING BRANDS',
+      check: 'Genuine Products and Warranty Support',
     },
     {
       icon: 'fa-solid fa-award',
-      title: '25+ Years of Industry Leadership',
-      desc: 'Over two decades of proven cooling excellence and technical mastery across 15,000+ completed installations in coastal Tamil Nadu.',
+      title: 'Over 25+ Years of Experience',
+      desc: 'Benefit from our experience in AC sales, installation, repair, and maintenance.',
       tag: 'SINCE 1999',
-      check: '15,000+ Completed Projects',
+      check: 'Decades of Industry Experience',
     },
     {
       icon: 'fa-solid fa-user-gear',
-      title: 'Factory-Certified HVAC Engineers',
-      desc: 'Rigorous factory training ensuring precision heat load calculation, zero-moisture vacuum leak testing, and vibration-isolated setups.',
-      tag: 'CERTIFIED TEAM',
-      check: 'Zero-Moisture Vacuum Testing',
+      title: 'Experienced Technicians',
+      desc: 'Our technicians focus on professional installation, careful troubleshooting, and reliable servicing.',
+      tag: 'EXPERT TEAM',
+      check: 'Quality Workmanship',
     },
     {
       icon: 'fa-solid fa-receipt',
-      title: 'Transparent BOQ Itemized Pricing',
-      desc: 'Clear, itemized proposals with zero hidden costs, clear copper piping rates, and free comprehensive initial site surveys.',
-      tag: 'ZERO HIDDEN FEES',
-      check: 'Free Initial Site Survey',
+      title: 'Transparent Pricing',
+      desc: 'Receive clear quotations and service estimates to help you make informed decisions.',
+      tag: 'HONEST PRICING',
+      check: 'Clear and Honest Pricing',
     },
     {
-      icon: 'fa-solid fa-stopwatch',
-      title: 'Rapid 15-Minute Response Time',
-      desc: 'Dedicated local service desks in Pondicherry, Villupuram, and Cuddalore ensuring fast turnaround for service callouts.',
-      tag: '15-MIN SLA',
-      check: 'Same-Day Breakdown Service',
+      icon: 'fa-solid fa-headset',
+      title: 'Responsive Customer Support',
+      desc: 'We aim to respond promptly to service requests and provide convenient support when you need assistance.',
+      tag: 'QUICK SUPPORT',
+      check: 'Reliable Service Assistance',
     },
     {
       icon: 'fa-solid fa-shield-halved',
-      title: '100% Genuine OEM Spares & Warranty',
-      desc: 'Factory-original PCB boards, compressors, and eco-refrigerants backed by manufacturer warranty certificates.',
-      tag: 'OEM WARRANTY',
-      check: 'Direct Factory Backing',
+      title: 'Dependable After-Sales Service',
+      desc: 'From routine maintenance to repair support, we help you maintain your air conditioning system for lasting comfort.',
+      tag: 'AFTER-SALES',
+      check: 'Customer-Focused Support',
     },
   ];
 
@@ -530,8 +530,7 @@ export default function AboutPage() {
               Why Customers Choose Us
             </h2>
             <p className="section-desc mx-auto" style={{ maxWidth: '680px' }}>
-              Discover the trust pillars that have made Comfort Aircon the #1 preferred cooling partner for over 15,000 satisfied residential and commercial clients.
-            </p>
+              Since 1999, Comfort Aircon has been committed to delivering reliable air conditioning products and services for homes, offices, and commercial establishments.</p>
           </div>
 
           <div className="row g-4">
