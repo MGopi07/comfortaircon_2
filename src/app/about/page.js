@@ -200,7 +200,7 @@ export default function AboutPage() {
                 Your Trusted Air Conditioning Partner in <span className="text-primary-blue">Puducherry</span>
               </h1>
               <p className="subpage-lead">
-                Comfort Aircon is Puducherry’s premier authorized Carrier AC Dealer &amp; Air Conditioning Services provider, offering Carrier cooling systems alongside Toshiba high-efficiency Japanese air conditioning solutions.
+                Comfort Aircon delivers reliable air conditioning solutions for homes, offices, and commercial spaces. With expertise in AC sales, installation, repair, and maintenance, we are committed to providing quality cooling solutions and dependable customer service.
               </p>
 
               <div className="d-flex flex-wrap align-items-center gap-3 pt-2">
@@ -264,10 +264,11 @@ export default function AboutPage() {
               <div className="who-content-col reveal-from-right">
                 <span className="who-label">WHO WE ARE</span>
                 <h2 className="who-title">
-                  Our job is to provide you with innovation.
+                  Bringing Innovation and Comfort to Every Space
+
                 </h2>
                 <p className="who-description">
-                  Founded in 1999, Comfort Aircon is Puducherry’s premier air conditioning sales, engineering, and maintenance enterprise. As an authorized Carrier AC Dealer and Toshiba Air Conditioning Partner, we bring world-class cooling technology with meticulous local execution to homes, healthcare facilities, and commercial projects.
+                  Established in 1999, Comfort Aircon specializes in air conditioning sales, installation, servicing, and maintenance. Our experienced team helps customers choose suitable cooling solutions based on their needs, space, and budget.
                 </p>
 
                 {/* Bullet Checklist with filled circular checkmarks */}
@@ -325,14 +326,13 @@ export default function AboutPage() {
               </h2>
               <p className="promo-banner-desc">
                 Keep your air conditioner running efficiently with professional servicing from Comfort Aircon. Our services include system inspection, filter and coil cleaning, performance checks, and maintenance recommendations.</p>
-              <a
-                href={INITIAL_CONTACT.whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
                 className="promo-banner-btn"
+                onClick={() => openAppointment()}
               >
-                <i className="fa-brands fa-whatsapp fs-5 me-2"></i> WhatsApp Now
-              </a>
+                <i className="fa-regular fa-calendar-check fs-5 me-2"></i> Book Your Service
+              </button>
             </div>
           </div>
         </div>
