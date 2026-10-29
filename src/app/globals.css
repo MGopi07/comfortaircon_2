@@ -5818,7 +5818,7 @@ body.maintenance-page {
    SUBPAGE SHARED HERO & BREADCRUMBS
    Integrates /images/about-us-hero.png seamlessly across all subpages
    ========================================================================== */
-/* Subpage hero base styles are defined in master section below (line 8650+) */
+/* Subpage hero base styles are defined in master section below (line 8620+) */
 
 .subpage-badge {
   display: none !important;
@@ -8614,8 +8614,8 @@ body.maintenance-page {
 }
 
 /* ==========================================================================
-   UNIVERSAL SUBPAGE HERO BANNER (.subpage-hero)
-   Used on About Us, Services, Products, Gallery, and Contact pages
+   SUBPAGE HERO BANNER (.subpage-hero)
+   Applied across About Us, Services, Products, Gallery, and Contact pages
    - Displays full uncropped hero image on right (background-size: auto 100%)
    - Seamless gradient overlay & gradient mask on left edge
    - Content container sits over navy background with high contrast
