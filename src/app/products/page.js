@@ -22,6 +22,14 @@ export default function ProductsPage() {
 
   return (
     <>
+      {/* Preload hero WebP image */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/about-us-hero-original.webp"
+        type="image/webp"
+      />
+
       {/* 1. SUBPAGE HERO / BANNER */}
       <section className="subpage-hero">
         <div className="container-xxl">
@@ -52,14 +60,7 @@ export default function ProductsPage() {
                 >
                   <i className="fa-solid fa-clipboard-question me-2"></i> Enquire for Quote
                 </button>
-                <a
-                  href={INITIAL_CONTACT.whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline-success bg-white rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-xs"
-                >
-                  <i className="fa-brands fa-whatsapp fs-5"></i> WhatsApp Product Inquiry
-                </a>
+
                 <a
                   href={INITIAL_CONTACT.phoneHref}
                   className="btn btn-outline-light rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"

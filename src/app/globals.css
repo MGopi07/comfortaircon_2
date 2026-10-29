@@ -5818,42 +5818,7 @@ body.maintenance-page {
    SUBPAGE SHARED HERO & BREADCRUMBS
    Integrates /images/about-us-hero.png seamlessly across all subpages
    ========================================================================== */
-.subpage-hero {
-  background-color: #09162E;
-  background-image: 
-    linear-gradient(
-      90deg,
-      #09162E 0%,
-      #09162E 34%,
-      rgba(9, 22, 46, 0.94) 48%,
-      rgba(9, 22, 46, 0.68) 64%,
-      rgba(9, 22, 46, 0.20) 84%,
-      rgba(9, 22, 46, 0.04) 100%
-    ),
-    url('/images/about-us-hero-original.png');
-  background-position: right top;
-  background-size: cover;
-  background-repeat: no-repeat;
-  position: relative;
-  padding: 64px 0 54px;
-  color: #FFFFFF;
-  overflow: hidden;
-  border-bottom: 3px solid var(--primary-blue);
-}
-
-.subpage-hero:not(.subpage-hero-about)::before {
-  display: none !important;
-}
-
-.subpage-hero:not(.subpage-hero-about)::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
-}
+/* Subpage hero base styles are defined in master section below (line 8650+) */
 
 .subpage-badge {
   display: none !important;
@@ -8649,44 +8614,8 @@ body.maintenance-page {
 }
 
 /* ==========================================================================
-   STANDARD SUBPAGE HERO BANNER (.subpage-hero)
-   Used on contact, services, products, and gallery pages
-   ========================================================================== */
-.subpage-hero:not(.subpage-hero-about) {
-  background-color: #09162E;
-  background-image: 
-    linear-gradient(
-      90deg,
-      #09162E 0%,
-      #09162E 34%,
-      rgba(9, 22, 46, 0.94) 48%,
-      rgba(9, 22, 46, 0.68) 64%,
-      rgba(9, 22, 46, 0.20) 84%,
-      rgba(9, 22, 46, 0.04) 100%
-    ),
-    url('/images/about-us-hero-original.png');
-  background-position: right top;
-  background-size: cover;
-  background-repeat: no-repeat;
-  padding: 64px 0 54px;
-}
-
-@media (max-width: 991px) {
-  .subpage-hero:not(.subpage-hero-about) {
-    padding: 56px 0 46px;
-    background-image: 
-      linear-gradient(
-        180deg,
-        rgba(9, 22, 46, 0.95) 0%,
-        rgba(9, 22, 46, 0.88) 100%
-      ),
-      url('/images/about-us-hero-original.png');
-    background-position: right top;
-  }
-}
-
-/* ==========================================================================
-   ABOUT US SUB-PAGE HERO (.subpage-hero.subpage-hero-about)
+   UNIVERSAL SUBPAGE HERO BANNER (.subpage-hero)
+   Used on About Us, Services, Products, Gallery, and Contact pages
    - Displays full uncropped hero image on right (background-size: auto 100%)
    - Seamless gradient overlay & gradient mask on left edge
    - Content container sits over navy background with high contrast
@@ -8698,7 +8627,7 @@ body.maintenance-page {
 }
 
 /* 1. Section Container */
-.subpage-hero.subpage-hero-about {
+.subpage-hero {
   background-color: var(--hero-navy);
   background-image: none !important;
   position: relative;
@@ -8709,10 +8638,11 @@ body.maintenance-page {
   align-items: center;
   padding: 38px 0;
   border-bottom: 3px solid var(--hero-blue);
+  color: #FFFFFF;
 }
 
 /* 2. Image Layer (::before pseudo-element, z-index 0, pointer-events none) */
-.subpage-hero.subpage-hero-about::before {
+.subpage-hero::before {
   content: '' !important;
   display: block !important;
   position: absolute;
@@ -8745,7 +8675,7 @@ body.maintenance-page {
 }
 
 /* 3. Overlay Layer (::after pseudo-element, z-index 1, pointer-events none) */
-.subpage-hero.subpage-hero-about::after {
+.subpage-hero::after {
   content: '' !important;
   display: block !important;
   position: absolute;
@@ -8759,19 +8689,19 @@ body.maintenance-page {
 }
 
 /* 4. Content Container & Text Column */
-.subpage-hero.subpage-hero-about .container-xxl {
+.subpage-hero .container-xxl {
   position: relative;
   z-index: 2;
   max-width: 1240px;
   width: 100%;
 }
 
-.subpage-hero.subpage-hero-about .col-lg-8 {
+.subpage-hero .col-lg-8 {
   max-width: 620px;
   width: 100%;
 }
 
-.subpage-hero.subpage-hero-about .subpage-lead {
+.subpage-hero .subpage-lead {
   margin-bottom: 16px;
 }
 
@@ -8800,23 +8730,23 @@ body.maintenance-page {
 
 /* 1200px and below: image layer width 68%, content max-width 560px */
 @media (max-width: 1200px) {
-  .subpage-hero.subpage-hero-about::before {
+  .subpage-hero::before {
     width: 68%;
   }
 
-  .subpage-hero.subpage-hero-about .col-lg-8 {
+  .subpage-hero .col-lg-8 {
     max-width: 560px;
   }
 }
 
 /* 992px and below: image layer width 100%, background-size cover, 78% center, opacity .55, top overlay gradient */
 @media (max-width: 992px) {
-  .subpage-hero.subpage-hero-about {
+  .subpage-hero {
     min-height: auto;
     padding: 36px 0;
   }
 
-  .subpage-hero.subpage-hero-about::before {
+  .subpage-hero::before {
     width: 100%;
     background-size: cover;
     background-position: 78% center;
@@ -8828,33 +8758,33 @@ body.maintenance-page {
     translate: none;
   }
 
-  .subpage-hero.subpage-hero-about::after {
+  .subpage-hero::after {
     background: linear-gradient(180deg, rgba(9, 22, 46, 0.94) 0%, rgba(9, 22, 46, 0.7) 100%);
   }
 
-  .subpage-hero.subpage-hero-about .col-lg-8 {
+  .subpage-hero .col-lg-8 {
     max-width: 100%;
   }
 }
 
 /* 576px and below: image layer opacity .4, buttons stack full width, no horizontal scroll at 360px */
 @media (max-width: 576px) {
-  .subpage-hero.subpage-hero-about {
+  .subpage-hero {
     padding: 28px 0;
     overflow-x: hidden;
   }
 
-  .subpage-hero.subpage-hero-about::before {
+  .subpage-hero::before {
     opacity: 0.4;
   }
 
-  .subpage-hero.subpage-hero-about .d-flex.flex-wrap {
+  .subpage-hero .d-flex.flex-wrap {
     flex-direction: column;
     align-items: stretch !important;
     width: 100%;
   }
 
-  .subpage-hero.subpage-hero-about .d-flex.flex-wrap .btn {
+  .subpage-hero .d-flex.flex-wrap .btn {
     width: 100%;
     justify-content: center;
     text-align: center;
@@ -8863,7 +8793,7 @@ body.maintenance-page {
 
 /* Accessibility: Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  .subpage-hero.subpage-hero-about::before {
+  .subpage-hero::before {
     animation: none !important;
     transform: none !important;
     translate: none !important;

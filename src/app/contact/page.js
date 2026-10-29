@@ -131,6 +131,14 @@ export default function ContactPage() {
 
   return (
     <>
+      {/* Preload hero WebP image */}
+      <link
+        rel="preload"
+        as="image"
+        href="/images/about-us-hero-original.webp"
+        type="image/webp"
+      />
+
       {/* 1. SUBPAGE HERO / BANNER */}
       <section className="subpage-hero">
         <div className="container-xxl">
@@ -160,14 +168,7 @@ export default function ContactPage() {
                 >
                   <i className="fa-solid fa-phone"></i> Tap to Call {INITIAL_CONTACT.phone}
                 </a>
-                <a
-                  href={INITIAL_CONTACT.whatsappHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-outline-success bg-white rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-xs"
-                >
-                  <i className="fa-brands fa-whatsapp fs-5"></i> Chat on WhatsApp
-                </a>
+
               </div>
             </div>
           </div>
