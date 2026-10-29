@@ -6,23 +6,23 @@ export default function WhyChooseUs() {
   const reasons = [
     {
       icon: 'fa-solid fa-certificate',
-      title: 'Authorized Carrier Dealer',
-      desc: '100% genuine equipment directly sourced with manufacturer warranty & GST invoices.',
+      title: 'Authorized AC Dealership',
+      desc: 'Get genuine air conditioning products from authorized brands, with manufacturer warranty support and proper billing.',
     },
     {
       icon: 'fa-solid fa-award',
-      title: '25+ Years Experience',
-      desc: 'Over two decades of proven cooling excellence across 15,000+ completed installations.',
+      title: '25+ Years of Experience',
+      desc: 'Benefit from decades of industry experience in AC sales, installation, repair, and maintenance for residential and commercial spaces.',
     },
     {
       icon: 'fa-solid fa-id-card',
-      title: 'Certified HVAC Engineers',
-      desc: 'Factory-trained specialists ensuring precision load calculation, ducting, and setup.',
+      title: 'Experienced HVAC Technicians',
+      desc: 'Our skilled technicians provide professional installation, accurate system setup, and reliable servicing to ensure efficient cooling performance.',
     },
     {
       icon: 'fa-solid fa-hand-holding-dollar',
-      title: 'Transparent BOQ Pricing',
-      desc: 'Clear, itemized proposals with zero hidden costs and free initial site consultation.',
+      title: 'Transparent Pricing',
+      desc: 'Enjoy clear quotations, detailed service estimates, and honest pricing with no unexpected charges.',
     },
   ];
 
@@ -78,10 +78,11 @@ export default function WhyChooseUs() {
               Why Choose <span className="gradient-word">Comfort Aircon</span>?
             </h2>
             <p className="why-lead">
-              As Puducherry&apos;s premier authorized Carrier &amp; Toshiba AC dealership
-              for over 25 years, we combine official manufacturer backing,
-              factory-trained HVAC engineers, transparent pricing, and rapid local
-              service across Pondicherry, Villupuram, and Cuddalore.
+              With over 25 years of experience, Comfort Aircon delivers reliable
+              air conditioning solutions across Puducherry, Villupuram, and
+              Cuddalore. We focus on quality products, professional installation,
+              transparent pricing, and dependable customer support to ensure
+              lasting comfort.
             </p>
             <div className="row g-3 g-md-4">
               {reasons.map((reason) => (
