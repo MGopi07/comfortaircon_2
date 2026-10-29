@@ -432,140 +432,37 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* 3. SECTION 2: CONTACT DETAILS AND BUSINESS HOURS + INTERACTIVE MAP (2ND REF IMAGE) */}
+      {/* 3. SECTION 2: INTERACTIVE GOOGLE MAP LOCATION */}
       <section className="contact-hours-section" id="location-hours">
         <div className="container-xxl">
-          <div className="row g-4 align-items-stretch">
-            {/* Left Column: Business Hours Card */}
-            <div className="col-lg-6">
-              <div className="ref-eyebrow-tag">
-                <span className="ref-tag-dot"></span>
-                <span>Location &amp; Hours</span>
+          <div className="ref-map-card" style={{ minHeight: '460px', height: '460px' }}>
+            {/* Floating Location Overlay Badge */}
+            <div className="ref-map-floating-box">
+              <div className="ref-map-title">Comfort Aircon Showroom</div>
+              <div className="ref-map-address">
+                No: 295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry – 605013
               </div>
-              <h2 className="ref-card-title">
-                Contact Details and Business Hours
-              </h2>
-              <p className="ref-card-lead">
-                Reach out to schedule service, ask about an HVAC issue, or get help with heating, cooling, repair, maintenance, and emergency support.
-              </p>
-
-              <div className="ref-hours-card">
-                <div className="ref-hours-header">Business hours</div>
-
-                <div className="ref-hours-row">
-                  <span className="ref-hours-day">Monday – Saturday</span>
-                  <span className="ref-hours-time">9:00 AM – 8:00 PM</span>
-                </div>
-
-                <div className="ref-hours-row">
-                  <span className="ref-hours-day">Sunday</span>
-                  <span className="ref-hours-time">10:00 AM – 2:00 PM</span>
-                </div>
-
-                <div className="ref-hours-row">
-                  <span className="ref-hours-day">Emergency support</span>
-                  <span className="ref-hours-time">
-                    <span className="ref-badge-live">Available 24/7</span>
-                  </span>
-                </div>
-
-                <div className="ref-hours-row">
-                  <span className="ref-hours-day">Active service areas</span>
-                  <span className="ref-hours-time text-end" style={{ maxWidth: "240px", fontSize: "0.85rem" }}>
-                    {INITIAL_CONTACT.serviceAreas.join(", ")}
-                  </span>
-                </div>
-
-                {/* Social Media & WhatsApp quick action */}
-                <div className="d-flex flex-wrap align-items-center justify-content-between pt-3 mt-2">
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="small text-muted fw-bold me-1">Follow Us:</span>
-                    <a
-                      href={INITIAL_CONTACT.facebookUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm btn-outline-primary rounded-circle"
-                      style={{ width: "34px", height: "34px", padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                      aria-label="Facebook"
-                    >
-                      <i className="fa-brands fa-facebook-f"></i>
-                    </a>
-                    <a
-                      href={INITIAL_CONTACT.instagramUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm btn-outline-danger rounded-circle"
-                      style={{ width: "34px", height: "34px", padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                      aria-label="Instagram"
-                    >
-                      <i className="fa-brands fa-instagram"></i>
-                    </a>
-                    <a
-                      href={INITIAL_CONTACT.twitterUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm btn-outline-dark rounded-circle"
-                      style={{ width: "34px", height: "34px", padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                      aria-label="Twitter / X"
-                    >
-                      <i className="fa-brands fa-x-twitter"></i>
-                    </a>
-                    <a
-                      href={INITIAL_CONTACT.youtubeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-sm btn-outline-danger rounded-circle"
-                      style={{ width: "34px", height: "34px", padding: 0, display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-                      aria-label="YouTube"
-                    >
-                      <i className="fa-brands fa-youtube"></i>
-                    </a>
-                  </div>
-
-                  <a
-                    href={INITIAL_CONTACT.whatsappHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center gap-1 shadow-xs"
-                  >
-                    <i className="fa-brands fa-whatsapp fs-6"></i>
-                    <span>WhatsApp</span>
-                  </a>
-                </div>
-              </div>
+              <a
+                href="https://www.google.com/maps/place/COMFORT+AIRCON+%7C+Hvac+Solutions+Provider+%7C+MEP+consultant/@11.9349443,79.8103655,19z"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ref-map-btn"
+              >
+                <i className="fa-solid fa-map-location-dot"></i>
+                <span>Open in Maps</span>
+                <i className="fa-solid fa-arrow-up-right-from-square ms-1" style={{ fontSize: '0.72rem' }}></i>
+              </a>
             </div>
 
-            {/* Right Column: Google Maps Card with Floating Location Badge */}
-            <div className="col-lg-6">
-              <div className="ref-map-card">
-                {/* Floating Location Overlay Badge (Matching Ref 2) */}
-                <div className="ref-map-floating-box">
-                  <div className="ref-map-title">Comfort Aircon Showroom</div>
-                  <div className="ref-map-address">
-                    295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry
-                  </div>
-                  <a
-                    href={INITIAL_CONTACT.googleMapsLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="ref-map-btn"
-                  >
-                    <i className="fa-solid fa-map-location-dot"></i>
-                    <span>Open in Maps</span>
-                    <i className="fa-solid fa-arrow-up-right-from-square ms-1" style={{ fontSize: "0.72rem" }}></i>
-                  </a>
-                </div>
-
-                <iframe
-                  src={INITIAL_CONTACT.googleMapsLink}
-                  className="ref-map-iframe"
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Comfort Aircon Puducherry Google Map Location"
-                ></iframe>
-              </div>
-            </div>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1951.7852898985193!2d79.81036553823368!3d11.934944297073288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1106ae5f7185dcdb%3A0x8b19cc10065d019e!2sCOMFORT%20AIRCON%20%7C%20Hvac%20Solutions%20Provider%20%7C%20MEP%20consultant!5e0!3m2!1sen!2sin!4v1793256398227!5m2!1sen!2sin"
+              className="ref-map-iframe"
+              style={{ minHeight: '460px', height: '100%', width: '100%', border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title="Comfort Aircon Puducherry Google Map Location"
+            ></iframe>
           </div>
         </div>
       </section>
