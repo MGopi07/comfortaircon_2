@@ -5762,7 +5762,7 @@ body.maintenance-page {
       rgba(9, 22, 46, 0.20) 84%,
       rgba(9, 22, 46, 0.04) 100%
     ),
-    url('/images/about-us-hero.png');
+    url('/images/about-us-hero-original.png');
   background-position: right top;
   background-size: cover;
   background-repeat: no-repeat;
@@ -8598,7 +8598,7 @@ body.maintenance-page {
       rgba(9, 22, 46, 0.20) 84%,
       rgba(9, 22, 46, 0.04) 100%
     ),
-    url('/images/about-us-hero.png');
+    url('/images/about-us-hero-original.png');
   background-position: right top;
   background-size: cover;
   background-repeat: no-repeat;
@@ -8621,7 +8621,7 @@ body.maintenance-page {
         rgba(9, 22, 46, 0.95) 0%,
         rgba(9, 22, 46, 0.88) 100%
       ),
-      url('/images/about-us-hero.png');
+      url('/images/about-us-hero-original.png');
     background-position: right top;
   }
 }
