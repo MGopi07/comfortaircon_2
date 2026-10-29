@@ -16,7 +16,7 @@ export const INITIAL_CONTACT = {
   secondaryEmail: 'info@comfortaircon.com',
   address: 'No: 295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry – 605013',
   workingHours: 'Monday – Saturday: 9:00 AM – 8:00 PM | Sunday: 10:00 AM – 2:00 PM',
-  googleMapsLink: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1951.7852898985193!2d79.81036553823368!3d11.934944297073288!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1106ae5f7185dcdb%3A0x8b19cc10065d019e!2sCOMFORT%20AIRCON%20%7C%20Hvac%20Solutions%20Provider%20%7C%20MEP%20consultant!5e0!3m2!1sen!2sin!4v1793256398227!5m2!1sen!2sin',
+  googleMapsLink: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.587548858422!2d79.8106980735886!3d11.933765888294278!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1106ae5f7185dcdb%3A0x8b19cc10065d019e!2sCOMFORT%20AIRCON%20%7C%20Hvac%20Solutions%20Provider%20%7C%20MEP%20consultant!5e0!3m2!1sen!2sin!4v1793258188167!5m2!1sen!2sin',
   facebookUrl: 'https://facebook.com/comfortaircon',
   instagramUrl: 'https://instagram.com/comfortaircon',
   twitterUrl: 'https://twitter.com/comfortaircon',
