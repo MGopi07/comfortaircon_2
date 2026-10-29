@@ -382,45 +382,49 @@ export default function ContactPage() {
 
             {/* Right Column: Contact Cards (~40%) */}
             <div className="col-lg-5">
-              {/* Card 1: Call us */}
-              <div className="ref-contact-card">
-                <div className="ref-contact-icon">
-                  <i className="fa-solid fa-phone"></i>
-                </div>
-                <div className="ref-contact-title">Call us</div>
-                <a href={INITIAL_CONTACT.phoneHref} className="ref-contact-highlight">
-                  {INITIAL_CONTACT.phone}
-                </a>
-                <span className="ref-contact-subtext">Landline: {INITIAL_CONTACT.secondaryPhone}</span>
-                <p className="ref-contact-desc">
-                  Talk with our team about scheduling urgent repair, maintenance, or heating and cooling service questions.
-                </p>
-              </div>
-
-              {/* Card 3: Email us */}
-              <div className="ref-contact-card">
-                <div className="ref-contact-icon">
-                  <i className="fa-solid fa-envelope"></i>
-                </div>
-                <div className="ref-contact-title">Email us</div>
-                <a href={`mailto:${INITIAL_CONTACT.email}`} className="ref-contact-highlight">
-                  {INITIAL_CONTACT.email}
-                </a>
-                <span className="ref-contact-subtext">{INITIAL_CONTACT.secondaryEmail}</span>
-                <p className="ref-contact-desc">
-                  Send your service request, system issue, project details, or general questions anytime.
-                </p>
-              </div>
-
-              {/* Card 4: Visit location */}
+              {/* Card 1: Visit Our Location */}
               <div className="ref-contact-card">
                 <div className="ref-contact-icon">
                   <i className="fa-solid fa-location-dot"></i>
                 </div>
-                <div className="ref-contact-title">Visit our location</div>
-                <div className="ref-contact-highlight">Pudupalaiyam, Pondicherry</div>
+                <div className="ref-contact-title">Visit Our Location</div>
+                <div className="ref-contact-highlight">Pudupalaiyam, Puducherry</div>
                 <p className="ref-contact-desc">
-                  {INITIAL_CONTACT.address}
+                  No: 295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry – 605013.
+                </p>
+              </div>
+
+              {/* Card 2: Call Us */}
+              <div className="ref-contact-card">
+                <div className="ref-contact-icon">
+                  <i className="fa-solid fa-phone"></i>
+                </div>
+                <div className="ref-contact-title">Call Us</div>
+                <a href={INITIAL_CONTACT.phoneHref} className="ref-contact-highlight">
+                  Mobile: {INITIAL_CONTACT.phone}
+                </a>
+                <a href={INITIAL_CONTACT.secondaryPhoneHref} className="ref-contact-subtext text-decoration-none">
+                  Landline: {INITIAL_CONTACT.secondaryPhone}
+                </a>
+                <p className="ref-contact-desc">
+                  Talk with our team about scheduling repair, maintenance, or air conditioning service questions.
+                </p>
+              </div>
+
+              {/* Card 3: Email Us */}
+              <div className="ref-contact-card">
+                <div className="ref-contact-icon">
+                  <i className="fa-solid fa-envelope"></i>
+                </div>
+                <div className="ref-contact-title">Email Us</div>
+                <a href={`mailto:${INITIAL_CONTACT.email}`} className="ref-contact-highlight">
+                  {INITIAL_CONTACT.email}
+                </a>
+                <a href={`mailto:${INITIAL_CONTACT.secondaryEmail}`} className="ref-contact-subtext text-decoration-none">
+                  {INITIAL_CONTACT.secondaryEmail}
+                </a>
+                <p className="ref-contact-desc">
+                  Send your service request, project details, or general questions anytime.
                 </p>
               </div>
             </div>

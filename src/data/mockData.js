@@ -14,7 +14,7 @@ export const INITIAL_CONTACT = {
   whatsappHref: 'https://wa.me/919843020458?text=Hi%2C%20I%20want%20to%20enquire%20about%20your%20AC%20products%20%2F%20services.',
   email: 'admin@comfortair.co.in',
   secondaryEmail: 'info@comfortaircon.com',
-  address: '295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry, 605013',
+  address: 'No: 295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry – 605013',
   workingHours: 'Monday – Saturday: 9:00 AM – 8:00 PM | Sunday: 10:00 AM – 2:00 PM',
   googleMapsLink: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.620027582539!2d79.8078502!3d11.9472304!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a536173a116f1a9%3A0x6b4be93e9619582!2sKamaraj%20Salai%2C%20Thattanchavady%2C%20Puducherry!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin',
   facebookUrl: 'https://facebook.com/comfortaircon',
