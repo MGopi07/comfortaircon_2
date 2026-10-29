@@ -1,24 +1,81 @@
 'use client';
 
-/* eslint-disable @next/next/no-img-element */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useModal } from '@/context/ModalContext';
-import { PRODUCTS_CATALOG, INITIAL_CONTACT } from '@/data/mockData';
+// TODO: replace sampleProducts with API response
+import { sampleProducts } from '@/data/sampleProducts';
+import ProductGrid from '@/components/ProductGrid';
 
 export default function ProductsPage() {
   const { openAppointment, openSpec } = useModal();
 
-  const [selectedBrand, setSelectedBrand] = useState('ALL'); // 'ALL' | 'Carrier' | 'Toshiba'
-  const [selectedCategory, setSelectedCategory] = useState('ALL'); // 'ALL' | 'Split AC' | 'Cassette AC' | 'Ductable AC' | 'VRF Systems'
+  // Integration placeholders ready for future backend API response
+  const [productsData, setProductsData] = useState(sampleProducts);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
+  // Sync with Admin Panel products
+  useEffect(() => {
+    const loadProducts = () => {
+      if (typeof window === 'undefined') return;
+      try {
+        const stored = localStorage.getItem('comfort_aircon_products');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            const published = parsed
+              .filter((p) => p.published !== false)
+              .map((p) => ({
+                id: p.id,
+                name: p.name,
+                model: p.model,
+                image: p.image || p.img || '/images/carrier-split-ac.png',
+                specifications: Array.isArray(p.specsList) && p.specsList.length > 0
+                  ? p.specsList
+                  : Array.isArray(p.specifications) && p.specifications.length > 0
+                  ? p.specifications
+                  : typeof p.specifications === 'string'
+                  ? p.specifications
+                      .split(/[\n|]/)
+                      .map((line) => {
+                        const [l, ...v] = line.split(':');
+                        return { label: l?.trim() || 'Spec', value: v.join(':').trim() || l?.trim() };
+                      })
+                      .filter((s) => s.label && s.value)
+                  : [],
+                features: Array.isArray(p.featuresList) && p.featuresList.length > 0
+                  ? p.featuresList
+                  : Array.isArray(p.features) && p.features.length > 0
+                  ? p.features
+                  : typeof p.features === 'string'
+                  ? p.features.split('\n').map((f) => f.trim()).filter(Boolean)
+                  : [],
+              }));
+            setProductsData(published);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error('Error loading products on products page:', err);
+      }
+    };
+    loadProducts();
+    window.addEventListener('storage', loadProducts);
+    return () => window.removeEventListener('storage', loadProducts);
+  }, []);
+
+  // Client-side search filtering by product name or model
   const filteredProducts = useMemo(() => {
-    return PRODUCTS_CATALOG.filter((item) => {
-      const matchBrand = selectedBrand === 'ALL' || item.brand === selectedBrand;
-      const matchCategory = selectedCategory === 'ALL' || item.category === selectedCategory;
-      return matchBrand && matchCategory;
+    if (!searchQuery.trim()) return productsData;
+    const query = searchQuery.toLowerCase().trim();
+    return productsData.filter((item) => {
+      const matchName = item.name ? item.name.toLowerCase().includes(query) : false;
+      const matchModel = item.model ? item.model.toLowerCase().includes(query) : false;
+      return matchName || matchModel;
     });
-  }, [selectedBrand, selectedCategory]);
+  }, [productsData, searchQuery]);
 
   return (
     <>
@@ -41,238 +98,68 @@ export default function ProductsPage() {
                 Find the Right AC for <span className="text-primary-blue">Your Space</span>
               </h1>
               <p className="subpage-lead">
-                Get professional assistance in choosing the right air conditioner based on your space, cooling requirements, and budget.</p>
-
-
+                Get professional assistance in choosing the right air conditioner based on your space, cooling requirements, and budget.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. PRODUCTS SECTION WITH FILTERS & FSD CARDS */}
+      {/* 2. PRODUCTS SECTION WITH DATA-DRIVEN FSD CARDS */}
       <section className="products-page-section">
         <div className="container-xxl">
-          {/* Brand Role Explainer Strip */}
-          <div className="p-3 bg-white rounded-4 border shadow-xs mb-4">
-            <div className="row align-items-center gy-2">
-              <div className="col-md-7">
-                <div className="d-flex align-items-center gap-2 flex-wrap">
-                  <span className="brand-pill-carrier">
-                    <i className="fa-solid fa-certificate"></i> Carrier Air Conditioners
-                  </span>
-                  <span className="brand-pill-toshiba">
-                    <i className="fa-solid fa-snowflake"></i> Toshiba Air Conditioners
-                  </span>
-                  <span className="text-muted small">
-                    • 100% genuine factory warranty, itemized BOQ quotes, and certified installation.
-                  </span>
-                </div>
-              </div>
-              <div className="col-md-5 text-md-end">
-                <span className="badge bg-light text-dark border px-3 py-2 small">
-                  <i className="fa-solid fa-circle-info text-primary-blue me-1"></i> Information &amp; Enquiry Only (No Online Cart)
-                </span>
-              </div>
+          {/* Search Option */}
+          <div className="mb-4 mb-md-5 d-flex justify-content-center">
+            <div className="position-relative" style={{ maxWidth: '480px', width: '100%' }}>
+              <i
+                className="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"
+                aria-hidden="true"
+              ></i>
+              <input
+                type="text"
+                className="form-control rounded-pill ps-5 pe-4 py-2.5 border shadow-xs bg-white"
+                placeholder="Search by name or model..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Search air conditioners by name or model"
+                style={{ fontSize: '0.95rem' }}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-link position-absolute top-50 end-0 translate-middle-y me-2 text-muted text-decoration-none"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear search"
+                >
+                  <i className="fa-solid fa-xmark"></i>
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Interactive Filters Bar */}
-          <div className="filter-pills-bar">
-            <div className="row align-items-center gy-3">
-              {/* Brand Selector */}
-              <div className="col-lg-6">
-                <div className="d-flex align-items-center gap-2 flex-wrap">
-                  <span className="text-muted small fw-bold text-uppercase letter-spacing-1 me-1">
-                    Brand:
-                  </span>
-                  <button
-                    type="button"
-                    className={`filter-pill-btn ${selectedBrand === 'ALL' ? 'active' : ''}`}
-                    onClick={() => setSelectedBrand('ALL')}
-                  >
-                    All Brands ({PRODUCTS_CATALOG.length})
-                  </button>
-                  <button
-                    type="button"
-                    className={`filter-pill-btn ${selectedBrand === 'Carrier' ? 'active' : ''}`}
-                    onClick={() => setSelectedBrand('Carrier')}
-                  >
-                    <i className="fa-solid fa-certificate text-primary me-1"></i> Carrier
-                  </button>
-                  <button
-                    type="button"
-                    className={`filter-pill-btn ${selectedBrand === 'Toshiba' ? 'active-toshiba' : ''}`}
-                    onClick={() => setSelectedBrand('Toshiba')}
-                  >
-                    <i className="fa-solid fa-snowflake text-danger me-1"></i> Toshiba
-                  </button>
-                </div>
-              </div>
-
-              {/* Category Selector */}
-              <div className="col-lg-6">
-                <div className="d-flex align-items-center justify-content-lg-end gap-2 flex-wrap">
-                  <span className="text-muted small fw-bold text-uppercase letter-spacing-1 me-1">
-                    Type:
-                  </span>
-                  {['ALL', 'Split AC', 'Cassette AC', 'Ductable AC', 'VRF Systems'].map((cat) => (
-                    <button
-                      key={cat}
-                      type="button"
-                      className={`filter-pill-btn ${selectedCategory === cat ? 'active' : ''}`}
-                      onClick={() => setSelectedCategory(cat)}
-                    >
-                      {cat === 'ALL' ? 'All Types' : cat}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Product Cards Grid (Matches Exact FSD Section 7.4 Fields) */}
-          <div className="row g-4">
-            {filteredProducts.map((product) => (
-              <div className="col-lg-4 col-md-6" key={product.id}>
-                <div className="product-fsd-card">
-                  {/* Card Image Top */}
-                  <div className="product-card-top">
-                    <img
-                      src={product.image}
-                      alt={`${product.name} - ${product.model}`}
-                      loading="lazy"
-                    />
-
-                    {/* Brand Badge */}
-                    <div className="product-badge-corner">
-                      {product.brand === 'Carrier' ? (
-                        <span className="brand-pill-carrier">
-                          <i className="fa-solid fa-certificate"></i> Carrier
-                        </span>
-                      ) : (
-                        <span className="brand-pill-toshiba">
-                          <i className="fa-solid fa-snowflake"></i> Toshiba
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Category Tag */}
-                    <span className="product-category-tag">{product.category}</span>
-                  </div>
-
-                  {/* Card Content (Exact FSD Fields: Name, Model, Specifications, Features, Enquire button) */}
-                  <div className="product-card-content">
-                    {/* Field 3: Model */}
-                    <div className="product-model-text">{product.model}</div>
-
-                    {/* Field 2: Name */}
-                    <h3 className="product-title-fsd">{product.name}</h3>
-
-                    {/* Field 4: Specifications */}
-                    <div className="product-specs-box">
-                      <div className="text-muted small fw-bold text-uppercase letter-spacing-1 mb-2">
-                        Technical Specifications:
-                      </div>
-                      {product.specsList.slice(0, 4).map((spec, sIdx) => (
-                        <div className="product-spec-row" key={sIdx}>
-                          <span className="product-spec-name">{spec.label}</span>
-                          <span className="product-spec-val">{spec.value}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Field 5: Features */}
-                    <div className="mb-2">
-                      <div className="text-muted small fw-bold text-uppercase letter-spacing-1 mb-2">
-                        Key Features:
-                      </div>
-                      <ul className="product-features-checklist">
-                        {product.featuresList.slice(0, 3).map((feat, fIdx) => (
-                          <li key={fIdx}>
-                            <i className="fa-solid fa-circle-check"></i>
-                            <span>{feat}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Field 6: Enquire Button (Opens Enquiry Modal with Product auto-filled) */}
-                    <div className="product-card-actions">
-                      <button
-                        type="button"
-                        className="btn btn-custom-primary flex-grow-1 shadow-xs fw-bold"
-                        onClick={() => openAppointment(product.name)}
-                      >
-                        <i className="fa-solid fa-clipboard-question me-1"></i> Enquire Now
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-outline-secondary rounded-pill px-3 fw-semibold small"
-                        onClick={() =>
-                          openSpec({
-                            name: product.name,
-                            brand: product.brand,
-                            desc: product.features,
-                            specs: product.specifications,
-                            img: product.image,
-                          })
-                        }
-                        title="View Full Technical Datasheet"
-                      >
-                        <i className="fa-solid fa-file-lines me-1"></i> Specs
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-5 bg-white rounded-4 border p-5 my-4">
-              <i className="fa-solid fa-filter-circle-xmark text-muted fs-1 mb-3"></i>
-              <h4 className="fw-bold text-dark-navy">No products match your filter</h4>
-              <p className="text-muted">
-                Try selecting &quot;All Brands&quot; or &quot;All Types&quot; to view our full cooling equipment range.
-              </p>
-              <button
-                type="button"
-                className="btn btn-custom-primary px-4 py-2 mt-2"
-                onClick={() => {
-                  setSelectedBrand('ALL');
-                  setSelectedCategory('ALL');
-                }}
-              >
-                Reset Filters
-              </button>
+          {/* Optional Error Alert State (ready for API integration) */}
+          {error && (
+            <div className="alert alert-danger rounded-4 my-4" role="alert">
+              <i className="fa-solid fa-triangle-exclamation me-2"></i>
+              {error}
             </div>
           )}
 
-          {/* Consultation / Sizing Banner */}
-          <div className="brand-partner-showcase mt-5">
-            <div className="row align-items-center gy-4">
-              <div className="col-lg-8">
-                <span className="section-tag mb-2">
-                  <i className="fa-solid fa-calculator me-1"></i> NOT SURE WHICH AC IS RIGHT FOR YOUR SPACE?
-                </span>
-                <h3 className="section-title text-start fs-3 mb-2">
-                  Free Heat Load Calculation &amp; Site Assessment
-                </h3>
-                <p className="text-muted mb-0">
-                  Room dimensions, ceiling height, glass sun-exposure, and occupant count dictate the exact tonnage required. Sizing your AC accurately prevents high electric bills and early compressor wear. Schedule an on-site visit with our certified engineers across Pondicherry, Villupuram, and Cuddalore.
-                </p>
-              </div>
-              <div className="col-lg-4 text-lg-end">
-                <button
-                  type="button"
-                  className="btn btn-custom-primary px-4 py-3 fw-bold w-100 w-lg-auto"
-                  onClick={() => openAppointment()}
-                >
-                  <i className="fa-solid fa-ruler-combined me-2"></i> Book Free Site Survey
-                </button>
-              </div>
-            </div>
-          </div>
+          {/* Data-Driven Product Grid with Scroll Entrance & Layout Animations */}
+          <ProductGrid
+            products={filteredProducts}
+            isLoading={isLoading}
+            onEnquire={(product) => openAppointment(`${product.name} (${product.model})`)}
+            onViewSpecs={(product) =>
+              openSpec({
+                name: product.name,
+                desc: product.features.join(' • '),
+                specs: product.specifications.map((s) => `${s.label}: ${s.value}`).join(' | '),
+                img: product.image,
+              })
+            }
+            onResetFilters={() => setSearchQuery('')}
+          />
         </div>
       </section>
     </>

@@ -1,7 +1,17 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback, useSyncExternalStore } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo, useSyncExternalStore } from 'react';
 import ProductPanel from './ProductPanel';
+import { PRODUCTS_CATALOG } from '@/data/mockData';
+
+const BG_TINTS = [
+  '#F0F8FF', // Soft icy blue tint 1
+  '#EAF4FC', // Soft icy blue tint 2
+  '#E1EFFB', // Soft icy blue tint 3
+  '#D9EBF9', // Soft icy blue tint 4
+  '#E6F2FC', // Soft icy blue tint 5
+  '#EDF6FD', // Soft icy blue tint 6
+];
 
 function subscribeReducedMotion(callback) {
   if (typeof window === 'undefined') return () => { };
@@ -20,115 +30,88 @@ function getReducedMotionServerSnapshot() {
 }
 
 export default function ProductPanels({ openSpec, openAppointment }) {
-  const products = [
-    {
-      id: 1,
-      indexStr: '01',
-      category: 'Split AC',
-      name: 'Carrier Split Room AC',
-      model: 'Ester Neo 5-Star Inverter',
-      specs: [
-        { label: 'Capacity', value: '1.5 Ton (5-Star)' },
-        { label: 'Compressor', value: 'Dual Inverter Rotary' },
-        { label: 'Filtration', value: 'PM 2.5 Micro Filter' },
-        { label: 'Noise Level', value: '21 dB Ultra Quiet' },
-      ],
-      features: [
-        'Rapid Cool Inverter Energy Saver',
-        'PM 2.5 Micro-Air Filtration System',
-        '10-Year Compressor Warranty',
-      ],
-      img: '/images/carrier-split-ac.png',
-      bgTint: '#F0F8FF', // Soft icy blue tint 1
-      borderColor: 'rgba(0, 120, 191, 0.16)',
-    },
-    {
-      id: 2,
-      indexStr: '02',
-      category: 'Cassette AC',
-      name: 'Carrier 4-Way Cassette AC',
-      model: 'Superia 40KV 4-Way Series',
-      specs: [
-        { label: 'Airflow', value: '360° Uniform Flow' },
-        { label: 'Drain Pump', value: 'Built-in High Lift' },
-        { label: 'Profile', value: 'Slim Depth Design' },
-        { label: 'Control', value: 'Wireless Remote Included' },
-      ],
-      features: [
-        '360° Uniform Airflow Dispersion',
-        'Built-in High Lift Condensate Pump',
-        'Slim Architectural Ceiling Profile',
-      ],
-      img: '/images/carrier-cassette.png',
-      bgTint: '#EAF4FC', // Soft icy blue tint 2
-      borderColor: 'rgba(0, 120, 191, 0.18)',
-    },
-    {
-      id: 3,
-      indexStr: '03',
-      category: 'Ductable AC',
-      name: 'Carrier Concealed Ductable AC',
-      model: 'Concealed 40VD High-Static',
-      specs: [
-        { label: 'Installation', value: '100% In-Ceiling' },
-        { label: 'Blower', value: 'High Static Pressure' },
-        { label: 'Diffusers', value: 'Linear Grill Integration' },
-        { label: 'Control', value: 'Central Automation Ready' },
-      ],
-      features: [
-        '100% Invisible Ceiling Concealment',
-        'High Static Pressure Performance',
-        'Central Automation & BMS Ready',
-      ],
-      img: '/images/carrier-duct.png',
-      bgTint: '#E1EFFB', // Soft icy blue tint 3
-      borderColor: 'rgba(0, 120, 191, 0.20)',
-    },
-    {
-      id: 4,
-      indexStr: '04',
-      category: 'VRF Systems',
-      name: 'Carrier Commercial VRF System',
-      model: 'X-Power Commercial VRF',
-      specs: [
-        { label: 'Capacity', value: 'Up to 64 Indoor Units' },
-        { label: 'Compressor', value: 'Variable DC Inverter' },
-        { label: 'Ambient Temp', value: '52°C Cooling Durability' },
-        { label: 'Operation', value: 'Multi-Zone Independent' },
-      ],
-      features: [
-        'Multi-Zone Independent Room Control',
-        'Extreme 52°C Ambient Cooling Durability',
-        'Full Inverter Energy Efficiency COP',
-      ],
-      img: '/images/carrier-vrf-ac.png',
-      bgTint: '#D9EBF9', // Soft icy blue tint 4
-      borderColor: 'rgba(0, 120, 191, 0.22)',
-    },
-    {
-      id: 5,
-      indexStr: '05',
-      category: 'Toshiba Range',
-      name: 'Toshiba SMMS-u Japanese VRF',
-      model: 'SMMS-u Next-Gen MCY-MHP',
-      specs: [
-        { label: 'Engineering', value: 'Japanese SMMS-u Tech' },
-        { label: 'Compressor', value: 'Twin Rotary Inverter' },
-        { label: 'Heat Exchanger', value: 'Magic Coil Self-Clean' },
-        { label: 'Efficiency', value: 'Industry-Leading COP' },
-      ],
-      features: [
-        'Twin Rotary DC Inverter Compressor',
-        'Magic Coil Self-Cleaning Heat Exchanger',
-        'Advanced Triple Liquid Sub-cooling',
-      ],
-      img: '/images/toshiba-vrf.png',
-      bgTint: '#E6F2FC', // Soft icy blue (NO RED)
-      borderColor: 'rgba(0, 120, 191, 0.20)',
-    },
-  ];
+  const [rawProducts, setRawProducts] = useState(PRODUCTS_CATALOG);
+
+  // Sync with Admin Panel products from localStorage
+  useEffect(() => {
+    const loadStoredProducts = () => {
+      if (typeof window === 'undefined') return;
+      try {
+        const stored = localStorage.getItem('comfort_aircon_products');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setRawProducts(parsed);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error('Error reading comfort_aircon_products from localStorage:', err);
+      }
+      setRawProducts(PRODUCTS_CATALOG);
+    };
+
+    loadStoredProducts();
+    window.addEventListener('storage', loadStoredProducts);
+    return () => window.removeEventListener('storage', loadStoredProducts);
+  }, []);
+
+  // Filter ONLY published products from the admin panel
+  const products = useMemo(() => {
+    return rawProducts
+      .filter((p) => p.published !== false)
+      .map((p, idx) => {
+        const specs =
+          Array.isArray(p.specsList) && p.specsList.length > 0
+            ? p.specsList
+            : Array.isArray(p.specs) && p.specs.length > 0
+            ? p.specs
+            : typeof p.specifications === 'string'
+            ? p.specifications
+                .split(/[\n|]/)
+                .map((part) => {
+                  const [lbl, ...val] = part.split(':');
+                  return {
+                    label: lbl ? lbl.trim() : 'Spec',
+                    value: val.join(':').trim() || lbl.trim(),
+                  };
+                })
+                .filter((s) => s.label && s.value)
+            : [];
+
+        const features =
+          Array.isArray(p.featuresList) && p.featuresList.length > 0
+            ? p.featuresList
+            : Array.isArray(p.features) && p.features.length > 0
+            ? p.features
+            : typeof p.features === 'string'
+            ? p.features.split('\n').map((f) => f.trim()).filter(Boolean)
+            : [];
+
+        return {
+          id: p.id || `prod-${idx}`,
+          indexStr: String(idx + 1).padStart(2, '0'),
+          category: p.category || (p.brand ? `${p.brand} Range` : 'AC System'),
+          name: p.name,
+          model: p.model || 'Standard',
+          specs: specs.slice(0, 4),
+          features: features.slice(0, 3),
+          img: p.image || p.img || '/images/carrier-split-ac.png',
+          bgTint: BG_TINTS[idx % BG_TINTS.length],
+          borderColor: 'rgba(0, 120, 191, 0.18)',
+        };
+      });
+  }, [rawProducts]);
 
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Keep activeIndex within bounds if products list changes
+  useEffect(() => {
+    if (products.length > 0 && activeIndex >= products.length) {
+      setActiveIndex(0);
+    }
+  }, [products.length, activeIndex]);
+
   const [hasInteracted, setHasInteracted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isRevealed, setIsRevealed] = useState(true);
@@ -230,6 +213,19 @@ export default function ProductPanels({ openSpec, openAppointment }) {
     },
     [handleSelect, products.length]
   );
+
+  if (products.length === 0) {
+    return (
+      <div className="text-center py-5">
+        <div className="p-4 rounded-4 bg-light d-inline-block border">
+          <i className="fa-solid fa-box-open fs-2 text-muted mb-2 d-block"></i>
+          <p className="text-muted fw-semibold mb-0">
+            No products are currently published. Please publish products in the Admin Panel to display them here.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

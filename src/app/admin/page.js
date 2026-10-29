@@ -53,6 +53,9 @@ export default function AdminPanelPage() {
     published: true,
   });
 
+  const [editProductModal, setEditProductModal] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+
   const [newGalleryModal, setNewGalleryModal] = useState(false);
   const [newGalleryData, setNewGalleryData] = useState({
     title: '',
@@ -120,9 +123,34 @@ export default function AdminPanelPage() {
         }
       };
 
+      // Load Products from localStorage
+      const loadProducts = () => {
+        const storedProd = localStorage.getItem('comfort_aircon_products');
+        if (storedProd) {
+          try {
+            const parsed = JSON.parse(storedProd);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setProducts(parsed);
+              return;
+            }
+          } catch (e) {
+            console.error('Error parsing stored products:', e);
+          }
+        }
+        setProducts(PRODUCTS_CATALOG);
+        localStorage.setItem('comfort_aircon_products', JSON.stringify(PRODUCTS_CATALOG));
+      };
+
       loadEnquiries();
-      window.addEventListener('storage', loadEnquiries);
-      return () => window.removeEventListener('storage', loadEnquiries);
+      loadProducts();
+
+      const handleStorageSync = () => {
+        loadEnquiries();
+        loadProducts();
+      };
+
+      window.addEventListener('storage', handleStorageSync);
+      return () => window.removeEventListener('storage', handleStorageSync);
     }
   }, []);
 
@@ -217,23 +245,121 @@ export default function AdminPanelPage() {
   });
 
   // 2. PRODUCT MANAGEMENT ACTIONS (FSD Section 9.2)
+  const saveProductsToStorage = (updatedList) => {
+    setProducts(updatedList);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('comfort_aircon_products', JSON.stringify(updatedList));
+        window.dispatchEvent(new Event('storage'));
+      } catch (err) {
+        console.error('Error saving products to localStorage:', err);
+      }
+    }
+  };
+
   const handleToggleProductPublish = (id) => {
     const updated = products.map((p) =>
       p.id === id ? { ...p, published: !p.published } : p
     );
-    setProducts(updated);
+    saveProductsToStorage(updated);
     notify('Product publish status toggled.');
   };
 
   const handleDeleteProduct = (id) => {
     if (!confirm('Are you sure you want to remove this product from the catalogue?')) return;
-    setProducts(products.filter((p) => p.id !== id));
+    const updated = products.filter((p) => p.id !== id);
+    saveProductsToStorage(updated);
     notify('Product removed.');
+  };
+
+  const handleOpenEditProduct = (prod) => {
+    const specsStr =
+      typeof prod.specifications === 'string'
+        ? prod.specifications
+        : Array.isArray(prod.specsList)
+        ? prod.specsList.map((s) => `${s.label}: ${s.value}`).join('\n')
+        : '';
+
+    const featsStr =
+      typeof prod.features === 'string'
+        ? prod.features
+        : Array.isArray(prod.featuresList)
+        ? prod.featuresList.join('\n')
+        : '';
+
+    setEditingProduct({
+      ...prod,
+      specifications: specsStr,
+      features: featsStr,
+    });
+    setEditProductModal(true);
+  };
+
+  const handleSaveEditProduct = (e) => {
+    e.preventDefault();
+    if (!editingProduct) return;
+
+    const specsArr = (editingProduct.specifications || '')
+      .split(/[\n|]/)
+      .map((line) => {
+        const parts = line.split(':');
+        return {
+          label: parts[0]?.trim() || 'Spec',
+          value: parts.slice(1).join(':').trim() || parts[0]?.trim(),
+        };
+      })
+      .filter((s) => s.label && s.value);
+
+    const featsArr = (editingProduct.features || '')
+      .split('\n')
+      .map((f) => f.trim())
+      .filter(Boolean);
+
+    const updated = products.map((p) => {
+      if (p.id === editingProduct.id) {
+        return {
+          ...p,
+          name: editingProduct.name,
+          brand: editingProduct.brand,
+          isPrimary: editingProduct.brand === 'Carrier',
+          category: editingProduct.category,
+          model: editingProduct.model,
+          specifications: editingProduct.specifications,
+          specsList: specsArr.length > 0 ? specsArr : p.specsList,
+          features: editingProduct.features,
+          featuresList: featsArr.length > 0 ? featsArr : p.featuresList,
+          image: editingProduct.image,
+          published: editingProduct.published,
+        };
+      }
+      return p;
+    });
+
+    saveProductsToStorage(updated);
+    setEditProductModal(false);
+    setEditingProduct(null);
+    notify(`Product "${editingProduct.name}" updated successfully.`);
   };
 
   const handleAddProduct = (e) => {
     e.preventDefault();
     if (!newProductData.name || !newProductData.model) return;
+
+    const specsArr = (newProductData.specifications || '')
+      .split(/[\n|]/)
+      .map((line) => {
+        const parts = line.split(':');
+        return {
+          label: parts[0]?.trim() || 'Spec',
+          value: parts.slice(1).join(':').trim() || parts[0]?.trim(),
+        };
+      })
+      .filter((s) => s.label && s.value);
+
+    const featsArr = (newProductData.features || '')
+      .split('\n')
+      .map((f) => f.trim())
+      .filter(Boolean);
 
     const newProd = {
       id: `prod-${Date.now()}`,
@@ -243,20 +369,24 @@ export default function AdminPanelPage() {
       name: newProductData.name,
       model: newProductData.model,
       specifications: newProductData.specifications || 'Standard specifications',
-      specsList: [
-        { label: 'Model', value: newProductData.model },
-        { label: 'Brand', value: newProductData.brand },
-        { label: 'Category', value: newProductData.category },
-      ],
+      specsList:
+        specsArr.length > 0
+          ? specsArr
+          : [
+              { label: 'Model', value: newProductData.model },
+              { label: 'Brand', value: newProductData.brand },
+              { label: 'Category', value: newProductData.category },
+            ],
       features: newProductData.features || 'Standard features',
-      featuresList: newProductData.features
-        ? newProductData.features.split('\n')
-        : ['High Efficiency Inverter', 'Genuine OEM Warranty'],
+      featuresList:
+        featsArr.length > 0
+          ? featsArr
+          : ['High Efficiency Inverter', 'Genuine OEM Warranty'],
       image: newProductData.image,
       published: newProductData.published,
     };
 
-    setProducts([newProd, ...products]);
+    saveProductsToStorage([newProd, ...products]);
     setNewProductModal(false);
     setNewProductData({
       name: '',
@@ -796,14 +926,24 @@ export default function AdminPanelPage() {
                                 </button>
                               </td>
                               <td className="text-end">
-                                <button
-                                  type="button"
-                                  className="btn btn-sm btn-outline-danger"
-                                  onClick={() => handleDeleteProduct(prod.id)}
-                                  title="Delete Product"
-                                >
-                                  <i className="fa-solid fa-trash-can"></i>
-                                </button>
+                                <div className="d-flex justify-content-end gap-1">
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-outline-primary"
+                                    onClick={() => handleOpenEditProduct(prod)}
+                                    title="Edit Product"
+                                  >
+                                    <i className="fa-solid fa-pen-to-square"></i>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-outline-danger"
+                                    onClick={() => handleDeleteProduct(prod.id)}
+                                    title="Delete Product"
+                                  >
+                                    <i className="fa-solid fa-trash-can"></i>
+                                  </button>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -1317,6 +1457,176 @@ export default function AdminPanelPage() {
                   </button>
                   <button type="submit" className="btn btn-custom-primary btn-sm px-4 fw-bold">
                     Save Product
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: EDIT PRODUCT */}
+      {editProductModal && editingProduct && (
+        <div
+          className="modal-backdrop fade show d-flex align-items-center justify-content-center"
+          style={{ zIndex: 1060, backgroundColor: 'rgba(0,0,0,0.6)' }}
+          onClick={() => {
+            setEditProductModal(false);
+            setEditingProduct(null);
+          }}
+        >
+          <div
+            className="modal-dialog modal-dialog-centered modal-lg w-100"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+              <div className="modal-header bg-dark-navy text-white py-3 px-4">
+                <h5 className="modal-title fs-6 fw-bold mb-0">Edit Product: {editingProduct.name}</h5>
+                <button
+                  type="button"
+                  className="btn-close btn-close-white"
+                  onClick={() => {
+                    setEditProductModal(false);
+                    setEditingProduct(null);
+                  }}
+                ></button>
+              </div>
+              <form onSubmit={handleSaveEditProduct}>
+                <div className="modal-body p-4">
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <label className="form-label small fw-bold">Brand Classification</label>
+                      <select
+                        className="form-select"
+                        value={editingProduct.brand}
+                        onChange={(e) =>
+                          setEditingProduct({ ...editingProduct, brand: e.target.value })
+                        }
+                      >
+                        <option value="Carrier">Carrier</option>
+                        <option value="Toshiba">Toshiba</option>
+                      </select>
+                    </div>
+
+                    <div className="col-md-6">
+                      <label className="form-label small fw-bold">Category</label>
+                      <select
+                        className="form-select"
+                        value={editingProduct.category}
+                        onChange={(e) =>
+                          setEditingProduct({ ...editingProduct, category: e.target.value })
+                        }
+                      >
+                        <option value="Split AC">Split AC</option>
+                        <option value="Cassette AC">Cassette AC</option>
+                        <option value="Ductable AC">Ductable AC</option>
+                        <option value="VRF Systems">VRF Systems</option>
+                      </select>
+                    </div>
+
+                    <div className="col-md-6">
+                      <label className="form-label small fw-bold">1. Product Name *</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={editingProduct.name}
+                        onChange={(e) =>
+                          setEditingProduct({ ...editingProduct, name: e.target.value })
+                        }
+                        required
+                      />
+                    </div>
+
+                    <div className="col-md-6">
+                      <label className="form-label small fw-bold">2. Model *</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={editingProduct.model}
+                        onChange={(e) =>
+                          setEditingProduct({ ...editingProduct, model: e.target.value })
+                        }
+                        required
+                      />
+                    </div>
+
+                    <div className="col-12">
+                      <label className="form-label small fw-bold">3. Specifications (Label: Value per line) *</label>
+                      <textarea
+                        className="form-control"
+                        rows={3}
+                        value={editingProduct.specifications}
+                        onChange={(e) =>
+                          setEditingProduct({ ...editingProduct, specifications: e.target.value })
+                        }
+                        required
+                      ></textarea>
+                    </div>
+
+                    <div className="col-12">
+                      <label className="form-label small fw-bold">4. Key Features (1 per line) *</label>
+                      <textarea
+                        className="form-control"
+                        rows={3}
+                        value={editingProduct.features}
+                        onChange={(e) =>
+                          setEditingProduct({ ...editingProduct, features: e.target.value })
+                        }
+                        required
+                      ></textarea>
+                    </div>
+
+                    <div className="col-md-8">
+                      <label className="form-label small fw-bold">5. Image Asset Path *</label>
+                      <select
+                        className="form-select"
+                        value={editingProduct.image}
+                        onChange={(e) =>
+                          setEditingProduct({ ...editingProduct, image: e.target.value })
+                        }
+                      >
+                        <option value="/images/carrier-split.png">Carrier Split AC</option>
+                        <option value="/images/carrier-split-ac.png">Carrier Split AC (Wide)</option>
+                        <option value="/images/carrier-cassette.png">Carrier Cassette AC</option>
+                        <option value="/images/carrier-duct.png">Carrier Ductable AC</option>
+                        <option value="/images/carrier-vrf-ac.png">Carrier VRF System</option>
+                        <option value="/images/toshiba-split.png">Toshiba Inverter Split AC</option>
+                        <option value="/images/toshiba-cassette.png">Toshiba Inverter Cassette AC</option>
+                        <option value="/images/toshiba-vrf.png">Toshiba SMMS-u VRF System</option>
+                      </select>
+                    </div>
+
+                    <div className="col-md-4 d-flex align-items-center pt-4">
+                      <div className="form-check form-switch">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="editProdPublish"
+                          checked={editingProduct.published}
+                          onChange={(e) =>
+                            setEditingProduct({ ...editingProduct, published: e.target.checked })
+                          }
+                        />
+                        <label className="form-check-label small fw-bold" htmlFor="editProdPublish">
+                          Published
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="modal-footer bg-light p-3">
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary btn-sm"
+                    onClick={() => {
+                      setEditProductModal(false);
+                      setEditingProduct(null);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="btn btn-custom-primary btn-sm px-4 fw-bold">
+                    Update Product
                   </button>
                 </div>
               </form>

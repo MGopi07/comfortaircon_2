@@ -221,22 +221,11 @@ export default function ServiceAreasSection() {
                             </div>
                           </div>
 
-                          {/* Action Buttons */}
-                          <div className="area-action-btns d-flex flex-wrap align-items-center gap-2 gap-sm-3">
-                            <a
-                              href={`https://wa.me/${area.whatsappPhone}?text=${encodeURIComponent(
-                                area.whatsappText
-                              )}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="btn-area-whatsapp flex-grow-1"
-                            >
-                              <i className="fa-brands fa-whatsapp fs-5"></i>
-                              <span>WhatsApp {area.name} Team</span>
-                            </a>
+                          {/* Action Button */}
+                          <div className="area-action-btns d-flex justify-content-center align-items-center w-100">
                             <button
                               type="button"
-                              className="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-xs"
+                              className="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center justify-content-center gap-2 shadow-xs"
                               onClick={() => openAppointment()}
                             >
                               <i className="fa-regular fa-calendar-check fs-6"></i>
