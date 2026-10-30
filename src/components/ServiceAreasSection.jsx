@@ -19,10 +19,10 @@ export default function ServiceAreasSection() {
       iconBg: 'rgba(0, 120, 191, 0.1)',
       iconColor: 'var(--primary-blue)',
       tagline: 'Carrier Flagship Hub & Direct Showroom',
-      desc: 'Complete Carrier & Toshiba sales showroom, extensive warehouse inventory, genuine spare parts, and dedicated certified technician dispatch across Puducherry.',
+      desc: 'Complete Carrier, Toshiba & Midea sales showroom, extensive warehouse inventory, genuine spare parts, and dedicated certified technician dispatch across Puducherry.',
       tags: ['White Town', 'Lawspet', 'Muthialpet', 'Saram', 'Villianur', 'Kalapet', 'Reddiarpalayam', 'Gorimedu'],
       features: [
-        'Authorized Carrier & Toshiba Hub',
+        'Authorized Carrier, Toshiba & Midea Hub',
         'Same-Day Delivery & Installation',
         '2-Hour Rapid Technician Assistance',
         '100% Genuine Spare Parts & Warranty',
@@ -225,10 +225,10 @@ export default function ServiceAreasSection() {
                           <div className="area-action-btns d-flex justify-content-center align-items-center w-100">
                             <button
                               type="button"
-                              className="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center justify-content-center gap-2 shadow-xs"
+                              className="btn btn-custom-primary rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center justify-content-center gap-2 shadow-sm"
                               onClick={() => openAppointment()}
                             >
-                              <i className="fa-regular fa-calendar-check fs-6"></i>
+                              <i className="fa-solid fa-clipboard-check fs-6"></i>
                               <span>Book Service</span>
                             </button>
                           </div>
@@ -269,7 +269,7 @@ export default function ServiceAreasSection() {
                     Certified Field Team
                   </span>
                   <small className="text-muted" style={{ fontSize: '0.74rem' }}>
-                    Carrier &amp; Toshiba Authorized
+                    Carrier, Toshiba &amp; Midea Authorized
                   </small>
                 </div>
               </div>

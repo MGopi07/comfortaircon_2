@@ -232,7 +232,7 @@ export default function ContactPage() {
                     <div>
                       <h6 className="alert-heading fw-bold mb-1">Thank you for reaching out!</h6>
                       <p className="mb-0 small">
-                        Your request has been logged successfully. Our Carrier &amp; Toshiba technical support desk will call your mobile number shortly.
+                        Your request has been logged successfully. Our Carrier, Toshiba &amp; Midea technical support desk will call your mobile number shortly.
                       </p>
                     </div>
                   </div>
@@ -368,7 +368,7 @@ export default function ContactPage() {
                           setFormData({ ...formData, productInterested: e.target.value })
                         }
                       >
-                        <option value="">Select product (Carrier / Toshiba)...</option>
+                        <option value="">Select product (Carrier / Toshiba / Midea)...</option>
                         {publishedProducts.map((prod) => (
                           <option key={prod} value={prod}>
                             {prod}

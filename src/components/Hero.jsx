@@ -53,7 +53,7 @@ export default function Hero() {
             {/* Status Badge */}
             <div className="hero-status-badge">
               <span className="pulse-dot"></span>
-              <span>Authorized Carrier &amp; Toshiba AC Dealership</span>
+              <span>Authorized Carrier, Toshiba &amp; Midea AC Dealership</span>
             </div>
 
             <h1 className="hero-title fw-extrabold text-navy lh-sm mb-0">

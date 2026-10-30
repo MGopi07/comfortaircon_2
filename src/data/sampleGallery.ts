@@ -81,7 +81,7 @@ export const sampleGallery: GalleryItem[] = [
   {
     id: 'gal-10',
     category: 'Product Images',
-    title: 'Authorized Carrier & Toshiba Sales Showroom',
+    title: 'Authorized Carrier, Toshiba & Midea Sales Showroom',
     alt: 'Comfort Aircon flagship dealership showroom showcasing inverter AC models',
     image: '/images/carrier_toshiba_sales_showroom.png',
   },

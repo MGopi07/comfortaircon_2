@@ -3,6 +3,7 @@
  * Based on Functional Specification Document Version 1.0 (Syscorp Technology)
  * Authorized Carrier AC Dealer & Air Conditioning Services (Pondicherry)
  * Authorized Toshiba Air Conditioning Partner
+ * Authorized Midea Air Conditioning Partner
  */
 
 export const INITIAL_CONTACT = {
@@ -53,7 +54,7 @@ export const SERVICES_CATALOG = [
       'Indoor blower wheel balance & bushing repair',
       'Complete condensation tray & drain-line unblocking',
     ],
-    brandsSupported: 'Carrier & Toshiba',
+    brandsSupported: 'Carrier, Toshiba & Midea',
   },
   {
     id: 3,
@@ -68,7 +69,7 @@ export const SERVICES_CATALOG = [
       'Current draw and compressor running load amp testing',
       'Thermostat & remote control calibration check',
     ],
-    brandsSupported: 'Carrier & Toshiba systems',
+    brandsSupported: 'Carrier, Toshiba & Midea systems',
   },
   {
     id: 4,
@@ -104,16 +105,16 @@ export const SERVICES_CATALOG = [
     id: 6,
     title: 'Replacement',
     slug: 'replacement',
-    shortDesc: 'Trade in your old, noisy AC for high-efficiency 5-Star Carrier or Toshiba inverter systems with attractive exchange bonuses.',
+    shortDesc: 'Trade in your old, noisy AC for high-efficiency 5-Star Carrier, Toshiba or Midea inverter systems with attractive exchange bonuses.',
     fullDesc: 'Seamless end-to-end AC upgrade service. We decommission old, power-hungry units safely, reclaim existing refrigerants responsibly, inspect your wiring and piping, and install state-of-the-art Carrier Inverter or Toshiba Japanese Inverter air conditioners to slash your electricity bills.',
     img: '/images/6.png',
     features: [
       'Fair market value buyback evaluation for old AC units',
       'Safe removal without damaging interior plaster or paint',
       'Upgraded 100% copper line sets and power cables',
-      'Exclusive dealer discounts on replacement Carrier & Toshiba models',
+      'Exclusive dealer discounts on replacement Carrier, Toshiba & Midea models',
     ],
-    brandsSupported: 'Carrier & Toshiba',
+    brandsSupported: 'Carrier, Toshiba & Midea',
   },
   {
     id: 7,
@@ -128,7 +129,7 @@ export const SERVICES_CATALOG = [
       'Discount on genuine Carrier & Toshiba OEM spare parts',
       'Detailed digital service logs for commercial audit compliance',
     ],
-    brandsSupported: 'Carrier & Toshiba residential and commercial',
+    brandsSupported: 'Carrier, Toshiba & Midea residential and commercial',
   },
   {
     id: 8,
@@ -143,7 +144,7 @@ export const SERVICES_CATALOG = [
       'BMS and smart centralized touchscreen controller setup',
       'Certified CFM air balancing and commissioning reports',
     ],
-    brandsSupported: 'Carrier & Toshiba',
+    brandsSupported: 'Carrier, Toshiba & Midea',
   },
 ];
 
@@ -456,8 +457,8 @@ export const GALLERY_ITEMS = [
   },
   {
     id: 5,
-    title: 'Comfort Aircon Authorized Carrier & Toshiba Showroom',
-    caption: 'Our flagship Pondicherry showroom featuring active demonstration units for Carrier and Toshiba ranges.',
+    title: 'Comfort Aircon Authorized Carrier, Toshiba & Midea Showroom',
+    caption: 'Our flagship Pondicherry showroom featuring active demonstration units for Carrier, Toshiba and Midea ranges.',
     category: 'Product images',
     image: '/images/carrier_toshiba_sales_showroom.png',
     location: 'Kamaraj Salai, Puducherry',

@@ -81,7 +81,7 @@ export default function AdminLoginPage() {
           <Link href="/" className="d-inline-block mb-2">
             <img
               src="/images/logo1.png"
-              alt="Comfort Aircon - Authorized Carrier & Toshiba Dealer"
+              alt="Comfort Aircon - Authorized Carrier, Toshiba & Midea Dealer"
               style={{ maxHeight: '48px', width: 'auto' }}
             />
           </Link>

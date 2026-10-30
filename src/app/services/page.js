@@ -13,6 +13,7 @@ export default function ServicesPage() {
   const [isMobile, setIsMobile] = useState(false);
   const workflowSectionRef = useRef(null);
   const catalogSectionRef = useRef(null);
+  const qaSectionRef = useRef(null);
   const [expandedService, setExpandedService] = useState(null);
   const [activeWfSlide, setActiveWfSlide] = useState(0);
   const [isWfPaused, setIsWfPaused] = useState(false);
@@ -81,6 +82,39 @@ export default function ServicesPage() {
     return () => observer.disconnect();
   }, []);
 
+  /* Scroll-Triggered Entrance Animations for Service Quality Assurance Section */
+  useEffect(() => {
+    const sectionEl = qaSectionRef.current;
+    if (!sectionEl) return;
+
+    const revealElements = sectionEl.querySelectorAll('.reveal');
+    if (!revealElements.length) return;
+
+    if (shouldReduceMotion || !('IntersectionObserver' in window)) {
+      revealElements.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.2,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
+
+    revealElements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [shouldReduceMotion]);
+
   const serviceWorkflow = [
     {
       step: '01',
@@ -113,26 +147,91 @@ export default function ServicesPage() {
       icon: 'fa-solid fa-gauge-high',
       title: 'Digital Vacuum Gauge Testing',
       desc: 'Every installation is vacuumed to under 500 microns to prevent internal acid formation and compressor burnouts.',
+      direction: 'from-left',
+      delayClass: 'delay-1',
     },
     {
       icon: 'fa-solid fa-shield-halved',
       title: '100% Genuine OEM Spares',
       desc: 'Authorized Carrier & Toshiba PCB controllers, fan motors, sensors, and virgin R32/R410A refrigerants.',
+      direction: 'from-top',
+      delayClass: 'delay-2',
     },
     {
       icon: 'fa-solid fa-bolt',
       title: 'Same-Day Response Time',
       desc: 'Rapid emergency response across Pondicherry, Villupuram, and Cuddalore with fully-stocked service vans.',
+      direction: 'from-bottom',
+      delayClass: 'delay-3',
     },
     {
       icon: 'fa-solid fa-hand-holding-dollar',
       title: 'Transparent Fixed Pricing',
       desc: 'Clear itemized billing for copper piping, brackets, and service with zero hidden surprises.',
+      direction: 'from-right',
+      delayClass: 'delay-4',
     },
   ];
 
   return (
     <>
+      {/* Scoped Section Backgrounds (sbg-) for Services Page */}
+      <style>{`
+        /* Section 2: Service Catalogue (Soft cool-grey blue gradient) */
+        .sbg-catalogue {
+          position: relative;
+          background: linear-gradient(180deg, #F3F7FB 0%, #EAF2FA 100%) !important;
+          border-top: 1px solid rgba(10, 60, 120, 0.08) !important;
+        }
+
+        /* Section 3: How We Work (Crisp white + 4% brand blue dotted grid) */
+        .sbg-workflow {
+          position: relative;
+          background-color: #FFFFFF !important;
+          border-top: 1px solid rgba(10, 60, 120, 0.08) !important;
+        }
+
+        .sbg-workflow::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image: radial-gradient(rgba(0, 120, 191, 0.04) 1px, transparent 1px);
+          background-size: 24px 24px;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .sbg-workflow .wf-container {
+          position: relative;
+          z-index: 1;
+        }
+
+        /* Section 4: Service Quality Assurance (Light cyan-blue tint gradient + corner radial glow) */
+        .sbg-quality {
+          position: relative;
+          background: linear-gradient(135deg, #E8F3FC 0%, #DCEBF8 100%) !important;
+          border-top: 1px solid rgba(10, 60, 120, 0.08) !important;
+        }
+
+        .sbg-quality::before {
+          content: '';
+          position: absolute;
+          top: -60px;
+          right: -60px;
+          width: 380px;
+          height: 380px;
+          background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 70%);
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .sbg-quality .container-xxl {
+          position: relative;
+          z-index: 1;
+        }
+      `}</style>
+
       {/* 1. SUBPAGE HERO / BANNER */}
       <section className="subpage-hero">
         <div className="container-xxl">
@@ -161,7 +260,7 @@ export default function ServicesPage() {
 
       {/* 2. COMPLETE AIR CONDITIONING SOLUTIONS (4x2 CATALOGUE GRID) */}
       <section
-        className="catalog-section"
+        className="catalog-section sbg-catalogue"
         ref={catalogSectionRef}
         aria-labelledby="catalog-main-heading"
         style={{ overflowX: 'hidden' }}
@@ -323,7 +422,7 @@ export default function ServicesPage() {
 
       {/* 3. OUR 4-STEP SERVICE WORKFLOW SECTION */}
       <section
-        className="wf-section"
+        className="wf-section sbg-workflow"
         ref={workflowSectionRef}
         aria-labelledby="wf-main-heading"
         style={{ overflowX: 'hidden' }}
@@ -433,39 +532,48 @@ export default function ServicesPage() {
       </section>
 
       {/* 4. WHY OUR SERVICE STANDARDS LEAD PONDICHERRY */}
-      <section className="services-standards-section py-5 border-top border-bottom" style={{ backgroundColor: '#F4F8FA' }}>
+      <section
+        ref={qaSectionRef}
+        className="services-standards-section sbg-quality py-5"
+        style={{ overflowX: 'hidden' }}
+      >
         <div className="container-xxl py-4">
           <div className="row align-items-center gy-4">
             <div className="col-lg-5">
-              <span
-                className="section-tag mb-2"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  width: 'fit-content',
-                  gap: '6px',
-                  padding: '3px 10px',
-                  fontSize: '0.72rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  borderRadius: '50px',
-                  border: '1px solid rgba(0, 120, 191, 0.28)',
-                  background: 'rgba(0, 120, 191, 0.08)',
-                  color: '#0078BF',
-                }}
-              >
-                <i className="fa-solid fa-shield-halved" style={{ fontSize: '0.7rem' }}></i> SERVICE QUALITY ASSURANCE
-              </span>
-              <h2
-                className="section-title text-start mb-3"
-                style={{ color: '#162E5C', fontWeight: 800 }}
-              >
-                Precision Standards You Can Rely On
-              </h2>
-              <p className="text-lead mb-4">
-                Pondicherry’s coastal humidity and salt-laden air demand rigorous service discipline. We use specialized equipment to maximize your cooling equipment’s operational life.
-              </p>
-              <div className="p-3 bg-white rounded-4 border shadow-xs d-flex align-items-center gap-3 mb-3">
+              {/* Left text block: slide in from the LEFT */}
+              <div className="reveal from-left">
+                <span
+                  className="section-tag mb-2"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    width: 'fit-content',
+                    gap: '6px',
+                    padding: '3px 10px',
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    borderRadius: '50px',
+                    border: '1px solid rgba(0, 120, 191, 0.28)',
+                    background: 'rgba(0, 120, 191, 0.08)',
+                    color: '#0078BF',
+                  }}
+                >
+                  <i className="fa-solid fa-shield-halved" style={{ fontSize: '0.7rem' }}></i> SERVICE QUALITY ASSURANCE
+                </span>
+                <h2
+                  className="section-title text-start mb-3"
+                  style={{ color: '#162E5C', fontWeight: 800 }}
+                >
+                  Precision Standards You Can Rely On
+                </h2>
+                <p className="text-lead mb-4">
+                  Pondicherry’s coastal humidity and salt-laden air demand rigorous service discipline. We use specialized equipment to maximize your cooling equipment’s operational life.
+                </p>
+              </div>
+
+              {/* "Covering All Key Service Areas" box: slide in from the BOTTOM */}
+              <div className="reveal from-bottom delay-1 p-3 bg-white rounded-4 border shadow-xs d-flex align-items-center gap-3 mb-3">
                 <i className="fa-solid fa-location-dot text-primary-blue fs-3"></i>
                 <div>
                   <h6 className="fw-bold text-dark-navy mb-0">Covering All Key Service Areas</h6>
@@ -480,7 +588,7 @@ export default function ServicesPage() {
               <div className="row g-3">
                 {servicePillars.map((pillar) => (
                   <div className="col-sm-6" key={pillar.title}>
-                    <div className="about-card-modern h-100 p-4">
+                    <div className={`about-card-modern h-100 p-4 reveal ${pillar.direction} ${pillar.delayClass}`}>
                       <div className="d-flex align-items-center gap-3 mb-2">
                         <div className="text-primary-blue fs-4">
                           <i className={pillar.icon}></i>

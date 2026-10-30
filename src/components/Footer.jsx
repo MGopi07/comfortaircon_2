@@ -59,7 +59,7 @@ export default function Footer() {
           <div className="footer-cta-text">
             <span className="footer-cta-eyebrow">
               <i className="fa-solid fa-snowflake"></i>
-              Authorized Carrier &amp; Toshiba Dealer
+              Authorized Carrier, Toshiba &amp; Midea Dealer
             </span>
             <h2 className="footer-cta-title">Need a new AC or quick service?</h2>
             <p className="footer-cta-desc">
@@ -96,8 +96,8 @@ export default function Footer() {
               </div>
             </Link>
             <p className="footer-about">
-              Puducherry&apos;s authorized sales dealer &amp; distributor for Carrier &amp;
-              Toshiba Air Conditioning Systems. Explore Split ACs, VRF Systems,
+              Puducherry&apos;s authorized sales dealer &amp; distributor for Carrier, Toshiba &amp;
+              Midea Air Conditioning Systems. Explore Split ACs, VRF Systems,
               Cassette ACs, and Commercial Cooling Solutions.
             </p>
             <ul className="footer-trust-list">

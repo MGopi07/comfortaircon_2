@@ -26,7 +26,7 @@ export default function ServicesSection() {
       title: 'AC Installation',
       desc: 'Precision wall mounting, copper piping, vacuum leak testing, and electrical wiring for split, cassette, and ductable ACs.',
       img: '/images/1.png',
-      alt: 'AC Installation - Carrier & Toshiba',
+      alt: 'AC Installation - Carrier, Toshiba & Midea',
       icon: 'fa-solid fa-screwdriver-wrench',
     },
     {
@@ -59,7 +59,7 @@ export default function ServicesSection() {
     },
     {
       title: 'AC Replacement',
-      desc: 'Trade in your old, noisy AC for high-efficiency 5-Star Carrier or Toshiba inverter systems with attractive exchange bonuses.',
+      desc: 'Trade in your old, noisy AC for high-efficiency 5-Star Carrier, Toshiba or Midea inverter systems with attractive exchange bonuses.',
       img: '/images/6.png',
       alt: 'AC Replacement and Upgrade',
       icon: 'fa-solid fa-arrows-rotate',
