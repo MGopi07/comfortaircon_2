@@ -512,7 +512,7 @@ export default function AdminPanelPage() {
                 />
               </Link>
               <div className="text-light small fw-bold">Admin Operations Panel</div>
-              <small className="text-muted fs-8">Carrier &amp; Toshiba Authorized</small>
+              <small className="text-muted fs-8">Carrier, Toshiba &amp; Midea Authorized</small>
             </div>
 
             {/* Current User Profile Card */}
@@ -841,6 +841,13 @@ export default function AdminPanelPage() {
                       >
                         Toshiba
                       </button>
+                      <button
+                        type="button"
+                        className={`btn btn-sm ${productBrandFilter === 'Midea' ? 'btn-info text-white' : 'btn-outline-secondary'}`}
+                        onClick={() => setProductBrandFilter('Midea')}
+                      >
+                        Midea
+                      </button>
                     </div>
 
                     <button
@@ -885,8 +892,10 @@ export default function AdminPanelPage() {
                               <td>
                                 {prod.brand === 'Carrier' ? (
                                   <span className="badge bg-primary text-white">Carrier</span>
-                                ) : (
+                                ) : prod.brand === 'Toshiba' ? (
                                   <span className="badge bg-danger text-white">Toshiba</span>
+                                ) : (
+                                  <span className="badge bg-info text-white">Midea</span>
                                 )}
                               </td>
                               <td>
@@ -1335,6 +1344,7 @@ export default function AdminPanelPage() {
                       >
                         <option value="Carrier">Carrier</option>
                         <option value="Toshiba">Toshiba</option>
+                        <option value="Midea">Midea</option>
                       </select>
                     </div>
 
@@ -1505,6 +1515,7 @@ export default function AdminPanelPage() {
                       >
                         <option value="Carrier">Carrier</option>
                         <option value="Toshiba">Toshiba</option>
+                        <option value="Midea">Midea</option>
                       </select>
                     </div>
 

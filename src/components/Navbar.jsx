@@ -49,7 +49,7 @@ export default function Navbar() {
         >
           <img
             src="/images/logo1.png"
-            alt="Comfort Aircon - Authorized Carrier & Toshiba Dealer"
+            alt="Comfort Aircon - Authorized Carrier, Toshiba & Midea Dealer"
             className="navbar-logo-img"
           />
         </Link>

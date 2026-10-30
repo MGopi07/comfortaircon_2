@@ -10,9 +10,9 @@ import FloatingButtons from '@/components/FloatingButtons';
 import SmoothScroll from '@/components/SmoothScroll';
 
 export const metadata = {
-  title: 'Comfort Aircon | Authorized Carrier & Toshiba HVAC Solutions & Engineering Profile',
+  title: 'Comfort Aircon | Carrier, Toshiba & Midea HVAC Solutions',
   description:
-    'Premier HVAC engineering solutions provider & official Carrier & Toshiba partner in Puducherry. Explore company profile, technical expertise, VRF systems, cassette ACs, and turnkey commercial cooling solutions.',
+    'Official Carrier, Toshiba & Midea HVAC partner in Puducherry. Technical expertise in VRF systems, cassette ACs, and turnkey commercial cooling solutions.',
   icons: {
     icon: [
       { url: '/favicon.png', type: 'image/png' },

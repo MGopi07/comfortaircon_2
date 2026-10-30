@@ -117,7 +117,7 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                     : 'Comfort Aircon - Enquire Now'}
                 </h5>
                 <small className="text-light opacity-75">
-                  Authorized Carrier &amp; Toshiba Sales &amp; Service • Rapid 15-Min Response
+                  Authorized Carrier, Toshiba &amp; Midea Sales &amp; Service • Rapid 15-Min Response
                 </small>
               </div>
               <button
