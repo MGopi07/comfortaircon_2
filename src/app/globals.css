@@ -68,12 +68,10 @@ html {
   /* Keep anchor targets (#services, #areas…) clear of the sticky navbar */
   scroll-padding-top: 84px;
   font-size: 16px;
-  overflow-x: hidden !important;
   overflow-x: clip !important;
-  /* clip keeps the sticky navbar working */
   max-width: 100vw;
-  height: 100%;
-  background-color: #0B0F17 !important;
+  min-height: 100%;
+  background-color: #F8FAFC !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -97,9 +95,8 @@ body {
   flex-direction: column;
   margin: 0;
   padding: 0;
-  overflow-x: hidden !important;
   overflow-x: clip !important;
-  background-color: #0B0F17 !important;
+  background-color: #F8FAFC !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -1219,12 +1216,13 @@ a {
 .hero-scroll-track {
   position: relative;
   width: 100%;
+  background: linear-gradient(135deg, #F0F6FF 0%, #E8F2FD 50%, #F5F8FF 100%) !important;
 }
 
 @media (min-width: 992px) {
   .hero-scroll-track {
-    /* Stage height + 300vh track height */
-    height: calc(100vh + 300vh);
+    /* Natural comfortable scroll track height */
+    height: calc(100vh + 150vh);
   }
 
   .hero-sticky-stage {
@@ -1235,14 +1233,15 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background: linear-gradient(135deg, #F0F6FF 0%, #E8F2FD 50%, #F5F8FF 100%) !important;
     z-index: 10;
   }
 }
 
 @media (min-width: 768px) and (max-width: 991.98px) {
   .hero-scroll-track {
-    /* Tablet pinned: stage height + 250vh */
-    height: calc(100vh + 250vh);
+    /* Tablet pinned: stage height + 100vh */
+    height: calc(100vh + 100vh);
   }
 
   .hero-sticky-stage {
@@ -1253,6 +1252,7 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background: linear-gradient(135deg, #F0F6FF 0%, #E8F2FD 50%, #F5F8FF 100%) !important;
     z-index: 10;
   }
 }
@@ -1260,6 +1260,7 @@ a {
 @media (max-width: 767.98px) {
   .hero-scroll-track {
     height: auto !important;
+    background: linear-gradient(135deg, #F0F6FF 0%, #E8F2FD 50%, #F5F8FF 100%) !important;
   }
 
   .hero-sticky-stage {
@@ -1267,6 +1268,7 @@ a {
     height: auto !important;
     max-height: none !important;
     padding: 32px 0 48px 0;
+    background: linear-gradient(135deg, #F0F6FF 0%, #E8F2FD 50%, #F5F8FF 100%) !important;
   }
 }
 
@@ -1297,14 +1299,14 @@ a {
   user-select: none;
   -webkit-user-select: none;
   will-change: transform, opacity;
-  transition: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Layer 1: Warm Room Background */
+/* Layer 1: Warm Room Background - ALWAYS 100% VISIBLE FROM START */
 .hero-layer-room-warm {
   z-index: 1;
   filter: sepia(0.35) saturate(0.6) brightness(0.94);
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 /* Layer 2: Cool Clean Room (Revealed by radial mask from vent) */
@@ -1317,6 +1319,7 @@ a {
 .hero-layer-airflow {
   z-index: 3;
   opacity: 0;
+  transform: scale(0.7);
   transform-origin: 50% 28%;
 }
 
@@ -1333,11 +1336,11 @@ a {
   animation: airflowShimmer 4s ease-in-out infinite;
 }
 
-/* Layer 4: Girl Warm / Off */
+/* Layer 4: Girl Warm / Seeking Relief - VISIBLE FROM START */
 .hero-layer-girl-off {
   z-index: 4;
-  opacity: 0;
-  transform: translate3d(0, 120%, 0);
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 /* Layer 5: Girl Happy / Comfort */
@@ -1346,11 +1349,11 @@ a {
   opacity: 0;
 }
 
-/* Layer 6: AC Off */
+/* Layer 6: AC Off - VISIBLE ON WALL FROM START */
 .hero-layer-ac-off {
   z-index: 6;
-  opacity: 0;
-  transform: translate3d(0, -120%, 0);
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 /* Layer 7: AC On */
@@ -1393,7 +1396,7 @@ a {
   will-change: opacity;
 }
 
-/* Frosted Temperature Status Chip (Top-Left of Scene) */
+/* Frosted Temperature Status Chip (Top-Left of Scene) - VISIBLE FROM START */
 .hero-temp-chip {
   position: absolute;
   top: 16px;
@@ -1409,8 +1412,8 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.95);
   border-radius: 50px;
   box-shadow: 0 10px 28px rgba(15, 60, 120, 0.12);
-  opacity: 0;
-  transform: translateY(-10px);
+  opacity: 1;
+  transform: translateY(0);
   transition: opacity 0.35s ease, transform 0.35s ease;
   pointer-events: none;
 }

@@ -4,19 +4,19 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useModal } from '@/context/ModalContext';
 
 /**
- * Step dots representing key milestones across the scroll scene:
- * 1. p=0.10: Living Room Scene
- * 2. p=0.30: Carrier Split AC Placement
- * 3. p=0.50: Homeowner Looking for Relief (30°C Warm)
- * 4. p=0.75: AC Powered On & Real Cold Airflow
- * 5. p=0.98: Pure Cooling Refreshment & Happiness (24°C Comfort)
+ * Step dots representing key milestones across the scene:
+ * 1. Warm Living Room (30°C)
+ * 2. Carrier Split AC Ready
+ * 3. AC Powers On (Display Lights Up)
+ * 4. Cold Airflow & Room Cooling (30°C -> 24°C)
+ * 5. Pure Cooling Refreshment & Happiness (24°C)
  */
 const STEP_DOTS = [
-  { name: 'Warm Living Room', p: 0.10 },
-  { name: 'Carrier AC Placement', p: 0.30 },
-  { name: 'Homeowner Needs Relief', p: 0.50 },
-  { name: 'AC Power On & Airflow', p: 0.75 },
-  { name: 'Pure Cooling Comfort', p: 0.98 },
+  { name: 'Warm Living Room', p: 0.05 },
+  { name: 'Carrier AC Ready', p: 0.25 },
+  { name: 'AC Powers On', p: 0.45 },
+  { name: 'Active Airflow & Cooling', p: 0.70 },
+  { name: 'Pure Comfort Refreshment', p: 0.98 },
 ];
 
 const PRELOAD_IMAGES = [
@@ -36,7 +36,7 @@ export default function Hero() {
   const stageRef = useRef(null);
   const stageSceneRef = useRef(null);
 
-  // Layer Refs for 60fps direct DOM animation (zero React re-render lag)
+  // Layer Refs for 60fps direct DOM animation (zero React re-render overhead)
   const roomWarmRef = useRef(null);
   const roomCoolRef = useRef(null);
   const airflowRef = useRef(null);
@@ -58,6 +58,7 @@ export default function Hero() {
 
   // Ref cache to prevent duplicate state triggers
   const lastTempRef = useRef({ val: 30, label: 'WARM', status: 'warm' });
+  const hasUserScrolledRef = useRef(false);
 
   // 1. Preload all hero photo assets on mount
   useEffect(() => {
@@ -84,76 +85,43 @@ export default function Hero() {
   }, []);
 
   /**
-   * Step 2: AC (off) slides DOWN from top (translateY -120% to 0, opacity 0 to 1, easeOutCubic)
-   * p range: 0.20 to 0.40
-   */
-  const setAcDrop = useCallback((p) => {
-    if (!acOffRef.current) return;
-    if (p < 0.20) {
-      acOffRef.current.style.transform = 'translate3d(0, -120%, 0)';
-      acOffRef.current.style.opacity = '0';
-    } else if (p <= 0.40) {
-      const p2 = (p - 0.20) / 0.20;
-      const ease = 1 - Math.pow(1 - p2, 3);
-      const ty = -120 * (1 - ease);
-      acOffRef.current.style.transform = `translate3d(0, ${ty}%, 0)`;
-      acOffRef.current.style.opacity = String(Math.min(1, p2 * 1.6));
-    } else {
-      acOffRef.current.style.transform = 'translate3d(0, 0, 0)';
-    }
-  }, []);
-
-  /**
-   * Step 3: Girl (girl-off) slides UP from bottom (translateY 120% to 0, opacity 0 to 1)
-   * p range: 0.40 to 0.60
-   */
-  const setGirlRise = useCallback((p) => {
-    if (!girlOffRef.current) return;
-    if (p < 0.40) {
-      girlOffRef.current.style.transform = 'translate3d(0, 120%, 0)';
-      girlOffRef.current.style.opacity = '0';
-    } else if (p <= 0.60) {
-      const p3 = (p - 0.40) / 0.20;
-      const ease = 1 - Math.pow(1 - p3, 3);
-      const ty = 120 * (1 - ease);
-      girlOffRef.current.style.transform = `translate3d(0, ${ty}%, 0)`;
-      girlOffRef.current.style.opacity = String(Math.min(1, p3 * 1.6));
-    } else if (p < 0.85) {
-      girlOffRef.current.style.transform = 'translate3d(0, 0, 0)';
-      girlOffRef.current.style.opacity = '1';
-    }
-  }, []);
-
-  /**
-   * Step 4: AC turns ON (crossfade ac-off to ac-on, cyan pulse at vent, beep on display)
-   * p range: 0.60 to 0.70
+   * Set AC State (p: 0.20 to 0.50):
+   * At p=0, AC is mounted and visible (ac-off).
+   * Crossfade from ac-off to ac-on with cyan vent pulse and display beep.
    */
   const setAcOn = useCallback((p) => {
     if (!acOffRef.current || !acOnRef.current) return;
-    if (p < 0.60) {
-      if (p >= 0.40) acOffRef.current.style.opacity = '1';
+
+    if (p < 0.25) {
+      // AC off, mounted on wall
+      acOffRef.current.style.opacity = '1';
+      acOffRef.current.style.transform = 'translate3d(0, 0, 0)';
       acOnRef.current.style.opacity = '0';
       if (ventPulseRef.current) ventPulseRef.current.style.opacity = '0';
       if (acBeepRef.current) acBeepRef.current.style.opacity = '0';
-    } else if (p <= 0.70) {
-      const p4 = (p - 0.60) / 0.10;
-      acOffRef.current.style.opacity = String(1 - p4);
-      acOnRef.current.style.opacity = String(p4);
+    } else if (p <= 0.45) {
+      const pTurnOn = (p - 0.25) / 0.20;
+      acOffRef.current.style.opacity = String(1 - pTurnOn);
+      acOnRef.current.style.opacity = String(pTurnOn);
 
       // Soft cyan pulse ring at the vent
       if (ventPulseRef.current) {
-        const pulseScale = 0.8 + 0.8 * p4;
-        const pulseOpacity = Math.sin(p4 * Math.PI);
+        const pulseScale = 0.8 + 0.8 * pTurnOn;
+        const pulseOpacity = Math.sin(pTurnOn * Math.PI);
         ventPulseRef.current.style.transform = `translate(-50%, -50%) scale(${pulseScale})`;
         ventPulseRef.current.style.opacity = String(pulseOpacity * 0.95);
       }
 
       // Display beep flash glow
       if (acBeepRef.current) {
-        const beepOpacity = p4 >= 0.2 && p4 <= 0.8 ? Math.sin(((p4 - 0.2) / 0.6) * Math.PI) : 0;
+        const beepOpacity =
+          pTurnOn >= 0.2 && pTurnOn <= 0.8
+            ? Math.sin(((pTurnOn - 0.2) / 0.6) * Math.PI)
+            : 0;
         acBeepRef.current.style.opacity = String(beepOpacity);
       }
     } else {
+      // AC on, display lit
       acOffRef.current.style.opacity = '0';
       acOnRef.current.style.opacity = '1';
       if (ventPulseRef.current) ventPulseRef.current.style.opacity = '0';
@@ -162,69 +130,82 @@ export default function Hero() {
   }, []);
 
   /**
-   * Step 5: Airflow image grows from vent (scale 0.6 to 1, opacity 0 to 1, downward drift)
-   * p range: 0.70 to 0.90
+   * Set Airflow and Cool Room Reveal (p: 0.40 to 0.75):
+   * Cold airflow expands from AC vent and room cools down.
    */
-  const setAirflow = useCallback((p) => {
-    if (!airflowRef.current) return;
-    if (p < 0.70) {
-      airflowRef.current.style.opacity = '0';
-      airflowRef.current.style.transform = 'scale(0.6) translate3d(0, 0, 0)';
-    } else if (p <= 0.90) {
-      const p5 = (p - 0.70) / 0.20;
-      const scale = 0.6 + 0.4 * p5;
-      const ty = p5 * 10;
-      airflowRef.current.style.opacity = String(p5);
-      airflowRef.current.style.transform = `scale(${scale}) translate3d(0, ${ty}px, 0)`;
-    } else {
-      airflowRef.current.style.opacity = '1';
-      airflowRef.current.style.transform = 'scale(1) translate3d(0, 10px, 0)';
-    }
-  }, []);
+  const setCooling = useCallback(
+    (p) => {
+      // Airflow layer
+      if (airflowRef.current) {
+        if (p < 0.40) {
+          airflowRef.current.style.opacity = '0';
+          airflowRef.current.style.transform = 'scale(0.7) translate3d(0, 0, 0)';
+        } else if (p <= 0.75) {
+          const pCool = (p - 0.40) / 0.35;
+          const scale = 0.7 + 0.3 * pCool;
+          const ty = pCool * 10;
+          airflowRef.current.style.opacity = String(pCool);
+          airflowRef.current.style.transform = `scale(${scale}) translate3d(0, ${ty}px, 0)`;
+        } else {
+          airflowRef.current.style.opacity = '1';
+          airflowRef.current.style.transform = 'scale(1) translate3d(0, 10px, 0)';
+        }
+      }
+
+      // Cool Room mask reveal
+      if (roomCoolRef.current) {
+        if (p < 0.40) {
+          roomCoolRef.current.style.opacity = '0';
+          roomCoolRef.current.style.webkitMaskImage = 'none';
+          roomCoolRef.current.style.maskImage = 'none';
+        } else if (p <= 0.75) {
+          const pCool = (p - 0.40) / 0.35;
+          roomCoolRef.current.style.opacity = '1';
+          const radius = Math.round(pCool * 130);
+          const maskVal = `radial-gradient(circle at 50% 28%, #000 ${radius}%, transparent ${radius + 15}%)`;
+          roomCoolRef.current.style.webkitMaskImage = maskVal;
+          roomCoolRef.current.style.maskImage = maskVal;
+        } else {
+          roomCoolRef.current.style.opacity = '1';
+          roomCoolRef.current.style.webkitMaskImage = 'none';
+          roomCoolRef.current.style.maskImage = 'none';
+        }
+      }
+
+      // Temperature chip count-down
+      if (p < 0.45) {
+        setTempDisplay(30, 'WARM', 'warm');
+      } else if (p <= 0.75) {
+        const pTemp = (p - 0.45) / 0.30;
+        const currentTemp = Math.round(30 - 6 * pTemp);
+        const label = pTemp < 0.5 ? 'COOLING DOWN' : 'COOLING';
+        setTempDisplay(currentTemp, label, 'cooling');
+      } else {
+        setTempDisplay(24, 'COOLING', 'cool');
+      }
+    },
+    [setTempDisplay]
+  );
 
   /**
-   * Step 5: Clean unfiltered cool room revealed over warm room via radial mask from vent
-   * p range: 0.70 to 0.90
+   * Set Girl State (p: 0.70 to 1.00):
+   * At p=0, girl-off is standing comfortably in the room.
+   * Crossfades to girl-happy (smiling, eyes closed) in refreshing cooling comfort.
    */
-  const setCoolReveal = useCallback((p) => {
-    if (!roomCoolRef.current) return;
-    if (p < 0.70) {
-      roomCoolRef.current.style.opacity = '0';
-      roomCoolRef.current.style.webkitMaskImage = 'none';
-      roomCoolRef.current.style.maskImage = 'none';
-    } else if (p <= 0.90) {
-      const p5 = (p - 0.70) / 0.20;
-      roomCoolRef.current.style.opacity = '1';
-      const radius = Math.round(p5 * 130);
-      const maskVal = `radial-gradient(circle at 50% 28%, #000 ${radius}%, transparent ${radius + 15}%)`;
-      roomCoolRef.current.style.webkitMaskImage = maskVal;
-      roomCoolRef.current.style.maskImage = maskVal;
-    } else {
-      roomCoolRef.current.style.opacity = '1';
-      roomCoolRef.current.style.webkitMaskImage = 'none';
-      roomCoolRef.current.style.maskImage = 'none';
-    }
-  }, []);
-
-  /**
-   * Step 6: Crossfade girl-off to girl-happy (tiny 1.02 scale, gentle float translateY 0 to -8px)
-   * p range: 0.85 to 1.00
-   */
-  const setHappy = useCallback((p) => {
+  const setGirlState = useCallback((p) => {
     if (!girlHappyRef.current || !girlOffRef.current) return;
-    if (p < 0.85) {
+
+    if (p < 0.70) {
+      girlOffRef.current.style.opacity = '1';
+      girlOffRef.current.style.transform = 'scale(1) translate3d(0, 0, 0)';
       girlHappyRef.current.style.opacity = '0';
       girlHappyRef.current.style.transform = 'scale(1) translate3d(0, 0, 0)';
-      if (p >= 0.60) {
-        girlOffRef.current.style.opacity = '1';
-        girlOffRef.current.style.transform = 'scale(1) translate3d(0, 0, 0)';
-      }
-    } else if (p <= 1.00) {
-      const p6 = (p - 0.85) / 0.15;
-      girlOffRef.current.style.opacity = String(1 - p6);
-      girlHappyRef.current.style.opacity = String(p6);
-      const scale = 1 + 0.02 * p6;
-      const ty = -8 * p6;
+    } else if (p <= 0.95) {
+      const pHappy = (p - 0.70) / 0.25;
+      girlOffRef.current.style.opacity = String(1 - pHappy);
+      girlHappyRef.current.style.opacity = String(pHappy);
+      const scale = 1 + 0.02 * pHappy;
+      const ty = -8 * pHappy;
       girlOffRef.current.style.transform = `scale(${scale}) translate3d(0, ${ty}px, 0)`;
       girlHappyRef.current.style.transform = `scale(${scale}) translate3d(0, ${ty}px, 0)`;
     } else {
@@ -235,81 +216,47 @@ export default function Hero() {
   }, []);
 
   /**
-   * Step 3 & 5: Temperature chip management (30°C WARM -> 24°C COOLING)
-   */
-  const setTemperature = useCallback(
-    (p) => {
-      if (!tempChipRef.current) return;
-      if (p < 0.35) {
-        tempChipRef.current.style.opacity = '0';
-        tempChipRef.current.style.transform = 'translateY(-10px)';
-      } else if (p < 0.70) {
-        tempChipRef.current.style.opacity = '1';
-        tempChipRef.current.style.transform = 'translateY(0)';
-        setTempDisplay(30, 'WARM', 'warm');
-      } else if (p <= 0.90) {
-        tempChipRef.current.style.opacity = '1';
-        tempChipRef.current.style.transform = 'translateY(0)';
-        const p5 = (p - 0.70) / 0.20;
-        const currentTemp = Math.round(30 - 6 * p5);
-        const label = p5 < 0.6 ? 'COOLING DOWN' : 'COOLING';
-        setTempDisplay(currentTemp, label, 'cooling');
-      } else {
-        tempChipRef.current.style.opacity = '1';
-        tempChipRef.current.style.transform = 'translateY(0)';
-        setTempDisplay(24, 'COOLING', 'cool');
-      }
-    },
-    [setTempDisplay]
-  );
-
-  /**
-   * Master progress driver: updates CSS variables & coordinates all 6 steps
+   * Master progress coordinator
    */
   const updateProgress = useCallback(
     (p) => {
       const clamped = Math.max(0, Math.min(1, p));
 
-      // CSS Variables on stage wrapper
+      // CSS Variable
       if (stageSceneRef.current) {
         stageSceneRef.current.style.setProperty('--hero-progress', clamped.toFixed(4));
       }
 
-      // Step 1: Room base warm fade-in (p: 0.00 to 0.20)
+      // Room warm is always 100% visible
       if (roomWarmRef.current) {
-        const p1 = Math.min(1, clamped / 0.18);
-        roomWarmRef.current.style.opacity = String(p1);
+        roomWarmRef.current.style.opacity = '1';
       }
 
-      setAcDrop(clamped);
-      setGirlRise(clamped);
       setAcOn(clamped);
-      setAirflow(clamped);
-      setCoolReveal(clamped);
-      setHappy(clamped);
-      setTemperature(clamped);
+      setCooling(clamped);
+      setGirlState(clamped);
 
-      // Scroll hint fades out once p > 0.04
+      // Scroll hint fades out once user scrolls
       if (scrollHintRef.current) {
-        const hintOpacity = clamped > 0.04 ? 0 : 1 - clamped / 0.04;
+        const hintOpacity = clamped > 0.05 ? 0 : 1 - clamped / 0.05;
         scrollHintRef.current.style.opacity = String(hintOpacity);
-        scrollHintRef.current.style.pointerEvents = clamped > 0.04 ? 'none' : 'auto';
+        scrollHintRef.current.style.pointerEvents = clamped > 0.05 ? 'none' : 'auto';
       }
 
-      // Thin 3px Progress Bar filling
+      // Progress bar fill
       if (progressBarRef.current) {
         progressBarRef.current.style.width = `${clamped * 100}%`;
       }
 
-      // Synchronize active dot indicator
+      // Active dot synchronization
       let dotIdx = 0;
       if (clamped >= 0.85) dotIdx = 4;
-      else if (clamped >= 0.65) dotIdx = 3;
-      else if (clamped >= 0.40) dotIdx = 2;
-      else if (clamped >= 0.20) dotIdx = 1;
+      else if (clamped >= 0.60) dotIdx = 3;
+      else if (clamped >= 0.35) dotIdx = 2;
+      else if (clamped >= 0.15) dotIdx = 1;
       setActiveStepIdx(dotIdx);
     },
-    [setAcDrop, setGirlRise, setAcOn, setAirflow, setCoolReveal, setHappy, setTemperature]
+    [setAcOn, setCooling, setGirlState]
   );
 
   /**
@@ -332,7 +279,10 @@ export default function Hero() {
       return;
     }
 
-    // Mobile (<768px): No pinning. Play the 6 steps once over 3.5s when visible
+    // Initialize with 100% visible initial scene
+    updateProgress(0.0);
+
+    // Mobile (<768px): No pinning. Play the sequence once over 3.5s when visible
     if (window.innerWidth < 768) {
       let hasPlayed = false;
       const observer = new IntersectionObserver(
@@ -361,6 +311,7 @@ export default function Hero() {
     // Desktop & Tablet: Sticky Pinned Scroll Sequence
     let rafId = null;
     const handleScroll = () => {
+      hasUserScrolledRef.current = true;
       if (rafId) return;
       rafId = requestAnimationFrame(() => {
         rafId = null;
@@ -369,7 +320,6 @@ export default function Hero() {
         const totalDist = track.offsetHeight - stageHeight;
         if (totalDist <= 0) return;
 
-        // Sticky top offset
         const stickyTop = window.innerWidth >= 992 ? 64 : 54;
         const scrolled = stickyTop - trackRect.top;
         const progress = Math.max(0, Math.min(1, scrolled / totalDist));
@@ -383,7 +333,6 @@ export default function Hero() {
         const entry = entries[0];
         if (entry.isIntersecting) {
           window.addEventListener('scroll', handleScroll, { passive: true });
-          handleScroll();
         } else {
           window.removeEventListener('scroll', handleScroll);
           if (track.getBoundingClientRect().top < 0) {
@@ -393,11 +342,10 @@ export default function Hero() {
           }
         }
       },
-      { threshold: [0, 0.1, 1.0], rootMargin: '120px 0px 120px 0px' }
+      { threshold: [0, 0.1, 1.0], rootMargin: '80px 0px 80px 0px' }
     );
 
     observer.observe(track);
-    handleScroll();
 
     return () => {
       observer.disconnect();
@@ -423,6 +371,7 @@ export default function Hero() {
    * Jump directly to step progress on dot click
    */
   const jumpToStep = (targetP) => {
+    hasUserScrolledRef.current = true;
     if (window.innerWidth < 768) {
       updateProgress(targetP);
       return;
@@ -534,7 +483,7 @@ export default function Hero() {
               {/* Soft Ambient Radial Glow Orb */}
               <div className="hero-img-glow" aria-hidden="true"></div>
 
-              {/* Frosted Temperature Status Chip (Top-Left of Scene) */}
+              {/* Frosted Temperature Status Chip (Top-Left of Scene) - Always Visible */}
               <div
                 className="hero-temp-chip"
                 ref={tempChipRef}
@@ -567,7 +516,7 @@ export default function Hero() {
                 className="hero-scene-stage position-relative overflow-hidden"
                 ref={stageSceneRef}
               >
-                {/* Layer 1: Warm Living Room Background */}
+                {/* Layer 1: Warm Living Room Background (Always 100% Visible) */}
                 <img
                   ref={roomWarmRef}
                   src="/hero/room-bg.webp"
@@ -606,7 +555,7 @@ export default function Hero() {
                   decoding="async"
                 />
 
-                {/* Layer 4: Girl Warm / Seeking Relief */}
+                {/* Layer 4: Girl Warm / Seeking Relief (Visible on Load) */}
                 <img
                   ref={girlOffRef}
                   src="/hero/girl-off.webp"
@@ -630,12 +579,11 @@ export default function Hero() {
                   decoding="async"
                 />
 
-                {/* Layer 6: Carrier Split AC (Off State) */}
+                {/* Layer 6: Carrier Split AC (Mounted and Visible on Load) */}
                 <img
                   ref={acOffRef}
                   src="/hero/ac-off.webp"
-                  alt=""
-                  aria-hidden="true"
+                  alt="Carrier Split AC Unit"
                   width={1200}
                   height={704}
                   className="hero-layer hero-layer-ac-off"
