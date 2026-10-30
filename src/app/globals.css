@@ -1212,64 +1212,379 @@ a {
   }
 }
 
-/* Banner Carousel Slider */
-.hero-banner-carousel {
+/* ==========================================================================
+   SCROLL-DRIVEN HERO PHOTO LAYER SCENE
+   ========================================================================== */
+
+.hero-scroll-track {
   position: relative;
-  z-index: 2;
+  width: 100%;
+}
+
+@media (min-width: 992px) {
+  .hero-scroll-track {
+    /* Stage height + 300vh track height */
+    height: calc(100vh + 300vh);
+  }
+
+  .hero-sticky-stage {
+    position: sticky;
+    top: 64px;
+    height: calc(100vh - 64px);
+    max-height: calc(100vh - 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .hero-scroll-track {
+    /* Tablet pinned: stage height + 250vh */
+    height: calc(100vh + 250vh);
+  }
+
+  .hero-sticky-stage {
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    max-height: calc(100vh - 56px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .hero-scroll-track {
+    height: auto !important;
+  }
+
+  .hero-sticky-stage {
+    position: static !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 32px 0 48px 0;
+  }
+}
+
+/* Photo Layers Stage Canvas: 1200 x 704 */
+.hero-scene-stage {
+  position: relative;
   width: 100%;
   max-width: 620px;
-  margin-inline: auto;
+  aspect-ratio: 1200 / 704;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  background: transparent;
+  /* Wrapper edge fade */
+  -webkit-mask-image: radial-gradient(ellipse 74% 74% at 50% 50%, #000 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 74% 74% at 50% 50%, #000 62%, transparent 100%);
+  will-change: transform;
 }
 
-.hero-banner-carousel .carousel-inner {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1637 / 1262;
-  overflow: visible;
-}
-
-.hero-banner-carousel .carousel-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Individual Stacked Photo Layers */
+.hero-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  float: none;
-  margin: 0;
-  padding: 0;
-  opacity: 0;
-  visibility: hidden;
-  transform: none;
-  transition: opacity 0.75s ease-in-out, visibility 0.75s ease-in-out;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform, opacity;
+  transition: none;
 }
 
-.hero-banner-carousel .carousel-item.active {
-  opacity: 1;
-  visibility: visible;
+/* Layer 1: Warm Room Background */
+.hero-layer-room-warm {
   z-index: 1;
+  filter: sepia(0.35) saturate(0.6) brightness(0.94);
+  opacity: 1;
 }
 
-/* Main Hero Image: width 100%, max-width 620px, height auto, max-height min(58vh, 520px), object-fit contain */
-.hero-main-img {
-  display: block;
+/* Layer 2: Cool Clean Room (Revealed by radial mask from vent) */
+.hero-layer-room-cool {
+  z-index: 2;
+  opacity: 0;
+}
+
+/* Layer 3: Airflow Streaks and Snowflakes */
+.hero-layer-airflow {
+  z-index: 3;
+  opacity: 0;
+  transform-origin: 50% 28%;
+}
+
+@keyframes airflowShimmer {
+  0%, 100% {
+    filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.45)) brightness(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 22px rgba(0, 240, 255, 0.75)) brightness(1.12);
+  }
+}
+
+.hero-scene-stage[style*="--hero-progress"] .hero-layer-airflow {
+  animation: airflowShimmer 4s ease-in-out infinite;
+}
+
+/* Layer 4: Girl Warm / Off */
+.hero-layer-girl-off {
+  z-index: 4;
+  opacity: 0;
+  transform: translate3d(0, 120%, 0);
+}
+
+/* Layer 5: Girl Happy / Comfort */
+.hero-layer-girl-happy {
+  z-index: 5;
+  opacity: 0;
+}
+
+/* Layer 6: AC Off */
+.hero-layer-ac-off {
+  z-index: 6;
+  opacity: 0;
+  transform: translate3d(0, -120%, 0);
+}
+
+/* Layer 7: AC On */
+.hero-layer-ac-on {
+  z-index: 7;
+  opacity: 0;
+}
+
+/* Layer 8: Vent Cyan Pulse Ring */
+.hero-vent-pulse-ring {
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  width: 170px;
+  height: 34px;
+  transform: translate(-50%, -50%) scale(0.8);
+  border-radius: 50%;
+  border: 2px solid #00f0ff;
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.85), inset 0 0 12px rgba(0, 240, 255, 0.5);
+  opacity: 0;
+  z-index: 8;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* Layer 9: Display Beep Glow */
+.hero-ac-beep-glow {
+  position: absolute;
+  left: 58%;
+  top: 16.5%;
+  width: 28px;
+  height: 28px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, #00f0ff 0%, rgba(0, 240, 255, 0.45) 45%, transparent 70%);
+  opacity: 0;
+  z-index: 8;
+  pointer-events: none;
+  filter: blur(2px);
+  will-change: opacity;
+}
+
+/* Frosted Temperature Status Chip (Top-Left of Scene) */
+.hero-temp-chip {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 50px;
+  box-shadow: 0 10px 28px rgba(15, 60, 120, 0.12);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+.hero-temp-chip .temp-chip-icon {
+  font-size: 1.1rem;
+  color: var(--primary-blue, #0078BF);
+}
+
+.temp-chip-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.temp-chip-val-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.1;
+}
+
+.temp-chip-num {
+  font-family: var(--font-heading);
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: var(--spotlight-dark-navy, #0b2a5b);
+  letter-spacing: -0.01em;
+}
+
+.temp-chip-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.temp-chip-status-dot.dot-warm {
+  background-color: #f59e0b;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+
+.temp-chip-status-dot.dot-cooling {
+  background-color: #0ea5e9;
+  box-shadow: 0 0 8px rgba(14, 165, 233, 0.6);
+}
+
+.temp-chip-status-dot.dot-cool {
+  background-color: #0078bf;
+  box-shadow: 0 0 8px rgba(0, 120, 191, 0.6);
+}
+
+.temp-chip-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+/* Scroll To Experience Hint */
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 50px;
+  box-shadow: 0 4px 16px rgba(15, 60, 120, 0.1);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--spotlight-dark-navy, #0b2a5b);
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.scroll-mouse-icon {
+  display: inline-block;
+  width: 13px;
+  height: 20px;
+  border: 1.5px solid var(--primary-blue, #0078BF);
+  border-radius: 999px;
+  position: relative;
+}
+
+.scroll-wheel-dot {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2.5px;
+  height: 4px;
+  background: var(--primary-blue, #0078BF);
+  border-radius: 2px;
+  animation: mouseWheelSlide 1.5s infinite;
+}
+
+@keyframes mouseWheelSlide {
+  0% { transform: translate(-50%, 0); opacity: 1; }
+  100% { transform: translate(-50%, 6px); opacity: 0; }
+}
+
+/* Thin 3px Progress Bar at Bottom of Stage */
+.hero-stage-progress-track {
+  position: relative;
   width: 100%;
   max-width: 620px;
-  height: auto;
-  max-height: min(58vh, 520px);
-  object-fit: contain;
-  margin-inline: auto;
-  border: none;
-  border-radius: 0;
-  box-shadow: none;
-  --hero-fade-y: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.55) 4%, #000 10%, #000 74%, rgba(0, 0, 0, 0.55) 88%, transparent 100%);
-  --hero-fade-x: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.55) 6%, #000 15%, #000 85%, rgba(0, 0, 0, 0.55) 94%, transparent 100%);
-  --hero-vignette: radial-gradient(ellipse 64% 62% at 50% 42%, #000 68%, transparent 100%);
-  -webkit-mask-image: var(--hero-fade-y), var(--hero-fade-x), var(--hero-vignette);
-  -webkit-mask-composite: source-in, source-in;
-  mask-image: var(--hero-fade-y), var(--hero-fade-x), var(--hero-vignette);
-  mask-composite: intersect;
+  height: 3px;
+  background: rgba(0, 120, 191, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 12px auto 0 auto;
+  z-index: 10;
+}
+
+.hero-stage-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #0078bf 0%, #00f0ff 100%);
+  border-radius: 999px;
+  transition: width 0.06s linear;
+}
+
+/* Accessibility: Prefers Reduced Motion Fallback */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-track {
+    height: auto !important;
+  }
+
+  .hero-sticky-stage {
+    position: static !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .hero-layer {
+    transition: none !important;
+  }
+
+  .hero-layer-room-warm {
+    opacity: 0 !important;
+  }
+
+  .hero-layer-room-cool,
+  .hero-layer-ac-on,
+  .hero-layer-airflow,
+  .hero-layer-girl-happy {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-layer-girl-off,
+  .hero-layer-ac-off,
+  .hero-vent-pulse-ring,
+  .hero-ac-beep-glow,
+  .hero-scroll-hint,
+  .hero-stage-progress-track {
+    display: none !important;
+  }
+
+  .hero-temp-chip {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* 5. Slider Dots: positioned directly below content with margin-top clamp(12px, 1.6vw, 24px) */
