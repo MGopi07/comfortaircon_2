@@ -59,7 +59,7 @@ export default function ProductSpecModal() {
 
                 <div className="col-md-7">
                   <span className="badge bg-primary-blue text-white px-3 py-1.5 rounded-pill mb-2 small fw-bold">
-                    {brand || 'Authorized System'}
+                    <i className="fa-solid fa-file-lines me-1" aria-hidden="true"></i> Technical Datasheet
                   </span>
                   <h3 className="fw-bold text-dark-navy mb-2 fs-4">{name}</h3>
                   <p className="text-muted small mb-3 lh-base">

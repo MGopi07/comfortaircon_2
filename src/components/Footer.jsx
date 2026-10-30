@@ -15,11 +15,11 @@ const ADDRESS = '295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry,
 
 const quickLinks = [
   { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about' },
+  { label: 'About Us', href: '/about-us' },
   { label: 'Services', href: '/services' },
   { label: 'Products', href: '/products' },
   { label: 'Gallery', href: '/gallery' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Contact Us', href: '/contact-us' },
 ];
 
 const services = [

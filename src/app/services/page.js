@@ -3,16 +3,28 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useModal } from '@/context/ModalContext';
 import { SERVICES_CATALOG, INITIAL_CONTACT } from '@/data/mockData';
 
 export default function ServicesPage() {
   const { openAppointment } = useModal();
+  const shouldReduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
   const workflowSectionRef = useRef(null);
   const catalogSectionRef = useRef(null);
   const [expandedService, setExpandedService] = useState(null);
   const [activeWfSlide, setActiveWfSlide] = useState(0);
   const [isWfPaused, setIsWfPaused] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const workflowSlides = [
     { img: '/images/1.png', alt: 'Precision HVAC installation and copper piping' },
@@ -140,10 +152,8 @@ export default function ServicesPage() {
                 Reliable AC Services for <span className="text-primary-blue">Every Space</span>
               </h1>
               <p className="subpage-lead">
-                From AC installation and repair to routine maintenance, Comfort Aircon delivers dependable cooling solutions for homes, offices, and commercial spaces across .
+                From AC installation and repair to routine maintenance, Comfort Aircon delivers dependable cooling solutions for homes, offices, and commercial spaces across Pondicherry and surrounding regions.
               </p>
-
-
             </div>
           </div>
         </div>
@@ -154,6 +164,7 @@ export default function ServicesPage() {
         className="catalog-section"
         ref={catalogSectionRef}
         aria-labelledby="catalog-main-heading"
+        style={{ overflowX: 'hidden' }}
       >
         <div className="catalog-container">
           {/* Section Header */}
@@ -178,8 +189,23 @@ export default function ServicesPage() {
               );
               const waUrl = `https://wa.me/919843020486?text=${waMessage}`;
 
+              const offset = isMobile ? 40 : 80;
+              const initialX = index % 2 === 0 ? -offset : offset;
+              const delay = (index % 4) * 0.15;
+
               return (
-                <li className="catalog-item" key={service.id}>
+                <motion.li
+                  className="catalog-item"
+                  key={service.id}
+                  initial={shouldReduceMotion ? false : { opacity: 0, x: initialX }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.25 }}
+                  transition={{
+                    duration: 0.7,
+                    ease: 'easeOut',
+                    delay: shouldReduceMotion ? 0 : delay,
+                  }}
+                >
                   <article className="catalog-card">
                     {/* Top 4:3 Image Media Area */}
                     <div className="card-media">
@@ -288,7 +314,7 @@ export default function ServicesPage() {
                       </div>
                     </div>
                   </article>
-                </li>
+                </motion.li>
               );
             })}
           </ul>
@@ -296,11 +322,22 @@ export default function ServicesPage() {
       </section>
 
       {/* 3. OUR 4-STEP SERVICE WORKFLOW SECTION */}
-      <section className="wf-section" ref={workflowSectionRef} aria-labelledby="wf-main-heading">
+      <section
+        className="wf-section"
+        ref={workflowSectionRef}
+        aria-labelledby="wf-main-heading"
+        style={{ overflowX: 'hidden' }}
+      >
         <div className="wf-container">
           <div className="wf-grid">
             {/* Left Column (about 1/3): Navy Card */}
-            <aside className="wf-left-panel">
+            <motion.aside
+              className="wf-left-panel"
+              initial={shouldReduceMotion ? false : { opacity: 0, x: isMobile ? -40 : -80 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
+            >
               <div className="wf-left-content">
                 <div className="wf-eyebrow">
                   <span className="wf-eyebrow-line" aria-hidden="true"></span>
@@ -352,13 +389,24 @@ export default function ServicesPage() {
                   <i className="fa-solid fa-arrow-right wf-btn-arrow" aria-hidden="true"></i>
                 </a>
               </div>
-            </aside>
+            </motion.aside>
 
             {/* Right Column (about 2/3): Vertical Timeline of 4 Steps */}
             <div className="wf-right-column">
               <ol className="wf-timeline">
                 {serviceWorkflow.map((item, idx) => (
-                  <li className="wf-timeline-item" key={item.step}>
+                  <motion.li
+                    className="wf-timeline-item"
+                    key={item.step}
+                    initial={shouldReduceMotion ? false : { opacity: 0, x: isMobile ? 40 : 80 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.25 }}
+                    transition={{
+                      duration: 0.7,
+                      ease: 'easeOut',
+                      delay: shouldReduceMotion ? 0 : idx * 0.2,
+                    }}
+                  >
                     {/* Circle Tracker & Connector Line */}
                     <div className="wf-tracker">
                       <div
@@ -376,7 +424,7 @@ export default function ServicesPage() {
                       <h3 className="wf-step-title">{item.title}</h3>
                       <p className="wf-step-desc">{item.desc}</p>
                     </div>
-                  </li>
+                  </motion.li>
                 ))}
               </ol>
             </div>
@@ -449,43 +497,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* 5. CALL TO ACTION STRIP */}
-      <section className="py-5 bg-dark-navy text-white text-center">
-        <div className="container-xxl py-3">
-          <span className="text-primary-blue text-uppercase fw-bold letter-spacing-1 small d-block mb-2">
-            PUDUCHERRY, VILLUPURAM &amp; CUDDALORE
-          </span>
-          <h2 className="text-white fw-bold fs-2 mb-3">
-            Experiencing cooling issues or need a new installation?
-          </h2>
-          <p className="text-light opacity-75 mx-auto mb-4" style={{ maxWidth: '600px' }}>
-            Book a service visit today. On mobile, tap Call to open your phone dialer directly with our business number.
-          </p>
-          <div className="d-flex flex-wrap justify-content-center gap-3">
-            <button
-              type="button"
-              className="btn btn-custom-primary px-4 py-3 fw-bold"
-              onClick={() => openAppointment()}
-            >
-              <i className="fa-solid fa-calendar-check me-2"></i> Book Service Online
-            </button>
-            <a
-              href={INITIAL_CONTACT.whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-success rounded-pill px-4 py-3 fw-bold d-inline-flex align-items-center gap-2"
-            >
-              <i className="fa-brands fa-whatsapp fs-5"></i> WhatsApp Us
-            </a>
-            <a
-              href={INITIAL_CONTACT.phoneHref}
-              className="btn btn-outline-light rounded-pill px-4 py-3 fw-bold d-inline-flex align-items-center gap-2"
-            >
-              <i className="fa-solid fa-phone"></i> Tap to Call {INITIAL_CONTACT.phone}
-            </a>
-          </div>
-        </div>
-      </section>
+
     </>
   );
 }

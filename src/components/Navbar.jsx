@@ -27,11 +27,11 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Home', href: '/' },
-    { name: 'About Us', href: '/about' },
+    { name: 'About Us', href: '/about-us' },
     { name: 'Services', href: '/services' },
     { name: 'Products', href: '/products' },
     { name: 'Gallery', href: '/gallery' },
-    { name: 'Contact Us', href: '/contact' },
+    { name: 'Contact Us', href: '/contact-us' },
   ];
 
   return (
