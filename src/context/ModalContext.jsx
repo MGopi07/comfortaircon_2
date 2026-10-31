@@ -54,11 +54,15 @@ export function ModalProvider({ children }) {
     setSpecState((prev) => ({ ...prev, isOpen: false }));
   };
 
+  const closeToast = () => {
+    setToastMessage(null);
+  };
+
   const showToast = (message) => {
     setToastMessage(message);
     setTimeout(() => {
       setToastMessage(null);
-    }, 4000);
+    }, 5500);
   };
 
   return (
@@ -72,6 +76,7 @@ export function ModalProvider({ children }) {
         closeSpec,
         toastMessage,
         showToast,
+        closeToast,
       }}
     >
       {children}

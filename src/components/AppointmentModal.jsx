@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useModal } from '@/context/ModalContext';
 import { submitEnquiry } from '@/services/api';
+import CustomSelect from '@/components/CustomSelect';
 
 const publishedProducts = [
   'Carrier Ester Neo 5-Star Inverter Split AC',
@@ -318,23 +319,19 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                     >
                       Service Required <span className="text-danger">*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       id="enquiryService"
-                      className={`form-select form-control-custom ${formErrors.service_required ? 'is-invalid' : ''}`}
+                      className="form-control-custom"
+                      error={!!formErrors.service_required}
                       required
                       value={formData.service}
-                      onChange={(e) => {
-                        setFormData({ ...formData, service: e.target.value });
+                      onChange={(val) => {
+                        setFormData({ ...formData, service: val });
                         if (formErrors.service_required) setFormErrors({ ...formErrors, service_required: '' });
                       }}
-                    >
-                      <option value="">-- Select Service Required --</option>
-                      {serviceOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
+                      options={serviceOptions}
+                      placeholder="-- Select Service Required --"
+                    />
                     {formErrors.service_required ? (
                       <div className="text-danger small mt-1 fw-semibold">{formErrors.service_required}</div>
                     ) : (
@@ -352,30 +349,24 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                     >
                       Product Interested In <span className="text-muted fw-normal">(Optional)</span>
                     </label>
-                    <select
+                    <CustomSelect
                       id="enquiryProduct"
-                      className="form-select form-control-custom"
+                      className="form-control-custom"
                       value={formData.productInterested}
-                      onChange={(e) =>
+                      onChange={(val) =>
                         setFormData({
                           ...formData,
-                          productInterested: e.target.value,
+                          productInterested: val,
                         })
                       }
-                    >
-                      <option value="">-- Select Product (Optional) --</option>
-                      {formData.productInterested &&
-                        !publishedProducts.includes(formData.productInterested) && (
-                          <option value={formData.productInterested}>
-                            {formData.productInterested}
-                          </option>
-                        )}
-                      {publishedProducts.map((prod) => (
-                        <option key={prod} value={prod}>
-                          {prod}
-                        </option>
-                      ))}
-                    </select>
+                      options={
+                        formData.productInterested &&
+                        !publishedProducts.includes(formData.productInterested)
+                          ? [formData.productInterested, ...publishedProducts]
+                          : publishedProducts
+                      }
+                      placeholder="-- Select Product (Optional) --"
+                    />
                     <div className="form-text small text-muted">
                       {formData.productInterested
                         ? 'Auto-filled from selected product'
@@ -391,23 +382,19 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                     >
                       Location <span className="text-danger">*</span>
                     </label>
-                    <select
+                    <CustomSelect
                       id="enquiryLocation"
-                      className={`form-select form-control-custom ${formErrors.location ? 'is-invalid' : ''}`}
+                      className="form-control-custom"
+                      error={!!formErrors.location}
                       required
                       value={formData.location}
-                      onChange={(e) => {
-                        setFormData({ ...formData, location: e.target.value });
+                      onChange={(val) => {
+                        setFormData({ ...formData, location: val });
                         if (formErrors.location) setFormErrors({ ...formErrors, location: '' });
                       }}
-                    >
-                      <option value="">-- Select Location --</option>
-                      {locationOptions.map((loc) => (
-                        <option key={loc} value={loc}>
-                          {loc}
-                        </option>
-                      ))}
-                    </select>
+                      options={locationOptions}
+                      placeholder="-- Select Location --"
+                    />
 
                     {/* Location "+ text box" when Other is selected */}
                     {formData.location === 'Other' && (
