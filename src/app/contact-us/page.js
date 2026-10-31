@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useModal } from '@/context/ModalContext';
 import { INITIAL_CONTACT } from '@/data/mockData';
 import { getContact, submitEnquiry } from '@/services/api';
+import CustomSelect from '@/components/CustomSelect';
 
 export default function ContactPage() {
   const { showToast } = useModal();
@@ -273,16 +274,23 @@ export default function ContactPage() {
       </section>
 
       {/* 2. SECTION 1: REQUEST HVAC SERVICE OR ASK A QUESTION (1ST REF IMAGE) */}
-      <section className="contact-ref-section overflow-hidden" id="enquiry-form" style={{ overflowX: 'hidden' }}>
+      <section className="contact-ref-section" id="enquiry-form">
         <div className="container-xxl">
           <div className="row g-4 align-items-start">
             {/* Left Column: Form Card (~60%) */}
             <div className="col-lg-7">
               <motion.div
-                initial={shouldReduceMotion ? false : { opacity: 0, x: -offsetX }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: shouldReduceMotion ? 0 : 0.7, ease: 'easeOut' }}
+                initial={shouldReduceMotion || isMobile ? false : { opacity: 0, y: 20 }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  transitionEnd: {
+                    transform: 'none',
+                  },
+                }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: 'easeOut' }}
+                className="ref-form-motion-wrap"
               >
                 <div className="ref-form-card">
                 <div className="ref-eyebrow-tag">
@@ -376,20 +384,14 @@ export default function ContactPage() {
                       <label className="form-label" htmlFor="refService">
                         Service Needed <span className="text-danger">*</span>
                       </label>
-                      <select
+                      <CustomSelect
                         id="refService"
-                        className="form-select"
                         value={formData.service}
-                        onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                        onChange={(val) => setFormData({ ...formData, service: val })}
+                        options={serviceOptions}
+                        placeholder="Select a service"
                         required
-                      >
-                        <option value="">Select a service</option>
-                        {serviceOptions.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     </div>
                   </div>
 
@@ -399,20 +401,14 @@ export default function ContactPage() {
                       <label className="form-label" htmlFor="refLocation">
                         Service Location <span className="text-danger">*</span>
                       </label>
-                      <select
+                      <CustomSelect
                         id="refLocation"
-                        className="form-select"
                         value={formData.location}
-                        onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                        onChange={(val) => setFormData({ ...formData, location: val })}
+                        options={locationOptions}
+                        placeholder="Select location"
                         required
-                      >
-                        <option value="">Select location</option>
-                        {locationOptions.map((loc) => (
-                          <option key={loc} value={loc}>
-                            {loc}
-                          </option>
-                        ))}
-                      </select>
+                      />
                       {formData.location === "Other" && (
                         <input
                           type="text"
@@ -430,21 +426,15 @@ export default function ContactPage() {
                       <label className="form-label" htmlFor="refProduct">
                         Product Interested In <span className="text-muted fw-normal">(Optional)</span>
                       </label>
-                      <select
+                      <CustomSelect
                         id="refProduct"
-                        className="form-select"
                         value={formData.productInterested}
-                        onChange={(e) =>
-                          setFormData({ ...formData, productInterested: e.target.value })
+                        onChange={(val) =>
+                          setFormData({ ...formData, productInterested: val })
                         }
-                      >
-                        <option value="">Select product (Carrier / Toshiba / Midea)...</option>
-                        {publishedProducts.map((prod) => (
-                          <option key={prod} value={prod}>
-                            {prod}
-                          </option>
-                        ))}
-                      </select>
+                        options={publishedProducts}
+                        placeholder="Select product (Carrier / Toshiba / Midea)..."
+                      />
                     </div>
                   </div>
 

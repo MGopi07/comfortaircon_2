@@ -95,6 +95,7 @@ export default function ServicesPage() {
       return;
     }
 
+    const isMobileScreen = typeof window !== 'undefined' && window.innerWidth < 992;
     const observer = new IntersectionObserver(
       (entries, obs) => {
         entries.forEach((entry) => {
@@ -105,8 +106,8 @@ export default function ServicesPage() {
         });
       },
       {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px',
+        threshold: isMobileScreen ? 0.05 : 0.15,
+        rootMargin: isMobileScreen ? '0px 0px -10px 0px' : '0px 0px -30px 0px',
       }
     );
 
