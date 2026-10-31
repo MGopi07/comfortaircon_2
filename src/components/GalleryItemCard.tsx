@@ -38,7 +38,7 @@ export default function GalleryItemCard({ item }: GalleryItemCardProps) {
           loading="lazy"
           className="gallery-card-img"
           onError={() => setImgSrc(NEUTRAL_PLACEHOLDER_IMG)}
-          unoptimized={typeof imgSrc === 'string' && imgSrc.startsWith('data:')}
+          unoptimized={typeof imgSrc === 'string' && (imgSrc.startsWith('data:') || imgSrc.startsWith('http'))}
         />
 
         {/* Category Pill Tag */}

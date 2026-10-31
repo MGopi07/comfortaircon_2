@@ -5,11 +5,14 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useModal } from '@/context/ModalContext';
 import { INITIAL_CONTACT } from '@/data/mockData';
+import { getContact, submitEnquiry } from '@/services/api';
 
 export default function ContactPage() {
   const { showToast } = useModal();
   const shouldReduceMotion = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
+  const [contactDetails, setContactDetails] = useState(INITIAL_CONTACT);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -18,6 +21,42 @@ export default function ContactPage() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Fetch company contact details with fallback to INITIAL_CONTACT
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchContact() {
+      try {
+        const res = await getContact();
+        if (isMounted && res?.data) {
+          setContactDetails((prev) => ({
+            ...prev,
+            phone: res.data.phone || prev.phone,
+            phoneHref: res.data.phone
+              ? `tel:${res.data.phone.replace(/[^0-9+]/g, '')}`
+              : prev.phoneHref,
+            whatsapp: res.data.whatsapp || prev.whatsapp,
+            whatsappHref: res.data.whatsapp
+              ? `https://wa.me/${res.data.whatsapp.replace(/\D/g, '')}`
+              : prev.whatsappHref,
+            email: res.data.email || prev.email,
+            address: res.data.address || prev.address,
+            workingHours: res.data.working_hours || prev.workingHours,
+            facebookUrl: res.data.facebook_url || prev.facebookUrl,
+            instagramUrl: res.data.instagram_url || prev.instagramUrl,
+            twitterUrl: res.data.twitter_url || prev.twitterUrl,
+            youtubeUrl: res.data.youtube_url || prev.youtubeUrl,
+          }));
+        }
+      } catch (err) {
+        console.warn('Backend contact API unavailable, using static fallback:', err);
+      }
+    }
+    fetchContact();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const offsetX = isMobile ? 40 : 80;
@@ -95,7 +134,7 @@ export default function ContactPage() {
 
   const locationOptions = ['Pondicherry', 'Villupuram', 'Cuddalore', 'Other'];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
 
@@ -108,6 +147,11 @@ export default function ContactPage() {
     const cleanPhone = formData.phone.trim();
     if (!/^\d{10}$/.test(cleanPhone)) {
       setErrorMessage('Please enter a valid 10-digit Indian mobile number.');
+      return;
+    }
+
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      setErrorMessage('Please enter a valid email address.');
       return;
     }
 
@@ -131,47 +175,73 @@ export default function ContactPage() {
         ? `Other (${formData.otherLocation.trim()})`
         : formData.location;
 
-    // Save lead to localStorage for Admin Enquiry Management (FSD Section 6.1)
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem('comfort_aircon_enquiries');
-        const list = stored ? JSON.parse(stored) : [];
-        const newEnquiry = {
-          id: `ENQ-${Date.now().toString().slice(-4)}`,
-          name: formData.name.trim(),
-          mobile: cleanPhone,
-          email: formData.email.trim() || 'N/A',
-          service: formData.service,
-          productInterested: formData.productInterested || 'N/A',
-          location: resolvedLocation,
-          message: formData.message.trim() || 'No additional message provided.',
-          status: 'New',
-          createdAt: new Date().toISOString(),
-        };
-        list.unshift(newEnquiry);
-        localStorage.setItem('comfort_aircon_enquiries', JSON.stringify(list));
-        window.dispatchEvent(new Event('storage'));
-      } catch (err) {
-        console.error('Error saving enquiry to localStorage:', err);
+    setIsSubmitting(true);
+
+    const payload = {
+      name: formData.name.trim(),
+      mobile_number: cleanPhone,
+      email: formData.email.trim() || undefined,
+      service_required: formData.service,
+      product_interested_in: formData.productInterested.trim() || undefined,
+      location: resolvedLocation,
+      message: formData.message.trim() || undefined,
+    };
+
+    try {
+      const response = await submitEnquiry(payload);
+
+      // Save lead to localStorage for Admin Enquiry Management fallback
+      if (typeof window !== 'undefined') {
+        try {
+          const stored = localStorage.getItem('comfort_aircon_enquiries');
+          const list = stored ? JSON.parse(stored) : [];
+          const newEnquiry = {
+            id: `ENQ-${Date.now().toString().slice(-4)}`,
+            name: formData.name.trim(),
+            mobile: cleanPhone,
+            email: formData.email.trim() || 'N/A',
+            service: formData.service,
+            productInterested: formData.productInterested || 'N/A',
+            location: resolvedLocation,
+            message: formData.message.trim() || 'No additional message provided.',
+            status: 'New',
+            createdAt: new Date().toISOString(),
+          };
+          list.unshift(newEnquiry);
+          localStorage.setItem('comfort_aircon_enquiries', JSON.stringify(list));
+          window.dispatchEvent(new Event('storage'));
+        } catch {
+          // Ignore localStorage errors
+        }
       }
+
+      setSubmittedSuccess(true);
+      showToast(
+        response?.message ||
+          `Enquiry submitted successfully! Our team will call you on ${cleanPhone} shortly.`
+      );
+
+      // Reset Form
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        service: '',
+        productInterested: '',
+        location: '',
+        otherLocation: '',
+        message: '',
+      });
+    } catch (err) {
+      if (err?.errors && typeof err.errors === 'object') {
+        const errorList = Object.values(err.errors).flat();
+        setErrorMessage(errorList.join(' ') || err.message);
+      } else {
+        setErrorMessage(err?.message || 'Failed to submit enquiry. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setSubmittedSuccess(true);
-    showToast(
-      `Enquiry submitted successfully! Our Pondicherry team will call you on ${cleanPhone} shortly.`
-    );
-
-    // Reset Form
-    setFormData({
-      name: '',
-      phone: '',
-      email: '',
-      service: '',
-      productInterested: '',
-      location: '',
-      otherLocation: '',
-      message: '',
-    });
   };
 
   return (
@@ -399,11 +469,19 @@ export default function ContactPage() {
 
                   {/* Submit Button */}
                   <div>
-                    <button type="submit" className="ref-btn-submit">
-                      <span>Send Request</span>
-                      <i className="fa-solid fa-arrow-right"></i>
+                    <button type="submit" className="ref-btn-submit" disabled={isSubmitting}>
+                      {isSubmitting ? (
+                        <>
+                          <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                          <span>Sending...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>Send Request</span>
+                          <i className="fa-solid fa-arrow-right"></i>
+                        </>
+                      )}
                     </button>
-
                   </div>
                 </form>
               </div>
@@ -427,7 +505,7 @@ export default function ContactPage() {
                     <div className="ref-contact-title">Visit Our Location</div>
                     <div className="ref-contact-highlight">Pudupalaiyam, Puducherry</div>
                     <p className="ref-contact-desc">
-                      No: 295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry – 605013.
+                      {contactDetails.address || 'No: 295, Thiruvalluvar Salai, Raja Nagar, Pudupalaiyam, Puducherry – 605013.'}
                     </p>
                   </div>
                 </motion.div>
@@ -439,12 +517,14 @@ export default function ContactPage() {
                       <i className="fa-solid fa-phone"></i>
                     </div>
                     <div className="ref-contact-title">Call Us</div>
-                    <a href={INITIAL_CONTACT.phoneHref} className="ref-contact-highlight">
-                      Mobile: {INITIAL_CONTACT.phone}
+                    <a href={contactDetails.phoneHref || INITIAL_CONTACT.phoneHref} className="ref-contact-highlight">
+                      Mobile: {contactDetails.phone || INITIAL_CONTACT.phone}
                     </a>
-                    <a href={INITIAL_CONTACT.secondaryPhoneHref} className="ref-contact-highlight">
-                      Landline: {INITIAL_CONTACT.secondaryPhone}
-                    </a>
+                    {contactDetails.secondaryPhone && (
+                      <a href={contactDetails.secondaryPhoneHref || INITIAL_CONTACT.secondaryPhoneHref} className="ref-contact-highlight">
+                        Landline: {contactDetails.secondaryPhone}
+                      </a>
+                    )}
                     <p className="ref-contact-desc mt-1">
                       Talk with our team about scheduling repair, maintenance, or air conditioning service questions.
                     </p>
@@ -458,12 +538,14 @@ export default function ContactPage() {
                       <i className="fa-solid fa-envelope"></i>
                     </div>
                     <div className="ref-contact-title">Email Us</div>
-                    <a href={`mailto:${INITIAL_CONTACT.email}`} className="ref-contact-highlight">
-                      {INITIAL_CONTACT.email}
+                    <a href={`mailto:${contactDetails.email || INITIAL_CONTACT.email}`} className="ref-contact-highlight">
+                      {contactDetails.email || INITIAL_CONTACT.email}
                     </a>
-                    <a href={`mailto:${INITIAL_CONTACT.secondaryEmail}`} className="ref-contact-highlight">
-                      {INITIAL_CONTACT.secondaryEmail}
-                    </a>
+                    {contactDetails.secondaryEmail && (
+                      <a href={`mailto:${contactDetails.secondaryEmail}`} className="ref-contact-highlight">
+                        {contactDetails.secondaryEmail}
+                      </a>
+                    )}
                     <p className="ref-contact-desc mt-1">
                       Send your service request, project details, or general questions anytime.
                     </p>

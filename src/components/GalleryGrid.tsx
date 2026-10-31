@@ -9,6 +9,7 @@ export interface GalleryGridProps {
   items: GalleryItem[];
   isLoading?: boolean;
   skeletonCount?: number;
+  isFiltered?: boolean;
   onResetFilter?: () => void;
   hasMore?: boolean;
   onLoadMore?: () => void;
@@ -29,6 +30,7 @@ export default function GalleryGrid({
   items,
   isLoading = false,
   skeletonCount = 6,
+  isFiltered = false,
   onResetFilter,
   hasMore = false,
   onLoadMore,
@@ -40,7 +42,7 @@ export default function GalleryGrid({
     return <GallerySkeleton count={skeletonCount} />;
   }
 
-  // 2. Empty Filter State
+  // 2. Empty State
   if (!items || items.length === 0) {
     return (
       <motion.div
@@ -58,18 +60,22 @@ export default function GalleryGrid({
             aria-hidden="true"
           />
         </div>
-        <h4 className="fw-bold text-dark-navy mb-2">No photos in this category yet</h4>
+        <h4 className="fw-bold text-dark-navy mb-2">
+          {isFiltered ? 'No photos in this category yet' : 'No gallery photos available yet'}
+        </h4>
         <p className="text-muted mb-4" style={{ maxWidth: '460px', margin: '0 auto' }}>
-          We haven&apos;t added any projects under this specific category yet. Try selecting &quot;All Works&quot; to browse our full project portfolio.
+          {isFiltered
+            ? 'We haven\u2019t added any projects under this specific category yet. Try selecting \u201cAll Photos\u201d to browse our full project portfolio.'
+            : 'Our project installation and service photos are currently being updated. Please check back shortly.'}
         </p>
-        {onResetFilter && (
+        {isFiltered && onResetFilter && (
           <button
             type="button"
             className="btn btn-custom-primary px-4 py-2.5 rounded-pill fw-bold shadow-xs"
             onClick={onResetFilter}
           >
             <i className="fa-solid fa-rotate-left me-2" aria-hidden="true" />
-            Show All Works
+            Show All Photos
           </button>
         )}
       </motion.div>
