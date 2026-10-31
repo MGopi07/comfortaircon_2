@@ -1,9 +1,10 @@
 'use client';
 
 /* eslint-disable @next/next/no-img-element */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useModal } from '@/context/ModalContext';
+import { getContact } from '@/services/api';
 
 const PHONE_DISPLAY = '+91 98430 20458';
 const PHONE_HREF = 'tel:+919843020458';
@@ -41,15 +42,60 @@ const trustBadges = [
   { icon: 'fa-solid fa-shield-halved', label: 'Genuine Parts & Warranty' },
 ];
 
-const socialLinks = [
-  { icon: 'fa-brands fa-facebook-f', label: 'Facebook' },
-  { icon: 'fa-brands fa-x-twitter', label: 'Twitter' },
-  { icon: 'fa-brands fa-instagram', label: 'Instagram' },
-  { icon: 'fa-brands fa-linkedin-in', label: 'LinkedIn' },
-];
-
 export default function Footer() {
   const { openAppointment } = useModal();
+  const [contact, setContact] = useState({
+    phone: PHONE_DISPLAY,
+    phoneHref: PHONE_HREF,
+    whatsapp: WHATSAPP_DISPLAY,
+    whatsappHref: WHATSAPP_HREF,
+    email: EMAIL,
+    address: ADDRESS,
+    facebookUrl: '#',
+    twitterUrl: '#',
+    instagramUrl: '#',
+    youtubeUrl: '#',
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadContact() {
+      try {
+        const res = await getContact();
+        if (isMounted && res?.data) {
+          const d = res.data;
+          setContact((prev) => ({
+            ...prev,
+            phone: d.phone || prev.phone,
+            phoneHref: d.phone ? `tel:${d.phone.replace(/[^0-9+]/g, '')}` : prev.phoneHref,
+            whatsapp: d.whatsapp || prev.whatsapp,
+            whatsappHref: d.whatsapp
+              ? `https://wa.me/${d.whatsapp.replace(/\D/g, '')}?text=Hi%2C%20I%20want%20to%20enquire%20about%20your%20AC%20products%20%2F%20services.`
+              : prev.whatsappHref,
+            email: d.email || prev.email,
+            address: d.address || prev.address,
+            facebookUrl: d.facebook_url || prev.facebookUrl,
+            twitterUrl: d.twitter_url || prev.twitterUrl,
+            instagramUrl: d.instagram_url || prev.instagramUrl,
+            youtubeUrl: d.youtube_url || prev.youtubeUrl,
+          }));
+        }
+      } catch (err) {
+        console.warn('Footer: Backend contact API unavailable, using fallback:', err);
+      }
+    }
+    loadContact();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const socialLinks = [
+    { icon: 'fa-brands fa-facebook-f', label: 'Facebook', href: contact.facebookUrl },
+    { icon: 'fa-brands fa-x-twitter', label: 'Twitter', href: contact.twitterUrl },
+    { icon: 'fa-brands fa-instagram', label: 'Instagram', href: contact.instagramUrl },
+    { icon: 'fa-brands fa-youtube', label: 'YouTube', href: contact.youtubeUrl },
+  ];
 
   return (
     <footer className="footer-section" id="contact">
@@ -76,9 +122,9 @@ export default function Footer() {
               <i className="fa-regular fa-calendar-check"></i>
               <span>Book a Service</span>
             </button>
-            <a href={PHONE_HREF} className="footer-cta-btn footer-cta-btn-outline">
+            <a href={contact.phoneHref} className="footer-cta-btn footer-cta-btn-outline">
               <i className="fa-solid fa-phone"></i>
-              <span>Call {PHONE_DISPLAY}</span>
+              <span>Call {contact.phone}</span>
             </a>
           </div>
         </div>
@@ -110,7 +156,13 @@ export default function Footer() {
             </ul>
             <div className="footer-social">
               {socialLinks.map((social) => (
-                <a key={social.label} href="#" aria-label={social.label}>
+                <a
+                  key={social.label}
+                  href={social.href}
+                  aria-label={social.label}
+                  target={social.href && social.href !== '#' ? '_blank' : undefined}
+                  rel={social.href && social.href !== '#' ? 'noopener noreferrer' : undefined}
+                >
                   <i className={social.icon}></i>
                 </a>
               ))}
@@ -157,7 +209,7 @@ export default function Footer() {
                 </span>
                 <span>
                   <span className="footer-contact-label">Showroom</span>
-                  <span className="footer-contact-value">{ADDRESS}</span>
+                  <span className="footer-contact-value">{contact.address}</span>
                 </span>
               </li>
               <li>
@@ -166,8 +218,8 @@ export default function Footer() {
                 </span>
                 <span>
                   <span className="footer-contact-label">Call Us</span>
-                  <a href={PHONE_HREF} className="footer-contact-value">
-                    {PHONE_DISPLAY}
+                  <a href={contact.phoneHref} className="footer-contact-value">
+                    {contact.phone}
                   </a>
                 </span>
               </li>
@@ -178,12 +230,12 @@ export default function Footer() {
                 <span>
                   <span className="footer-contact-label">WhatsApp</span>
                   <a
-                    href={WHATSAPP_HREF}
+                    href={contact.whatsappHref}
                     className="footer-contact-value"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {WHATSAPP_DISPLAY}
+                    {contact.whatsapp}
                   </a>
                 </span>
               </li>
@@ -193,8 +245,8 @@ export default function Footer() {
                 </span>
                 <span>
                   <span className="footer-contact-label">Email</span>
-                  <a href={`mailto:${EMAIL}`} className="footer-contact-value">
-                    {EMAIL}
+                  <a href={`mailto:${contact.email}`} className="footer-contact-value">
+                    {contact.email}
                   </a>
                 </span>
               </li>

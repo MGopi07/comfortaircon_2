@@ -1,33 +1,94 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useModal } from '@/context/ModalContext';
-// TODO: replace sampleGallery with API response
-import { sampleGallery } from '@/data/sampleGallery';
 import { GALLERY_CATEGORIES } from '@/types/gallery';
 import CategoryFilter from '@/components/CategoryFilter';
 import GalleryGrid from '@/components/GalleryGrid';
+import { getGallery } from '@/services/api';
 
 export default function GalleryPage() {
   const { openAppointment } = useModal();
 
-  // Integration placeholders ready for future backend API response
-  const [galleryData, setGalleryData] = useState(sampleGallery);
-  const [isLoading, setIsLoading] = useState(false);
+  const [galleryData, setGalleryData] = useState([]);
+  const [categoriesList, setCategoriesList] = useState(GALLERY_CATEGORIES);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [activeCategory, setActiveCategory] = useState('ALL');
   const [visibleCount, setVisibleCount] = useState(12);
 
+  // Normalize API category string to matching GALLERY_CATEGORIES label
+  const normalizeCategory = (cat) => {
+    if (!cat) return 'Service Work';
+    const match = GALLERY_CATEGORIES.find(
+      (c) => c.toLowerCase() === String(cat).trim().toLowerCase()
+    );
+    return match || cat;
+  };
+
+  // Fetch gallery items strictly from backend REST API
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadGallery() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await getGallery();
+        if (isMounted) {
+          if (response?.categories && Array.isArray(response.categories) && response.categories.length > 0) {
+            const cleanCategories = response.categories.map((c) => {
+              const match = GALLERY_CATEGORIES.find(
+                (gc) => gc.toLowerCase() === String(c).trim().toLowerCase()
+              );
+              return match || c.trim();
+            });
+            setCategoriesList(cleanCategories);
+          }
+
+          if (response?.data && Array.isArray(response.data)) {
+            const mapped = response.data.map((item, idx) => ({
+              id: String(item.id || `gal-${idx}`),
+              image: item.image_url || item.image || '/images/carrier-vrf.png',
+              alt: item.caption || item.alt || 'Comfort Aircon Installation Project',
+              title: item.caption || item.title || '',
+              category: normalizeCategory(item.category),
+            }));
+            setGalleryData(mapped);
+          } else {
+            setGalleryData([]);
+          }
+        }
+      } catch (err) {
+        console.warn('Backend API error loading gallery:', err);
+        if (isMounted) {
+          setError(err?.message || 'Failed to load gallery from server.');
+          setGalleryData([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadGallery();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Compute item counts per category from the current data
   const categoryCounts = useMemo(() => {
     const counts = {};
-    GALLERY_CATEGORIES.forEach((cat) => {
+    categoriesList.forEach((cat) => {
       counts[cat] = galleryData.filter((item) => item.category === cat).length;
     });
     return counts;
-  }, [galleryData]);
+  }, [galleryData, categoriesList]);
 
   // Client-side filtering on current items
   const filteredItems = useMemo(() => {
@@ -82,7 +143,7 @@ export default function GalleryPage() {
         <div className="container-xxl">
           {/* Category Filter Pills (Data-driven tabs with item count and layoutId pill) */}
           <CategoryFilter
-            categories={GALLERY_CATEGORIES}
+            categories={categoriesList}
             activeCategory={activeCategory}
             categoryCounts={categoryCounts}
             totalCount={galleryData.length}
@@ -101,6 +162,7 @@ export default function GalleryPage() {
           <GalleryGrid
             items={visibleItems}
             isLoading={isLoading}
+            isFiltered={activeCategory !== 'ALL'}
             onResetFilter={() => handleSelectCategory('ALL')}
             hasMore={filteredItems.length > visibleCount}
             onLoadMore={handleLoadMore}

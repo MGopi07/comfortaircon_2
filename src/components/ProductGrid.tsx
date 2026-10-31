@@ -9,6 +9,7 @@ export interface ProductGridProps {
   products: Product[];
   isLoading?: boolean;
   skeletonCount?: number;
+  isFiltered?: boolean;
   onEnquire?: (product: Product) => void;
   onViewSpecs?: (product: Product) => void;
   onResetFilters?: () => void;
@@ -28,6 +29,7 @@ export default function ProductGrid({
   products,
   isLoading = false,
   skeletonCount = 6,
+  isFiltered = false,
   onEnquire,
   onViewSpecs,
   onResetFilters,
@@ -47,7 +49,7 @@ export default function ProductGrid({
     );
   }
 
-  // 2. Empty Filter State
+  // 2. Empty State
   if (!products || products.length === 0) {
     return (
       <motion.div
@@ -60,16 +62,20 @@ export default function ProductGrid({
       >
         <div className="mb-3">
           <i
-            className="fa-solid fa-filter-circle-xmark text-muted"
+            className={`fa-solid ${isFiltered ? 'fa-filter-circle-xmark' : 'fa-box-open'} text-muted`}
             style={{ fontSize: '3rem' }}
             aria-hidden="true"
           ></i>
         </div>
-        <h4 className="fw-bold text-dark-navy mb-2">No equipment found</h4>
+        <h4 className="fw-bold text-dark-navy mb-2">
+          {isFiltered ? 'No equipment found' : 'No products available yet'}
+        </h4>
         <p className="text-muted mb-4" style={{ maxWidth: '480px', margin: '0 auto' }}>
-          We couldn&apos;t find any equipment matching your search query. Try clearing your search term to view our full equipment lineup.
+          {isFiltered
+            ? "We couldn't find any equipment matching your search query. Try clearing your search term to view our full equipment lineup."
+            : 'Our equipment catalog is currently being updated. Please check back shortly or contact our team for immediate assistance.'}
         </p>
-        {onResetFilters && (
+        {isFiltered && onResetFilters && (
           <button
             type="button"
             className="btn btn-custom-primary px-4 py-2.5 rounded-pill fw-bold shadow-xs"

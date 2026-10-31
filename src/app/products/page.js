@@ -4,66 +4,107 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useModal } from '@/context/ModalContext';
 // TODO: replace sampleProducts with API response
-import { sampleProducts } from '@/data/sampleProducts';
 import ProductGrid from '@/components/ProductGrid';
+import { getProducts } from '@/services/api';
 
 export default function ProductsPage() {
   const { openAppointment, openSpec } = useModal();
 
-  // Integration placeholders ready for future backend API response
-  const [productsData, setProductsData] = useState(sampleProducts);
-  const [isLoading, setIsLoading] = useState(false);
+  const [productsData, setProductsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Sync with Admin Panel products
+  // Fetch products strictly from backend REST API
   useEffect(() => {
-    const loadProducts = () => {
-      if (typeof window === 'undefined') return;
+    let isMounted = true;
+
+    async function loadProducts() {
+      setIsLoading(true);
+      setError(null);
       try {
-        const stored = localStorage.getItem('comfort_aircon_products');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed) && parsed.length > 0) {
-            const published = parsed
-              .filter((p) => p.published !== false)
-              .map((p) => ({
-                id: p.id,
-                name: p.name,
-                model: p.model,
-                image: p.image || p.img || '/images/carrier-split-ac.png',
-                specifications: Array.isArray(p.specsList) && p.specsList.length > 0
-                  ? p.specsList
-                  : Array.isArray(p.specifications) && p.specifications.length > 0
-                  ? p.specifications
-                  : typeof p.specifications === 'string'
-                  ? p.specifications
-                      .split(/[\n|]/)
-                      .map((line) => {
-                        const [l, ...v] = line.split(':');
-                        return { label: l?.trim() || 'Spec', value: v.join(':').trim() || l?.trim() };
-                      })
-                      .filter((s) => s.label && s.value)
-                  : [],
-                features: Array.isArray(p.featuresList) && p.featuresList.length > 0
-                  ? p.featuresList
-                  : Array.isArray(p.features) && p.features.length > 0
-                  ? p.features
-                  : typeof p.features === 'string'
-                  ? p.features.split('\n').map((f) => f.trim()).filter(Boolean)
-                  : [],
-              }));
-            setProductsData(published);
-            return;
+        const response = await getProducts();
+        if (isMounted) {
+          if (response?.data && Array.isArray(response.data)) {
+            const mapped = response.data.map((item, idx) => {
+              // Parse specifications whether provided as array, JSON string, or text
+              let specs = [];
+              if (Array.isArray(item.specifications) && item.specifications.length > 0) {
+                specs = item.specifications;
+              } else if (typeof item.specifications === 'string' && item.specifications.trim()) {
+                try {
+                  const parsed = JSON.parse(item.specifications);
+                  if (typeof parsed === 'object' && parsed !== null) {
+                    specs = Object.entries(parsed).map(([key, val]) => ({
+                      label: key,
+                      value: String(val),
+                    }));
+                  }
+                } catch {
+                  specs = item.specifications
+                    .split(/[\n|]/)
+                    .map((line) => {
+                      const [l, ...v] = line.split(':');
+                      return {
+                        label: l?.trim() || 'Specification',
+                        value: v.join(':').trim() || l?.trim(),
+                      };
+                    })
+                    .filter((s) => s.label && s.value);
+                }
+              }
+
+              // Parse features whether provided as array, JSON string, or text
+              let feats = [];
+              if (Array.isArray(item.features) && item.features.length > 0) {
+                feats = item.features;
+              } else if (typeof item.features === 'string' && item.features.trim()) {
+                try {
+                  const parsed = JSON.parse(item.features);
+                  if (Array.isArray(parsed)) {
+                    feats = parsed.map(String);
+                  } else if (typeof parsed === 'object' && parsed !== null) {
+                    feats = Object.entries(parsed).map(([k, v]) => `${k}: ${v}`);
+                  } else {
+                    feats = [String(parsed)];
+                  }
+                } catch {
+                  feats = item.features.split('\n').map((f) => f.trim()).filter(Boolean);
+                }
+              }
+
+              return {
+                id: String(item.id || item.slug || `prod-${idx}`),
+                name: item.name || '',
+                model: item.model || '',
+                image: item.image_url || item.image || '/images/carrier-split-ac.png',
+                specifications: specs,
+                features: feats,
+              };
+            });
+            setProductsData(mapped);
+          } else {
+            setProductsData([]);
           }
         }
       } catch (err) {
-        console.error('Error loading products on products page:', err);
+        console.warn('Backend API error loading products:', err);
+        if (isMounted) {
+          setError(err?.message || 'Failed to load products from server.');
+          setProductsData([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
-    };
+    }
+
     loadProducts();
-    window.addEventListener('storage', loadProducts);
-    return () => window.removeEventListener('storage', loadProducts);
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Client-side search filtering by product name or model
@@ -149,6 +190,7 @@ export default function ProductsPage() {
           <ProductGrid
             products={filteredProducts}
             isLoading={isLoading}
+            isFiltered={Boolean(searchQuery.trim())}
             onEnquire={(product) => openAppointment(`${product.name} (${product.model})`)}
             onViewSpecs={(product) =>
               openSpec({

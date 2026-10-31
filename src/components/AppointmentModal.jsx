@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useModal } from '@/context/ModalContext';
+import { submitEnquiry } from '@/services/api';
 
 const publishedProducts = [
   'Carrier Ester Neo 5-Star Inverter Split AC',
@@ -42,51 +43,117 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
     message: '',
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
+  const [generalError, setGeneralError] = useState('');
 
-    if (formData.phone.length !== 10) {
-      alert('Please enter a valid 10-digit Indian mobile number.');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormErrors({});
+    setGeneralError('');
+
+    const newErrors = {};
+
+    // 1. Client-side validation: Name
+    if (!formData.name.trim()) {
+      newErrors.name = 'Please enter your full name.';
+    }
+
+    // 2. Client-side validation: 10-digit mobile number
+    const cleanPhone = formData.phone.trim();
+    if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
+      newErrors.mobile_number = 'Please enter a valid 10-digit Indian mobile number.';
+    }
+
+    // 3. Client-side validation: Email (if provided)
+    if (formData.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      newErrors.email = 'Please enter a valid email address.';
+    }
+
+    // 4. Client-side validation: Service
+    if (!formData.service) {
+      newErrors.service_required = 'Please select a required service.';
+    }
+
+    // 5. Client-side validation: Location
+    if (!formData.location) {
+      newErrors.location = 'Please select your location.';
+    } else if (formData.location === 'Other' && !formData.otherLocation.trim()) {
+      newErrors.location = 'Please specify your town / locality.';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setFormErrors(newErrors);
       return;
     }
 
     const resolvedLocation =
       formData.location === 'Other' && formData.otherLocation
-        ? `Other (${formData.otherLocation})`
+        ? `Other (${formData.otherLocation.trim()})`
         : formData.location;
 
-    // Save lead to localStorage for Admin Enquiry Management (FSD Section 6.1)
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem('comfort_aircon_enquiries');
-        const list = stored ? JSON.parse(stored) : [];
-        const newEnquiry = {
-          id: `ENQ-${Date.now().toString().slice(-4)}`,
-          name: formData.name.trim(),
-          mobile: formData.phone.trim(),
-          email: formData.email.trim() || 'N/A',
-          service: formData.service || 'General Enquiry',
-          productInterested: formData.productInterested || 'N/A',
-          location: resolvedLocation,
-          message: formData.message.trim() || 'No additional message provided.',
-          status: 'New',
-          createdAt: new Date().toISOString(),
-        };
-        list.unshift(newEnquiry);
-        localStorage.setItem('comfort_aircon_enquiries', JSON.stringify(list));
-        window.dispatchEvent(new Event('storage'));
-      } catch (err) {
-        console.error('Error saving enquiry to localStorage:', err);
+    setIsSubmitting(true);
+
+    const payload = {
+      name: formData.name.trim(),
+      mobile_number: cleanPhone,
+      email: formData.email.trim() || undefined,
+      service_required: formData.service,
+      product_interested_in: formData.productInterested.trim() || undefined,
+      location: resolvedLocation,
+      message: formData.message.trim() || undefined,
+    };
+
+    try {
+      const response = await submitEnquiry(payload);
+
+      // Save lead to localStorage as fallback
+      if (typeof window !== 'undefined') {
+        try {
+          const stored = localStorage.getItem('comfort_aircon_enquiries');
+          const list = stored ? JSON.parse(stored) : [];
+          const newEnquiry = {
+            id: `ENQ-${Date.now().toString().slice(-4)}`,
+            name: formData.name.trim(),
+            mobile: cleanPhone,
+            email: formData.email.trim() || 'N/A',
+            service: formData.service || 'General Enquiry',
+            productInterested: formData.productInterested || 'N/A',
+            location: resolvedLocation,
+            message: formData.message.trim() || 'No additional message provided.',
+            status: 'New',
+            createdAt: new Date().toISOString(),
+          };
+          list.unshift(newEnquiry);
+          localStorage.setItem('comfort_aircon_enquiries', JSON.stringify(list));
+          window.dispatchEvent(new Event('storage'));
+        } catch {
+          // Ignore localStorage errors
+        }
       }
+
+      showToast(
+        response?.message ||
+          `Thank you, ${formData.name}! Your enquiry for ${formData.service || 'AC Service'}${
+            formData.productInterested ? ` (${formData.productInterested})` : ''
+          } in ${resolvedLocation} has been received. Our team will contact you on ${cleanPhone} shortly.`
+      );
+
+      onClose();
+    } catch (err) {
+      if (err?.errors && typeof err.errors === 'object') {
+        const serverErrors = {};
+        Object.entries(err.errors).forEach(([field, msgs]) => {
+          serverErrors[field] = Array.isArray(msgs) ? msgs.join(' ') : String(msgs);
+        });
+        setFormErrors(serverErrors);
+        setGeneralError(err.message || 'Please correct the validation errors below.');
+      } else {
+        setGeneralError(err?.message || 'Failed to submit enquiry. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
-
-    showToast(
-      `Thank you, ${formData.name}! Your enquiry for ${formData.service || 'AC Service'}${
-        formData.productInterested ? ` (${formData.productInterested})` : ''
-      } in ${resolvedLocation} has been received. Our team will contact you on ${formData.phone} shortly.`
-    );
-
-    onClose();
   };
 
   return (
@@ -109,16 +176,18 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
           <div className="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
             {/* Header */}
             <div className="modal-header bg-dark-navy text-white rounded-top-4 py-3 px-4">
-              <div>
-                <h5 className="modal-title fw-bold fs-5 mb-0 d-flex align-items-center">
+              <div className="d-flex align-items-center">
+                <h5
+                  className="modal-title fw-bold fs-5 mb-0 text-white d-flex align-items-center"
+                  style={{ color: '#ffffff' }}
+                >
                   <i className="fa-solid fa-clipboard-question me-2 text-primary-blue"></i>
-                  {productName
-                    ? `Enquire: ${productName}`
-                    : 'Comfort Aircon - Enquire Now'}
+                  <span>
+                    {productName
+                      ? `Enquire: ${productName}`
+                      : 'Comfort Aircon - Enquire Now'}
+                  </span>
                 </h5>
-                <small className="text-light opacity-75">
-                  Authorized Carrier, Toshiba &amp; Midea Sales &amp; Service • Rapid 15-Min Response
-                </small>
               </div>
               <button
                 type="button"
@@ -133,6 +202,13 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
               className="modal-body p-4 p-md-4"
               style={{ maxHeight: 'calc(100vh - 130px)', overflowY: 'auto' }}
             >
+              {generalError && (
+                <div className="alert alert-danger d-flex align-items-center gap-2 p-3 rounded-3 mb-3" role="alert">
+                  <i className="fa-solid fa-triangle-exclamation text-danger flex-shrink-0"></i>
+                  <span className="small fw-semibold">{generalError}</span>
+                </div>
+              )}
+
               <form onSubmit={handleSubmit}>
                 <div className="row g-3">
                   {/* 1. Name: Customer full name (letters and spaces) - Required */}
@@ -146,19 +222,24 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                     <input
                       id="enquiryName"
                       type="text"
-                      className="form-control form-control-custom"
+                      className={`form-control form-control-custom ${formErrors.name ? 'is-invalid' : ''}`}
                       required
                       pattern="^[A-Za-z\s.'-]+$"
                       title="Customer full name (letters and spaces only)"
                       placeholder="e.g. Ramesh Kumar"
                       value={formData.name}
-                      onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setFormData({ ...formData, name: e.target.value });
+                        if (formErrors.name) setFormErrors({ ...formErrors, name: '' });
+                      }}
                     />
-                    <div className="form-text small text-muted">
-                      Customer full name (letters and spaces)
-                    </div>
+                    {formErrors.name ? (
+                      <div className="text-danger small mt-1 fw-semibold">{formErrors.name}</div>
+                    ) : (
+                      <div className="form-text small text-muted">
+                        Customer full name (letters and spaces)
+                      </div>
+                    )}
                   </div>
 
                   {/* 2. Mobile Number: 10-digit Indian mobile - Required */}
@@ -176,24 +257,29 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                       <input
                         id="enquiryMobile"
                         type="tel"
-                        className="form-control form-control-custom border-start-0"
+                        className={`form-control form-control-custom border-start-0 ${formErrors.mobile_number ? 'is-invalid' : ''}`}
                         required
                         pattern="^[6-9]\d{9}$"
                         maxLength={10}
                         title="10-digit Indian mobile number"
                         placeholder="98430 12345"
                         value={formData.phone}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setFormData({
                             ...formData,
                             phone: e.target.value.replace(/\D/g, '').slice(0, 10),
-                          })
-                        }
+                          });
+                          if (formErrors.mobile_number) setFormErrors({ ...formErrors, mobile_number: '' });
+                        }}
                       />
                     </div>
-                    <div className="form-text small text-muted">
-                      10-digit Indian mobile — for call / WhatsApp follow-up
-                    </div>
+                    {formErrors.mobile_number ? (
+                      <div className="text-danger small mt-1 fw-semibold">{formErrors.mobile_number}</div>
+                    ) : (
+                      <div className="form-text small text-muted">
+                        10-digit Indian mobile — for call / WhatsApp follow-up
+                      </div>
+                    )}
                   </div>
 
                   {/* 3. Email: Optional reply email - Optional */}
@@ -207,16 +293,21 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                     <input
                       id="enquiryEmail"
                       type="email"
-                      className="form-control form-control-custom"
+                      className={`form-control form-control-custom ${formErrors.email ? 'is-invalid' : ''}`}
                       placeholder="e.g. ramesh@example.com"
                       value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setFormData({ ...formData, email: e.target.value });
+                        if (formErrors.email) setFormErrors({ ...formErrors, email: '' });
+                      }}
                     />
-                    <div className="form-text small text-muted">
-                      Optional reply email
-                    </div>
+                    {formErrors.email ? (
+                      <div className="text-danger small mt-1 fw-semibold">{formErrors.email}</div>
+                    ) : (
+                      <div className="form-text small text-muted">
+                        Optional reply email
+                      </div>
+                    )}
                   </div>
 
                   {/* 4. Service Required: Dropdown - Required */}
@@ -229,12 +320,13 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                     </label>
                     <select
                       id="enquiryService"
-                      className="form-select form-control-custom"
+                      className={`form-select form-control-custom ${formErrors.service_required ? 'is-invalid' : ''}`}
                       required
                       value={formData.service}
-                      onChange={(e) =>
-                        setFormData({ ...formData, service: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setFormData({ ...formData, service: e.target.value });
+                        if (formErrors.service_required) setFormErrors({ ...formErrors, service_required: '' });
+                      }}
                     >
                       <option value="">-- Select Service Required --</option>
                       {serviceOptions.map((opt) => (
@@ -243,9 +335,13 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                         </option>
                       ))}
                     </select>
-                    <div className="form-text small text-muted">
-                      Select the service needed
-                    </div>
+                    {formErrors.service_required ? (
+                      <div className="text-danger small mt-1 fw-semibold">{formErrors.service_required}</div>
+                    ) : (
+                      <div className="form-text small text-muted">
+                        Select the service needed
+                      </div>
+                    )}
                   </div>
 
                   {/* 5. Product Interested In: Dropdown (auto-filled on Enquire) - Optional */}
@@ -297,12 +393,13 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                     </label>
                     <select
                       id="enquiryLocation"
-                      className="form-select form-control-custom"
+                      className={`form-select form-control-custom ${formErrors.location ? 'is-invalid' : ''}`}
                       required
                       value={formData.location}
-                      onChange={(e) =>
-                        setFormData({ ...formData, location: e.target.value })
-                      }
+                      onChange={(e) => {
+                        setFormData({ ...formData, location: e.target.value });
+                        if (formErrors.location) setFormErrors({ ...formErrors, location: '' });
+                      }}
                     >
                       <option value="">-- Select Location --</option>
                       {locationOptions.map((loc) => (
@@ -321,18 +418,23 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                           required
                           placeholder="Please enter your town / locality"
                           value={formData.otherLocation}
-                          onChange={(e) =>
+                          onChange={(e) => {
                             setFormData({
                               ...formData,
                               otherLocation: e.target.value,
-                            })
-                          }
+                            });
+                            if (formErrors.location) setFormErrors({ ...formErrors, location: '' });
+                          }}
                         />
                       </div>
                     )}
-                    <div className="form-text small text-muted">
-                      Pondicherry; Villupuram; Cuddalore; Other (+ text box)
-                    </div>
+                    {formErrors.location ? (
+                      <div className="text-danger small mt-1 fw-semibold">{formErrors.location}</div>
+                    ) : (
+                      <div className="form-text small text-muted">
+                        Pondicherry; Villupuram; Cuddalore; Other (+ text box)
+                      </div>
+                    )}
                   </div>
 
                   {/* 7. Message: Text area, max 500 chars - Optional */}
@@ -365,6 +467,9 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                         setFormData({ ...formData, message: e.target.value })
                       }
                     ></textarea>
+                    {formErrors.message && (
+                      <div className="text-danger small mt-1 fw-semibold">{formErrors.message}</div>
+                    )}
                     <div className="form-text small text-muted">
                       Extra details — maximum 500 characters
                     </div>
@@ -372,17 +477,23 @@ function AppointmentModalDialog({ productName, onClose, showToast }) {
                 </div>
 
                 {/* Submit Action */}
-                <div className="pt-3 mt-3 border-top d-flex flex-column flex-sm-row align-items-center justify-content-between gap-3">
-                  <div className="small text-muted d-flex align-items-center">
-                    <i className="fa-solid fa-shield-halved text-success me-2 fs-5"></i>
-                    <span>Zero spam. Direct engineer callback.</span>
-                  </div>
+                <div className="pt-3 mt-3 border-top d-flex align-items-center justify-content-end">
                   <button
                     type="submit"
+                    disabled={isSubmitting}
                     className="btn btn-custom-accent px-5 py-3 fw-bold rounded-pill shadow-sm d-inline-flex align-items-center justify-content-center gap-2"
                   >
-                    <i className="fa-solid fa-paper-plane"></i>
-                    <span>Submit Enquiry</span>
+                    {isSubmitting ? (
+                      <>
+                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span>Submitting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa-solid fa-paper-plane"></i>
+                        <span>Submit Enquiry</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </form>

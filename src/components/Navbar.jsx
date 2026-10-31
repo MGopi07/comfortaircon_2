@@ -5,12 +5,33 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useModal } from '@/context/ModalContext';
 import { INITIAL_CONTACT } from '@/data/mockData';
+import { getContact } from '@/services/api';
 
 export default function Navbar() {
   const pathname = usePathname();
   const { openAppointment } = useModal();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [phoneInfo, setPhoneInfo] = useState({
+    phone: INITIAL_CONTACT.phone,
+    phoneHref: INITIAL_CONTACT.phoneHref,
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    getContact()
+      .then((res) => {
+        if (!isMounted || !res?.data?.phone) return;
+        setPhoneInfo({
+          phone: res.data.phone,
+          phoneHref: `tel:${res.data.phone.replace(/[^0-9+]/g, '')}`,
+        });
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,9 +112,9 @@ export default function Navbar() {
 
           <div className="d-flex align-items-center gap-2 pt-3 pt-xl-0">
             <a
-              href={INITIAL_CONTACT.phoneHref}
+              href={phoneInfo.phoneHref}
               className="btn btn-sm btn-outline-primary rounded-pill px-3 py-2 fw-bold d-none d-lg-inline-flex align-items-center gap-1"
-              title={`Call Comfort Aircon (${INITIAL_CONTACT.phone})`}
+              title={`Call Comfort Aircon (${phoneInfo.phone})`}
             >
               <i className="fa-solid fa-phone fs-6"></i> Call Us
             </a>
