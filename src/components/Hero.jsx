@@ -22,6 +22,8 @@ const STAGES = [
     titleLight: 'Complete Air',
     titleGradient: 'Conditioning Solutions',
     desc: 'Get professional AC installation, repair, and maintenance from our experienced team. We work with major AC brands to deliver reliable performance, efficient cooling, and customer satisfaction.',
+    ctaPrimary: 'Book a Service',
+    ctaSecondary: 'Explore Our Services',
     trust: [
       { highlight: '100% Genuine', muted: 'Carrier Units' },
       { highlight: 'Certified Expert', muted: 'Technicians' },
@@ -35,6 +37,8 @@ const STAGES = [
     titleLight: 'Heavy-Duty Copper',
     titleGradient: '& Inverter Power',
     desc: '100% inner-grooved copper coils, intelligent dual-inverter compressor, and high-efficiency heat exchangers engineered to deliver relentless cooling even in 52°C extreme summer heat.',
+    ctaPrimary: 'Book a Service',
+    ctaSecondary: 'Explore Inverter Tech',
     trust: [
       { highlight: '100% Copper', muted: 'Condenser Coils' },
       { highlight: 'Dual Inverter', muted: 'Compressor' },
@@ -48,6 +52,8 @@ const STAGES = [
     titleLight: '3D Surround Airflow',
     titleGradient: '& Pure Filtration',
     desc: 'Advanced micro-dust filters, PM2.5 purification, and whisper-quiet cross-flow blowers delivering instant room chilling in under 60 seconds with 19dB silent night operation.',
+    ctaPrimary: 'Book a Service',
+    ctaSecondary: 'Explore Pure Airflow',
     trust: [
       { highlight: 'Instant Chill', muted: 'Under 60 Sec' },
       { highlight: 'PM2.5 Pure Air', muted: 'Protection' },
@@ -67,7 +73,20 @@ export default function Hero() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeStage, setActiveStage] = useState(0);
   const activeStageRef = useRef(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Smoothly scroll to a specific stage if user clicks the indicator
+  const goToStage = (targetStage) => {
+    if (!trackRef.current) return;
+    const track = trackRef.current;
+    const rect = track.getBoundingClientRect();
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const trackTop = rect.top + scrollTop;
+    const trackHeight = track.offsetHeight - window.innerHeight;
+
+    const targetPct = targetStage === 0 ? 0.05 : targetStage === 1 ? 0.48 : 0.85;
+    const destY = trackTop + trackHeight * targetPct;
+    window.scrollTo({ top: destY, behavior: 'smooth' });
+  };
 
   // Render a given frame to the canvas with crisp high-DPI resolution & cover scaling
   const drawFrame = (index) => {
@@ -248,22 +267,20 @@ export default function Hero() {
             drawFrame(frameIndex);
           }
 
-          // Dynamic stage calculation based on scroll progress
+          // Dynamic stage calculation with 4% hysteresis buffer to prevent any edge jitter
           const progress = self.progress;
-          let stageIndex = 0;
-          if (progress >= 0.66) {
-            stageIndex = 2;
-          } else if (progress >= 0.33) {
+          let stageIndex = activeStageRef.current;
+          if (progress < 0.28) {
+            stageIndex = 0;
+          } else if (progress >= 0.34 && progress < 0.64) {
             stageIndex = 1;
+          } else if (progress >= 0.70) {
+            stageIndex = 2;
           }
 
           if (stageIndex !== activeStageRef.current) {
             activeStageRef.current = stageIndex;
-            setIsTransitioning(true);
-            setTimeout(() => {
-              setActiveStage(stageIndex);
-              setIsTransitioning(false);
-            }, 130);
+            setActiveStage(stageIndex);
           }
         },
       });
@@ -300,20 +317,18 @@ export default function Hero() {
       drawFrame(target);
 
       const dragProgress = target / (TOTAL_FRAMES - 1);
-      let stageIndex = 0;
-      if (dragProgress >= 0.66) {
-        stageIndex = 2;
-      } else if (dragProgress >= 0.33) {
+      let stageIndex = activeStageRef.current;
+      if (dragProgress < 0.28) {
+        stageIndex = 0;
+      } else if (dragProgress >= 0.34 && dragProgress < 0.64) {
         stageIndex = 1;
+      } else if (dragProgress >= 0.70) {
+        stageIndex = 2;
       }
 
       if (stageIndex !== activeStageRef.current) {
         activeStageRef.current = stageIndex;
-        setIsTransitioning(true);
-        setTimeout(() => {
-          setActiveStage(stageIndex);
-          setIsTransitioning(false);
-        }, 130);
+        setActiveStage(stageIndex);
       }
     };
 
@@ -340,8 +355,6 @@ export default function Hero() {
     };
   }, []);
 
-  const currentStage = STAGES[activeStage] || STAGES[0];
-
   return (
     <div ref={trackRef} className="hero-scroll-track position-relative">
       <section
@@ -357,65 +370,119 @@ export default function Hero() {
 
       <div className="container-xxl position-relative z-2">
         <div className="row align-items-center gy-4 gy-lg-0 hero-main-row">
-          {/* Left Column: Dynamic Synchronized Engineering Content */}
+          {/* Left Column: Stacked Cinematic Dynamic Engineering Content */}
           <div className="col-lg-6 col-xl-5 hero-content d-flex flex-column justify-content-center">
             {/* Status Badge with Interactive 3D Stage Stepper */}
-            <div className={`hero-status-badge hero-stage-badge ${isTransitioning ? 'hero-stage-fade-enter' : 'hero-stage-fade-active'}`}>
-              <span className="pulse-dot" style={{ backgroundColor: currentStage.dotColor, boxShadow: `0 0 10px ${currentStage.dotColor}` }}></span>
-              <span>{currentStage.badge}</span>
-              <div className="hero-stage-stepper" aria-label="Interactive 3D Stages">
+            <div className="hero-status-badge">
+              <span
+                className="pulse-dot"
+                style={{
+                  backgroundColor: STAGES[activeStage].dotColor,
+                  boxShadow: `0 0 10px ${STAGES[activeStage].dotColor}`,
+                  transition: 'background-color 0.8s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
+                }}
+              />
+              <div className="hero-stage-badge-stack">
                 {STAGES.map((s, idx) => (
                   <span
                     key={idx}
+                    className={`hero-stage-badge-text ${
+                      activeStage === idx ? 'active' : activeStage > idx ? 'prev' : 'next'
+                    }`}
+                  >
+                    {s.badge}
+                  </span>
+                ))}
+              </div>
+              <div className="hero-stage-stepper" aria-label="Interactive 3D Stages">
+                {STAGES.map((s, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => goToStage(idx)}
                     className={`hero-stage-step-dot ${activeStage === idx ? 'active' : ''}`}
                     title={s.stepName}
+                    aria-label={`Go to ${s.stepName}`}
                   />
                 ))}
               </div>
             </div>
 
-            <h1 className={`hero-title fw-extrabold lh-sm mb-0 hero-stage-title ${isTransitioning ? 'hero-stage-fade-enter' : 'hero-stage-fade-active'}`}>
-              <span className="hero-title-light">{currentStage.titleLight}</span> <br />
-              <span className="animated-gradient-text">{currentStage.titleGradient}</span>
-            </h1>
+            {/* Unified Stage Text Stack (Heading + Description) for natural, zero-dead-space spacing */}
+            <div className="hero-stage-text-stack">
+              {STAGES.map((s, idx) => (
+                <div
+                  key={idx}
+                  className={`hero-stage-text-block ${
+                    activeStage === idx ? 'active' : activeStage > idx ? 'prev' : 'next'
+                  }`}
+                >
+                  <h1 className="hero-title fw-extrabold lh-sm mb-0">
+                    <span className="hero-title-light">{s.titleLight}</span> <br />
+                    <span className="animated-gradient-text">{s.titleGradient}</span>
+                  </h1>
+                  <p className="hero-subtitle mb-0">
+                    {s.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
 
-            {/* Subtitle / Stage Description */}
-            <p className={`hero-subtitle mb-0 hero-stage-subtitle ${isTransitioning ? 'hero-stage-fade-enter' : 'hero-stage-fade-active'}`}>
-              {currentStage.desc}
-            </p>
-
-            {/* Action Buttons (fixed & permanently accessible) */}
-            <div className="hero-cta-group d-flex flex-wrap align-items-center gap-2 gap-sm-3">
-              <button
-                type="button"
-                className="btn btn-hero-book rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 shadow-sm"
-                onClick={() => openAppointment()}
-              >
-                <i className="fa-regular fa-calendar-check fs-6"></i>
-                <span>Book a Service</span>
-              </button>
-              <a
-                href="#services"
-                className="btn btn-hero-explore rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
-              >
-                <span>Explore Our Services</span>
-              </a>
+            {/* Action Buttons Stack with Fade-Up Transition across Stages */}
+            <div className="hero-stage-stack hero-cta-stack">
+              {STAGES.map((s, idx) => (
+                <div
+                  key={idx}
+                  className={`hero-cta-group d-flex flex-wrap align-items-center gap-2 gap-sm-3 hero-stage-layer ${
+                    activeStage === idx ? 'active' : activeStage > idx ? 'prev' : 'next'
+                  }`}
+                >
+                  <button
+                    type="button"
+                    className="btn btn-hero-book rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
+                    onClick={() => openAppointment()}
+                    style={{
+                      borderColor: `${s.dotColor}88`,
+                      boxShadow: `0 8px 24px -4px rgba(2, 132, 199, 0.55), 0 0 20px ${s.dotColor}44, inset 0 1px 0 rgba(255, 255, 255, 0.35)`,
+                    }}
+                  >
+                    <i className="fa-regular fa-calendar-check fs-6 btn-icon-calendar"></i>
+                    <span>{s.ctaPrimary}</span>
+                  </button>
+                  <a
+                    href="#services"
+                    className="btn btn-hero-explore rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2"
+                  >
+                    <span>{s.ctaSecondary}</span>
+                    <i className="fa-solid fa-arrow-right btn-arrow-icon"></i>
+                  </a>
+                </div>
+              ))}
             </div>
 
             {/* Divider Line */}
             <hr className="hero-trust-divider" />
 
-            {/* Dynamic Stage Trust Points */}
-            <div className={`hero-trust-row d-flex flex-wrap align-items-center gap-2 gap-md-3 hero-stage-trust ${isTransitioning ? 'hero-stage-fade-enter' : 'hero-stage-fade-active'}`}>
-              {currentStage.trust.map((item, idx) => (
-                <div key={idx} className="hero-trust-item d-flex align-items-center gap-2">
-                  <span className="hero-trust-check-icon">
-                    <i className="fa-solid fa-check"></i>
-                  </span>
-                  <span className="hero-trust-text">
-                    <span className="d-block text-highlight tabular-nums">{item.highlight}</span>
-                    <span className="text-muted-light">{item.muted}</span>
-                  </span>
+            {/* Dynamic Stage Trust Points Stack */}
+            <div className="hero-stage-stack hero-trust-stack">
+              {STAGES.map((s, idx) => (
+                <div
+                  key={idx}
+                  className={`hero-trust-row d-flex flex-wrap align-items-center gap-2 gap-md-3 hero-stage-layer ${
+                    activeStage === idx ? 'active' : activeStage > idx ? 'prev' : 'next'
+                  }`}
+                >
+                  {s.trust.map((item, tIdx) => (
+                    <div key={tIdx} className="hero-trust-item d-flex align-items-center gap-2">
+                      <span className="hero-trust-check-icon">
+                        <i className="fa-solid fa-check"></i>
+                      </span>
+                      <span className="hero-trust-text">
+                        <span className="d-block text-highlight tabular-nums">{item.highlight}</span>
+                        <span className="text-muted-light">{item.muted}</span>
+                      </span>
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
