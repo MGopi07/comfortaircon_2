@@ -454,15 +454,174 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 10. Hero Banner Carousel Initialization
-    const heroCarouselEl = document.getElementById('heroBannerCarousel');
-    if (heroCarouselEl && typeof bootstrap !== 'undefined' && bootstrap.Carousel) {
-        new bootstrap.Carousel(heroCarouselEl, {
-            interval: 3500,
-            ride: 'carousel',
-            wrap: true,
-            pause: 'hover'
-        });
+    // 10. Hero GSAP ScrollTrigger 120-Frame Canvas Sequence Animation
+    const heroCanvas = document.getElementById('heroSequenceCanvas');
+    const heroSection = document.getElementById('home');
+    const heroCanvasContainer = document.getElementById('heroCanvasContainer');
+    const heroProgressBar = document.getElementById('heroCanvasProgressBar');
+    const heroHint = document.getElementById('heroCanvasHint');
+
+    if (heroCanvas && heroSection) {
+        const TOTAL_FRAMES = 120;
+        const images = [];
+        let currentFrameIndex = 0;
+
+        const getFramePath = (i) => `frames/frame_${String(i + 1).padStart(4, '0')}.jpg`;
+
+        const ctx = heroCanvas.getContext('2d');
+
+        function renderFrame(index) {
+            if (!ctx) return;
+            let img = images[index];
+            if (!img || !img.complete || img.naturalWidth === 0) {
+                for (let i = index - 1; i >= 0; i--) {
+                    if (images[i] && images[i].complete && images[i].naturalWidth > 0) {
+                        img = images[i];
+                        break;
+                    }
+                }
+            }
+            if (!img || !img.complete || img.naturalWidth === 0) return;
+
+            const w = heroCanvas.width;
+            const h = heroCanvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+
+            const ratio = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+            const drawW = img.naturalWidth * ratio;
+            const drawH = img.naturalHeight * ratio;
+            const shiftX = (w - drawW) / 2;
+            const shiftY = (h - drawH) / 2;
+
+            ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight, shiftX, shiftY, drawW, drawH);
+        }
+
+        function resizeCanvas() {
+            const rect = heroCanvas.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return;
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            heroCanvas.width = Math.round(rect.width * dpr);
+            heroCanvas.height = Math.round(rect.height * dpr);
+            renderFrame(currentFrameIndex);
+        }
+
+        // Preload frame 0 immediately
+        const firstImg = new Image();
+        firstImg.src = getFramePath(0);
+        firstImg.onload = () => {
+            resizeCanvas();
+            renderFrame(0);
+        };
+        images[0] = firstImg;
+
+        // Preload remaining frames
+        for (let i = 1; i < TOTAL_FRAMES; i++) {
+            const img = new Image();
+            img.src = getFramePath(i);
+            images[i] = img;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        // GSAP ScrollTrigger
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            gsap.registerPlugin(ScrollTrigger);
+
+            const mm = gsap.matchMedia();
+
+            mm.add('(min-width: 992px)', () => {
+                ScrollTrigger.create({
+                    trigger: heroSection,
+                    start: 'top top',
+                    end: '+=1600',
+                    pin: true,
+                    pinSpacing: true,
+                    scrub: 0.5,
+                    anticipatePin: 1,
+                    onUpdate: (self) => {
+                        const idx = Math.min(TOTAL_FRAMES - 1, Math.floor(self.progress * (TOTAL_FRAMES - 1)));
+                        if (idx !== currentFrameIndex) {
+                            currentFrameIndex = idx;
+                            renderFrame(idx);
+                            if (heroProgressBar) {
+                                heroProgressBar.style.width = ((idx + 1) / TOTAL_FRAMES * 100) + '%';
+                            }
+                        }
+                        if (self.progress > 0.02 && heroHint) {
+                            heroHint.classList.add('faded');
+                        }
+                    }
+                });
+            });
+
+            mm.add('(max-width: 991.98px)', () => {
+                ScrollTrigger.create({
+                    trigger: heroSection,
+                    start: 'top top',
+                    end: '+=1200',
+                    pin: true,
+                    pinSpacing: true,
+                    scrub: 0.5,
+                    anticipatePin: 1,
+                    onUpdate: (self) => {
+                        const idx = Math.min(TOTAL_FRAMES - 1, Math.floor(self.progress * (TOTAL_FRAMES - 1)));
+                        if (idx !== currentFrameIndex) {
+                            currentFrameIndex = idx;
+                            renderFrame(idx);
+                            if (heroProgressBar) {
+                                heroProgressBar.style.width = ((idx + 1) / TOTAL_FRAMES * 100) + '%';
+                            }
+                        }
+                        if (self.progress > 0.02 && heroHint) {
+                            heroHint.classList.add('faded');
+                        }
+                    }
+                });
+            });
+        }
+
+        // Drag to scrub support
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartFrame = 0;
+
+        function onDragStart(e) {
+            isDragging = true;
+            dragStartX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+            dragStartFrame = currentFrameIndex;
+            if (heroHint) heroHint.classList.add('faded');
+        }
+
+        function onDragMove(e) {
+            if (!isDragging) return;
+            const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+            const delta = clientX - dragStartX;
+            let target = (dragStartFrame + Math.round(delta / 3)) % TOTAL_FRAMES;
+            if (target < 0) target += TOTAL_FRAMES;
+            currentFrameIndex = target;
+            renderFrame(target);
+            if (heroProgressBar) {
+                heroProgressBar.style.width = ((target + 1) / TOTAL_FRAMES * 100) + '%';
+            }
+        }
+
+        function onDragEnd() {
+            isDragging = false;
+        }
+
+        const showcaseEl = heroCanvas.closest('.hero-canvas-showcase');
+        if (showcaseEl) {
+            showcaseEl.addEventListener('mousedown', onDragStart);
+            window.addEventListener('mousemove', onDragMove);
+            window.addEventListener('mouseup', onDragEnd);
+
+            showcaseEl.addEventListener('touchstart', onDragStart, { passive: true });
+            window.addEventListener('touchmove', onDragMove, { passive: true });
+            window.addEventListener('touchend', onDragEnd);
+        }
     }
 
     // 13. Testimonial Auto Slider Card (Reference 1 Layout)

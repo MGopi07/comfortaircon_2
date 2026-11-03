@@ -321,8 +321,9 @@ export default function ProductSpotlight({ openSpec, openAppointment }) {
       const left = activeTab.offsetLeft;
       const width = activeTab.offsetWidth;
       setIndicatorStyle({ top: 'auto', height: 3, left, width });
-      // Scroll tab into view horizontally on tablet/mobile
-      activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      // Scroll ONLY the tab list container horizontally, NEVER the window/page
+      const scrollTarget = left - (tabList.clientWidth - width) / 2;
+      tabList.scrollTo({ left: scrollTarget, behavior: 'smooth' });
     }
   }, [activeIndex]);
 

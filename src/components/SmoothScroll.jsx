@@ -4,6 +4,8 @@ import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import { useModal } from '@/context/ModalContext';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 /**
  * SmoothScroll:
@@ -14,8 +16,8 @@ import { useModal } from '@/context/ModalContext';
  * - Scrolling is paused while the appointment/spec modals are open, and wheel
  *   events inside a modal scroll the modal natively instead of the page.
  * - Users with prefers-reduced-motion get native scrolling (Lenis default).
- * Lenis drives real window scrolling, so the CSS scroll-driven section
- * animations and the sticky navbar keep working unchanged.
+ * Lenis drives real window scrolling, and GSAP ticker synchronizes ScrollTrigger
+ * on every single animation frame with 0 lag.
  */
 export default function SmoothScroll() {
   const lenisRef = useRef(null);
@@ -24,7 +26,7 @@ export default function SmoothScroll() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      autoRaf: true,
+      autoRaf: false,
       lerp: 0.09,
       wheelMultiplier: 1,
       anchors: true,
@@ -33,7 +35,18 @@ export default function SmoothScroll() {
     });
     lenisRef.current = lenis;
 
+    // Connect Lenis to GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update);
+
+    // Drive Lenis via GSAP ticker for frame-perfect scroll synchronization
+    const updateRaf = (time) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(updateRaf);
+    gsap.ticker.lagSmoothing(0);
+
     return () => {
+      gsap.ticker.remove(updateRaf);
       lenis.destroy();
       lenisRef.current = null;
     };
